@@ -354,7 +354,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
 
   <div class="saybar" data-go="say" id="saybar">
     <div class="mic">🎙</div>
-    <div class="ph"><b>试试说：</b>给古城文创店发了5把朱泥壶，收了2000定金，尾款3000下个月结</div>
+    <div class="ph"><b>试试用语音记录你的每一笔账</b></div>
     <div class="go">去记账 ›</div>
   </div>
   <div class="exsay" id="exsay"></div>
@@ -1996,15 +1996,15 @@ function renderMine(){
   $('#m-info').innerHTML=[
     ['工艺类别',p.craft||'—'],
     ['纳税人识别号',p.tax],['征收方式',p.method],['申报周期',p.period],
-    ['开业日期',p.setup],['账本笔数',S.records.length+' 笔'],
+    ['开业日期',p.setup||'待填写'],['账本笔数',S.records.length+' 笔'],
     ['作品存证',S.proofs.length+' 件'],
     ['往来挂账',arStat().recN+arStat().payN+' 笔未结']
   ].map(function(x){return '<div class="row"><div class="row-l"><b>'+x[0]+'</b></div>'+
-    '<div class="row-r">'+x[1]+'</div></div>'}).join('');
+    '<div class="row-r">'+x[1]+'</div></div>'}).join('')+'<div class="row" data-setup-edit><div class="row-l"><b>开业日期设置</b><span>修改前会提示影响范围</span></div><div class="row-r"><span class="chev">›</span></div></div>';
   var rd=reportData();
   $('#m-set').innerHTML=[
     ['合规体检','财税健康分 '+check().score+' 分'],
-    ['经营身份自测',S.meta.quiz?'已测：'+S.meta.quiz:'3 秒测出该记哪种账'],
+    ['经营身份自测',S.meta.quiz?'已测：'+(S.meta.quiz==='food'?'食品类非遗':S.meta.quiz==='craft'?'非食品类非遗':'其他手工作坊'):'首次记账后匹配行业'],
     ['新手引导','重新看一遍'],
     ['免责声明','重要，请阅读'],
     ['对公账户',p.corpAccount?'已开立':'未开立'],
@@ -2046,7 +2046,13 @@ function renderSubsidy(){
 }
 function renderAll(){renderHome();renderBook();renderAr();renderBoard();renderSubsidy();renderMine();renderProof();renderReport()}
 /* 一键生成非遗补贴申报材料包（按本机流水 / 往来 / 存证汇总，供参考申报） */
+function ensureTaxId(next){
+  if(S.profile.tax){next();return}
+  openCenter('<h4>补充一个信息</h4><p>为了让代账会计帮您准确处理税务，需要补充一个信息。</p><div class="field"><label>纳税人识别号</label><input class="inp" id="tax-id" placeholder="填写营业执照上的纳税人识别号"></div><p style="font-size:12px;color:var(--t3);line-height:1.6">这个号就在您的营业执照上，填一次就行，以后自动带出。</p><button class="btn-primary" style="width:100%" id="tax-save">保存并继续</button>');
+  $('#tax-save').onclick=function(){var v=$('#tax-id').value.trim();if(!v){toast('请填写纳税人识别号');return}S.profile.tax=v;save();closeCenter();next()};
+}
 function generateSubsidyPack(){
+  if(!S.profile.tax){ensureTaxId(generateSubsidyPack);return}
   var p=S.profile,qs=quarterSales(),wm=monthsCovered();
   var recUnpaid=S.ar.filter(function(a){return a.kind==='rec'&&!a.paid});
   var recAmt=sum(recUnpaid),recN=recUnpaid.length;
@@ -2108,7 +2114,8 @@ document.addEventListener('click',function(e){
   if(g){var p=g.getAttribute('data-go');
     if(p==='bookadd')openAdd(g.getAttribute('data-type')||'out');
     else if(p==='invadd')openInv(g.getAttribute('data-d')||'out');
-    else if(p==='quiz'){resetQuiz();renderQuiz();go('quiz')}
+    else if(p==='quiz'){showIndustryCard()}
+    else if(p==='agent'){ensureTaxId(function(){go('agent')})}
     else go(p);
     return}
   if(t.closest('[data-back]')){go(lastMain);return}
@@ -2116,7 +2123,7 @@ document.addEventListener('click',function(e){
   if(tb){lastMain=tb.getAttribute('data-tab');go(lastMain);return}
   // 流水删除
   var dl=t.closest('[data-del]');
-  if(dl){S.records=S.records.filter(function(r){return r.id!==dl.getAttribute('data-del')});
+  if(dl){var rid=dl.getAttribute('data-del');S.records=S.records.filter(function(r){return r.id!==rid});S.ar=S.ar.filter(function(a){return a.sourceId!==rid});
     save();renderAll();toast('已删除');return}
   var di=t.closest('[data-idel]');
   if(di){S.invoices=S.invoices.filter(function(r){return r.id!==di.getAttribute('data-idel')});
@@ -2161,7 +2168,7 @@ document.addEventListener('click',function(e){
       '<div style="display:flex;gap:10px;margin-top:16px">'+
       '<button class="btn-sm gh" style="flex:1;padding:12px" id="cnl-del">取消</button>'+
       '<button class="btn-sm dun" style="flex:1;padding:12px" id="ok-del">确认删除</button></div>');
-    $('#ok-del').onclick=function(){S.ar=S.ar.filter(function(x){return x.id!==ad.getAttribute('data-ardel')});
+    $('#ok-del').onclick=function(){var aid=ad.getAttribute('data-ardel'),linked=S.ar.filter(function(x){return x.id===aid})[0];S.ar=S.ar.filter(function(x){return x.id!==aid});if(linked&&linked.sourceId){S.records=S.records.filter(function(r){return r.id!==linked.sourceId})}
       save();renderAll();closeCenter();toast('已删除');};
     $('#cnl-del').onclick=closeCenter;return}
   var ak=t.closest('#a-seg button');
@@ -2220,11 +2227,13 @@ document.addEventListener('click',function(e){
   if(t.closest('#pv-backup')||t.closest('#h-pv-backup')){openBackup();return}
   if(t.closest('#h-pv-more')){showPrivacy();return}
   // 我的设置
+  var se=t.closest('[data-setup-edit]');
+  if(se){showEditSetupDate();return}
   var st2=t.closest('[data-set]');
   if(st2){
     var key=+st2.getAttribute('data-set');
     if(key===0)go('board');
-    else if(key===1){resetQuiz();renderQuiz();go('quiz')}
+    else if(key===1){showIndustryCard()}
     else if(key===2)startGuide();
     else if(key===3)showDisclaimer(true);
     else if(key===4)go('board'); /* 对公账户：跳转看板页合规体检区统一管理 */
@@ -2287,10 +2296,10 @@ function doParse(){
     var credit=$('#rs-sw').classList.contains('on'),arEntry=null;
     if(credit){
       if(r.balance){
-        arEntry={id:uid(),kind:'rec',party:party||'客户',amt:r.balance,
+        arEntry={id:uid(),sourceId:rec.id,kind:'rec',party:party||'客户',amt:r.balance,
           reason:'尾款',date:date,due:$('#rs-due').value||date,paid:false};
       }else{
-        arEntry={id:uid(),kind:r.type==='in'?'rec':'pay',party:party||(r.type==='in'?'客户':'供应商'),
+        arEntry={id:uid(),sourceId:rec.id,kind:r.type==='in'?'rec':'pay',party:party||(r.type==='in'?'客户':'供应商'),
           amt:amt,reason:cat,date:date,due:$('#rs-due').value||date,paid:false};
       }
       S.ar.push(arEntry);
@@ -2669,7 +2678,9 @@ function endGuide(){
 function showAuth(){var layer=document.createElement('div');layer.className='auth-layer';layer.id='auth-layer';document.body.appendChild(layer);var mode='register',step=1,phone='';function bad(t){var h=layer.querySelector('.auth-hint');if(h){h.textContent=t;h.style.color='#d45d42'}}function render(){var login=mode==='login';layer.innerHTML='<div class="auth-card"><div class="auth-brand">穗账达</div><div class="auth-sub">为食品类与非食品类非遗手艺人记好每一笔账</div><ol class="auth-steps">'+['手机号','验证码','店铺名称','登录密码'].map(function(x,i){return '<li class="'+((!login&&i+1===step)?'on':'')+'"><i>'+(i+1)+'</i>'+x+'</li>'}).join('')+'</ol>'+(login?'<h3 style="margin:0 0 6px">欢迎回来</h3><p class="auth-hint">登录后继续管理您的账本</p>':'')+'<div id="auth-body"></div><button class="auth-link" id="auth-switch">'+(login?'还没有账号？立即注册':'已有账号？直接登录')+'</button></div>';var b=layer.querySelector('#auth-body');if(login){b.innerHTML='<div class="auth-field"><label>手机号</label><input id="au-phone" inputmode="tel" placeholder="请输入手机号"></div><div class="auth-field"><label>登录密码</label><input id="au-pass" type="password" placeholder="请输入登录密码"></div><button class="auth-main" id="au-login">登录</button>';layer.querySelector('#au-login').onclick=function(){var p=layer.querySelector('#au-phone').value.trim(),pw=layer.querySelector('#au-pass').value;if(!/^1\d{10}$/.test(p)||!pw){bad('请输入正确的手机号和登录密码');return}S.meta.auth={phone:p};save();layer.remove();bootApp()}}else if(step===1){b.innerHTML='<div class="auth-field"><label>手机号</label><input id="au-phone" inputmode="tel" placeholder="请输入手机号"></div><button class="auth-main" id="au-next">获取验证码</button>';layer.querySelector('#au-next').onclick=function(){phone=layer.querySelector('#au-phone').value.trim();if(!/^1\d{10}$/.test(phone)){bad('请输入正确的手机号');return}step=2;render()}}else if(step===2){b.innerHTML='<div class="auth-field"><label>验证码</label><div class="auth-code"><input id="au-code" inputmode="numeric" placeholder="请输入 6 位验证码"><button id="au-resend">重新获取</button></div><div class="auth-hint">验证码已发送，演示验证码：123456</div></div><button class="auth-main" id="au-next">验证并继续</button>';layer.querySelector('#au-next').onclick=function(){if(layer.querySelector('#au-code').value.trim()!=='123456'){bad('验证码不正确，请输入 123456');return}step=3;render()};layer.querySelector('#au-resend').onclick=function(){bad('验证码已重新发送：123456')}}else if(step===3){b.innerHTML='<div class="auth-field"><label>个体工商户名称</label><input id="au-shop" placeholder="如：老陈手拉壶作坊 / 李氏腐乳饼店"></div><button class="auth-main" id="au-next">下一步</button>';layer.querySelector('#au-next').onclick=function(){var n=layer.querySelector('#au-shop').value.trim();if(n.length<2){bad('请填写店铺或作坊名称');return}S.profile.name=n;step=4;render()}}else{b.innerHTML='<div class="auth-field"><label>设置登录密码</label><input id="au-pass" type="password" placeholder="至少 6 位字符"></div><div class="auth-field"><label>确认密码</label><input id="au-pass2" type="password" placeholder="再次输入登录密码"></div><button class="auth-main" id="au-next">完成注册，进入首页</button><div class="auth-hint">仅用于本机演示登录，不会上传密码</div>';layer.querySelector('#au-next').onclick=function(){var p=layer.querySelector('#au-pass').value;if(p.length<6||p!==layer.querySelector('#au-pass2').value){bad('密码至少 6 位且两次输入需一致');return}S.meta.auth={phone:phone};S.meta.disclaimer=true;S.meta.guide=false;S.meta.quiz=null;S.meta.firstEntry=false;save();layer.remove();bootApp()}}layer.querySelector('#auth-switch').onclick=function(){mode=login?'register':'login';step=1;render()}}render()}
 function startFirstGuide(){if(S.meta.guide||!S.meta.auth)return;var d=document.createElement('div');d.className='first-guide';d.innerHTML='<div class="first-guide-card"><div class="first-guide-finger">☝️</div><h3>先点亮麦克风</h3><p>按住这里，说一句话即可记账。食品类和非食品类手艺，都可以用自然语言记录。</p><button class="auth-main" id="fg-go">去记第一笔</button><button class="auth-link" id="fg-skip">稍后再看</button></div>';document.body.appendChild(d);d.querySelector('#fg-go').onclick=function(){d.remove();S.meta.guide=true;save();go('say');toast('按住麦克风，说一句话即可记账')};d.querySelector('#fg-skip').onclick=function(){d.remove();S.meta.guide=true;save()}}
 function showFirstSuccess(){var d=document.createElement('div');d.className='success-bubble';d.innerHTML='<b>太棒了！您的第一笔账已记好</b><span style="font-size:13px;color:#667a73">如果有欠款，系统会自动帮您记入应收台账。</span><button class="auth-main" style="margin-top:12px;padding:10px;font-size:14px" id="success-next">继续设置经营身份</button>';document.body.appendChild(d);d.querySelector('#success-next').onclick=function(){d.remove();showIndustryCard()}}
-function showIndustryCard(){var d=document.createElement('div');d.className='industry-card';d.innerHTML='<div class="industry-inner"><h3>老板，为了让系统更懂您的生意</h3><p>帮您匹配专属的非遗补贴和记账模板，请问您是做什么行业的？</p><button class="industry-option" data-ind="food">① <b>食品类非遗</b><br><small>腐乳饼、牛肉丸、工夫茶等</small></button><button class="industry-option" data-ind="craft">② <b>非食品类非遗</b><br><small>手拉壶、潮绣、木雕等</small></button><button class="industry-option" data-ind="other">③ <b>其他手工作坊</b></button></div>';document.body.appendChild(d);d.querySelectorAll('.industry-option').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-ind');S.meta.quiz=k;S.profile.craft=k==='food'?'食品类非遗':k==='craft'?'非食品类非遗':'其他手工作坊';save();d.remove();renderAll();toast('已匹配相应记账词库和补贴雷达')}})}
+function showSetupDateCard(){openCenter('<h4>补充开业日期</h4><p>请选择营业执照上的开业日期，后续可在“我的”中修改。</p><div class="field"><label>开业日期</label><input class="inp" id="setup-date" type="date" value="'+(S.profile.setup||today())+'"></div><button class="btn-primary" style="width:100%" id="setup-save">保存开业日期</button>');$('#setup-save').onclick=function(){var v=$('#setup-date').value;if(!v){toast('请选择开业日期');return}S.profile.setup=v;save();closeCenter();renderAll();toast('开业日期已保存')}}
+function showEditSetupDate(){openCenter('<h4>修改开业日期</h4><p>修改开业日期会影响经营时长和部分补贴测算，请确认营业执照信息准确。</p><div class="field"><label>开业日期</label><input class="inp" id="setup-date" type="date" value="'+(S.profile.setup||today())+'"></div><div style="display:flex;gap:10px"><button class="btn-ghost" style="flex:1" id="setup-cancel">取消</button><button class="btn-primary" style="flex:1" id="setup-edit-save">确认修改</button></div>');$('#setup-cancel').onclick=closeCenter;$('#setup-edit-save').onclick=function(){var v=$('#setup-date').value;if(!v){toast('请选择开业日期');return}S.profile.setup=v;save();closeCenter();renderAll();toast('开业日期已更新')}}
+function showIndustryCard(){var d=document.createElement('div');d.className='industry-card';d.innerHTML='<div class="industry-inner"><h3>老板，为了让系统更懂您的生意</h3><p>帮您匹配专属的非遗补贴和记账模板，请问您是做什么行业的？</p><button class="industry-option" data-ind="food">① <b>食品类非遗</b><br><small>腐乳饼、牛肉丸、工夫茶等</small></button><button class="industry-option" data-ind="craft">② <b>非食品类非遗</b><br><small>手拉壶、潮绣、木雕等</small></button><button class="industry-option" data-ind="other">③ <b>其他手工作坊</b></button></div>';document.body.appendChild(d);d.querySelectorAll('.industry-option').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-ind');S.meta.quiz=k;S.profile.craft=k==='food'?'食品类非遗':k==='craft'?'非食品类非遗':'其他手工作坊';save();d.remove();renderAll();toast('已匹配相应记账词库和补贴雷达');showSetupDateCard()}})}
 function afterRecordSaved(rec){if(!S.meta.firstEntry){S.meta.firstEntry=true;save();showFirstSuccess();return true}return false}
 function bootApp(){renderAll();renderSay();renderQuiz();renderAgent();renderProofCats();initRec();if(!S.meta.guide)setTimeout(startFirstGuide,450)}
 var _renderHome=renderHome;renderHome=function(){_renderHome();if(!S.records.length){$('#h-count').textContent='0';$('#h-in').textContent='¥0.00';$('#h-out').textContent='¥0.00';$('#h-net').textContent='¥0.00';$('#h-rate').textContent='--';$('#h-top').textContent='—';$('#h-noinv').textContent='¥0.00';$('#h-score').textContent='--';$('#h-ar-list').innerHTML='<div class="empty">暂无往来记录</div>';$('#h-alerts').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#h-subsidy').innerHTML='<div class="empty">完成行业选择后，系统会匹配食品类与非食品类非遗补贴</div>'}};
