@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>穗账达 · 为非遗传承人记好手工账</title>
+<style>
+:root{
+  --primary:#0E7C66; --primary-2:#14A085; --primary-l:#E6F4F0;
+  --accent:#FF7A2F; --accent-l:#FFF1E7;
+  --danger:#E5484D; --danger-l:#FDECEC;
+  --warn:#B26A00; --warn-l:#FFF6E5;
+  --success:#17A673; --success-l:#E7F7F1;
+  --t1:#16211E; --t2:#5B6B67; --t3:#98A5A1;
+  --bg:#F4F7F6; --line:#E8EEEC;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  color:var(--t1);background:#fff;line-height:1.6;font-size:16px}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+h1,h2,h3{margin:0;line-height:1.35}
+p{margin:0}
+
+/* 导航 */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;height:62px;gap:28px}
+.logo{display:flex;align-items:center;gap:9px;font-size:19px;font-weight:800;letter-spacing:.5px}
+.logo i{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#0E7C66,#14A085);
+  color:#fff;display:grid;place-items:center;font-style:normal;font-size:16px}
+.nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0;font-size:14.5px;color:var(--t2)}
+.nav ul li{cursor:pointer}
+.nav ul li:hover{color:var(--primary)}
+.nav .cta{margin-left:auto;display:flex;gap:10px;align-items:center}
+
+/* 按钮 */
+.btn{display:inline-block;border:0;border-radius:12px;padding:11px 22px;font-size:15px;
+  font-weight:700;cursor:pointer;font-family:inherit;transition:.18s}
+.btn.p{background:linear-gradient(135deg,#0E7C66,#14A085);color:#fff;
+  box-shadow:0 6px 18px rgba(14,124,102,.28)}
+.btn.p:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(14,124,102,.34)}
+.btn.g{background:var(--primary-l);color:var(--primary)}
+.btn.o{background:transparent;border:1px solid var(--line);color:var(--t2)}
+.btn.o:hover{border-color:var(--primary);color:var(--primary)}
+.btn.lg{padding:14px 30px;font-size:16.5px}
+
+/* Hero */
+.hero{background:linear-gradient(165deg,#F4F7F6 0%,#E9F3F0 55%,#F4F7F6 100%);
+  padding:62px 0 70px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-160px;top:-160px;width:420px;height:420px;
+  border-radius:50%;background:rgba(20,160,133,.07)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}
+.badge{display:inline-block;font-size:13px;background:rgba(14,124,102,.1);color:var(--primary);
+  padding:5px 12px;border-radius:999px;font-weight:600}
+.hero h1{font-size:46px;font-weight:800;letter-spacing:1px;margin:18px 0 14px}
+.hero .lead{font-size:18px;color:var(--t2);max-width:520px}
+.hero .sub{font-size:14.5px;color:var(--t3);margin-top:8px}
+.hero .acts{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.metrics{display:flex;gap:30px;margin-top:34px;flex-wrap:wrap}
+.metrics div b{display:block;font-size:24px;font-weight:800;color:var(--primary);
+  font-variant-numeric:tabular-nums}
+.metrics div span{font-size:12.5px;color:var(--t3)}
+
+/* 手机演示 */
+.phone{width:366px;height:730px;border-radius:42px;background:#16211E;padding:11px;
+  box-shadow:0 34px 70px rgba(8,40,33,.28);position:relative;margin:0 auto}
+.phone .notch{position:absolute;top:20px;left:50%;transform:translateX(-50%);
+  width:96px;height:22px;border-radius:999px;background:#16211E;z-index:3}
+.phone .screen{width:100%;height:100%;border-radius:32px;overflow:hidden;background:#F4F7F6}
+.phone iframe{width:100%;height:100%;border:0;display:block}
+.phone-cap{text-align:center;font-size:12.5px;color:var(--t3);margin-top:14px}
+
+/* 通用区块 */
+.sec{padding:74px 0}
+.sec.gray{background:var(--bg)}
+.sec-hd{text-align:center;max-width:720px;margin:0 auto 46px}
+.sec-hd h2{font-size:32px;font-weight:800}
+.sec-hd p{margin-top:12px;font-size:15.5px;color:var(--t2)}
+.eyebrow{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:1px}
+
+/* 痛点 */
+.pain{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.pain .c{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px}
+.pain .c .ic{font-size:26px}
+.pain .c b{display:block;font-size:16px;margin:10px 0 6px}
+.pain .c p{font-size:13.5px;color:var(--t2)}
+.pain .c .q{display:block;margin-top:12px;font-size:12.5px;color:var(--t3);
+  border-top:1px dashed var(--line);padding-top:10px}
+
+/* 差异对比 */
+.diff{background:linear-gradient(150deg,#0E7C66,#14A085);color:#fff;border-radius:22px;
+  padding:40px;margin-bottom:36px}
+.diff h3{font-size:26px;font-weight:800}
+.diff p{color:rgba(255,255,255,.85);margin-top:10px;font-size:15px;max-width:760px}
+.diff .pts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+.diff .pts div{background:rgba(255,255,255,.12);border-radius:14px;padding:16px}
+.diff .pts b{display:block;font-size:15px;margin-bottom:4px}
+.diff .pts span{font-size:13px;color:rgba(255,255,255,.8)}
+table.cmp{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;
+  overflow:hidden;box-shadow:0 2px 20px rgba(14,124,102,.07);font-size:14.5px}
+table.cmp th,table.cmp td{padding:15px 18px;text-align:center;border-bottom:1px solid var(--line)}
+table.cmp th{background:#FAFCFB;font-weight:700;font-size:14px}
+table.cmp th:first-child,table.cmp td:first-child{text-align:left}
+table.cmp td.f{font-weight:600}
+table.cmp tr.star td{background:linear-gradient(90deg,rgba(255,122,47,.09),rgba(255,122,47,.02))}
+table.cmp tr:last-child td{border-bottom:0}
+th.us{background:var(--primary)!important;color:#fff;border-radius:0}
+.y{color:var(--success);font-weight:800;font-size:17px}
+.n{color:#C7D2CF;font-size:17px}
+.star-tag{display:inline-block;font-size:11px;background:var(--accent);color:#fff;
+  border-radius:5px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+
+/* 功能 */
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feat .c{border:1px solid var(--line);border-radius:16px;padding:24px;background:#fff;transition:.2s}
+.feat .c:hover{border-color:var(--primary);box-shadow:0 8px 26px rgba(14,124,102,.1);
+  transform:translateY(-2px)}
+.feat .c .ic{font-size:28px}
+.feat .c b{display:block;font-size:17px;margin:12px 0 8px}
+.feat .c p{font-size:13.5px;color:var(--t2)}
+.feat .c .say{display:block;margin-top:14px;background:var(--primary-l);border-radius:10px;
+  padding:9px 12px;font-size:12.5px;color:var(--primary);font-weight:600}
+
+/* 三步 */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;counter-reset:s}
+.steps .s{position:relative;padding:26px 22px;border-radius:16px;background:#fff;
+  border:1px solid var(--line)}
+.steps .s .n{width:34px;height:34px;border-radius:50%;background:var(--primary);color:#fff;
+  display:grid;place-items:center;font-weight:800;margin-bottom:12px}
+.steps .s b{display:block;font-size:17px;margin-bottom:6px}
+.steps .s p{font-size:13.5px;color:var(--t2)}
+
+/* 适合谁 */
+.who{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.who div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center}
+.who div .ic{font-size:28px}
+.who div b{display:block;font-size:15px;margin-top:8px}
+.who div span{font-size:12.5px;color:var(--t3)}
+
+/* 定价 */
+.price{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+.price .c{border:1px solid var(--line);border-radius:18px;padding:26px;background:#fff;position:relative}
+.price .c.hot{border-color:var(--primary);box-shadow:0 10px 30px rgba(14,124,102,.14)}
+.price .c.hot .tag{position:absolute;top:-12px;right:22px;background:var(--accent);color:#fff;
+  font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px}
+.price .c h4{margin:0;font-size:17px}
+.price .c .p{margin:14px 0 4px;font-size:34px;font-weight:800;color:var(--primary)}
+.price .c .p small{font-size:14px;color:var(--t3);font-weight:400}
+.price .c ul{list-style:none;padding:0;margin:16px 0 22px;font-size:13.5px;color:var(--t2)}
+.price .c ul li{padding:6px 0;display:flex;gap:8px}
+.price .c ul li::before{content:"✓";color:var(--success);font-weight:800}
+.price .c .btn{width:100%;text-align:center}
+
+/* 免责 */
+.disc{background:var(--warn-l);border:1px solid #F0DDBA;border-radius:16px;padding:22px;
+  font-size:13.5px;color:#7A4E00}
+.disc b{display:block;font-size:15px;margin-bottom:6px;color:var(--warn)}
+.disc button{margin-top:12px;background:var(--warn);color:#fff;border:0;border-radius:10px;
+  padding:9px 18px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit}
+
+/* 页脚 */
+.foot{background:#16211E;color:#9FB0AC;padding:44px 0 34px;font-size:13.5px}
+.foot .wrap{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+.foot .logo{color:#fff}
+.foot .cols{display:flex;gap:60px;flex-wrap:wrap}
+.foot .cols b{display:block;color:#fff;font-size:14px;margin-bottom:10px}
+.foot .cols a{display:block;padding:4px 0}
+.foot .cols a:hover{color:#fff}
+.foot .bt{border-top:1px solid rgba(255,255,255,.1);margin-top:30px;padding-top:20px;
+  font-size:12.5px;color:#7C8C88}
+
+/* 弹窗 */
+.mask{position:fixed;inset:0;background:rgba(10,25,22,.55);z-index:100;display:none}
+.mask.on{display:block}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:90%;max-width:620px;
+  max-height:82vh;background:#fff;border-radius:16px;padding:26px;z-index:101;display:none;
+  overflow-y:auto}
+.modal.on{display:block}
+.modal h4{margin:0 0 14px;font-size:19px}
+.modal .bd{font-size:13px;color:var(--t2);line-height:1.85}
+.modal .bd b{color:var(--t1);display:block;margin:14px 0 4px}
+.modal button{margin-top:20px;width:100%;background:var(--primary);color:#fff;border:0;
+  border-radius:12px;padding:12px;font-weight:700;cursor:pointer;font-family:inherit}
+
+@media(max-width:960px){
+  .hero .wrap{grid-template-columns:1fr;gap:40px}
+  .hero h1{font-size:36px}
+  .phone{width:320px;height:640px}
+  .pain,.who{grid-template-columns:repeat(2,1fr)}
+  .feat,.steps,.price,.diff .pts{grid-template-columns:1fr}
+  .nav ul{display:none}
+  table.cmp{font-size:13px}
+  table.cmp th,table.cmp td{padding:11px 8px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="wrap">
+    <div class="logo"><i>穗</i>穗账达</div>
+    <ul>
+      <li data-go="#pain">工坊的难处</li>
+      <li data-go="#diff">我们的不同</li>
+      <li data-go="#feat">核心功能</li>
+      <li data-go="#who">适合谁</li>
+      <li data-go="#price">价格</li>
+    </ul>
+    <div class="cta">
+      <a class="btn o" href="app.html" target="_blank">在线体验</a>
+      <a class="btn p" href="#try">立即开始</a>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="badge">非遗手工作坊专用 · 食品类 / 非食品类</span>
+      <h1>记好手工账，<br>守好祖宗业</h1>
+      <p class="lead">为非遗传承人、手工作坊主而生。开口说一句，就把手工生意的进出账记清楚——<br>
+        谁订了你的壶、谁欠着货款、这个月到底赚没赚，一开口就说得明。</p>
+      <p class="sub">穗账达是一款聚焦潮州非遗小作坊（陶瓷 / 木雕 / 潮绣）的记账与往来管理工具，把「记账」变成「说话」。</p>
+      <div class="acts">
+        <a class="btn p lg" href="app.html" target="_blank">▶ 打开在线体验</a>
+        <a class="btn o lg" href="#diff">看看和别家有什么不同</a>
+      </div>
+      <div class="metrics">
+        <div><b>3 秒</b><span>记完一笔手工账</span></div>
+        <div><b>0 基础</b><span>不用懂会计借贷</span></div>
+        <div><b>自动催</b><span>赊账逾期提醒</span></div>
+        <div><b>本机存</b><span>数据不上传服务器</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen"><iframe src="app.html" title="穗账达应用演示"></iframe></div>
+      </div>
+      <p class="phone-cap">↑ 右侧就是真机界面，可以直接点着用（新用户空账本 · 可注册登录）</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="pain">
+  <div class="wrap">
+    <div class="sec-hd">
+      <span class="eyebrow">非遗工坊的真实处境</span>
+      <h2>手艺好，账却记不清</h2>
+      <p>请个会计不划算，财务软件看不懂，最后只剩微信收款码、手写收据，和一堆记不住的赊账与说不清的补贴。</p>
+    </div>
+    <div class="pain">
+      <div class="c"><div class="ic">🧾</div><b>订单收据散落各处</b>
+        <p>给景区文创店发的货、手写收据、微信转账截图散在各处，月底对账全靠回忆。</p>
+        <span class="q">"那批釉下彩，到底结没结款？"</span></div>
+      <div class="c"><div class="ic">💸</div><b>谁欠我货款记不清</b>
+        <p>赊给文创店、展会的货，说好月底结的款，全在脑子里，一忙就忘。</p>
+        <span class="q">"牌坊街那家两万，是不是还没给？"</span></div>
+      <div class="c"><div class="ic">📊</div><b>算不清赚没赚</b>
+        <p>陶土、釉料、大师工时、学徒工资一扣，这个月到底剩多少算不清。</p>
+        <span class="q">"开了几窑，怎么没见钱？"</span></div>
+      <div class="c"><div class="ic">🏺</div><b>花样被抄、补贴不会领</b>
+        <p>新花样刚拿出来就被仿、作品被抢注；传承人补助、版权补贴更不知道怎么申请。</p>
+        <span class="q">"这笔补助，我能领吗？"</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec gray" id="diff">
+  <div class="wrap">
+    <div class="diff">
+      <span class="eyebrow" style="color:#FFD3B2">人无我有</span>
+      <h3>别人做「记账」，我们做「把手工账记明白 + 把货款要回来 + 把作品存住」</h3>
+      <p>市面上的财务软件都在教你把分录做平，但非遗工坊主真正睡不着觉的是——
+        赊给文创店的货款什么时候能收回来、新花样被抄了怎么办、传承人补助怎么领。
+        穗账达把「应收应付 + 逾期催款 + 作品存证 + 非遗政策」放在和记账同等的位置，
+        这也是畅捷通、慧算账都没有的场景。</p>
+      <div class="pts">
+        <div><b>谁欠我货款</b><span>赊给文创店、景区的货，一笔不落</span></div>
+        <div><b>逾期催款</b><span>到期自动标红，一键生成潮汕话催款</span></div>
+        <div><b>作品存证</b><span>新花样拍一张，带时间戳在先证据</span></div>
+      </div>
+    </div>
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th>能力</th>
+          <th class="us">穗账达</th>
+          <th>畅捷通</th>
+          <th>慧算账</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="star"><td class="f">应收应付台账<span class="star-tag">人无我有</span></td>
+          <td class="y">✓</td><td class="n">—</td><td class="n">—</td></tr>
+        <tr class="star"><td class="f">逾期提醒 + 潮汕话催款话术<span class="star-tag">人无我有</span></td>
+          <td class="y">✓</td><td class="n">—</td><td class="n">—</td></tr>
+        <tr class="star"><td class="f">作品存证（带时间戳在先证据）<span class="star-tag">人无我有</span></td>
+          <td class="y">✓</td><td class="n">—</td><td class="n">—</td></tr>
+        <tr class="star"><td class="f">非遗政策自动匹配（补助 / 补贴测算）<span class="star-tag">人无我有</span></td>
+          <td class="y">✓</td><td class="n">—</td><td class="n">—</td></tr>
+        <tr><td class="f">自然语言一句话记账</td>
+          <td class="y">✓</td><td class="n">—</td><td class="n">—</td></tr>
+        <tr><td class="f">老板经营看板（毛利率 / 客户）</td>
+          <td class="y">✓</td><td class="y">✓</td><td class="n">—</td></tr>
+        <tr><td class="f">凭证账簿 / 固定资产等全套财务模块</td>
+          <td class="n">—</td><td class="y">✓</td><td class="y">✓</td></tr>
+        <tr><td class="f">无需会计基础即可上手</td>
+          <td class="y">✓</td><td class="n">—</td><td class="n">—</td></tr>
+        <tr><td class="f">票据 OCR 识别</td>
+          <td class="n">—</td><td class="y">✓</td><td class="y">✓</td></tr>
+      </tbody>
+    </table>
+    <p style="text-align:center;font-size:12.5px;color:var(--t3);margin-top:14px">
+      对比依据为各产品公开功能页的常规版本，仅作能力侧重说明，不构成对任何产品的评价。</p>
+  </div>
+</section>
+
+<section class="sec" id="feat">
+  <div class="wrap">
+    <div class="sec-hd">
+      <span class="eyebrow">核心功能</span>
+      <h2>只做非遗工坊真正用得上的六件事</h2>
+    </div>
+    <div class="feat">
+      <div class="c"><div class="ic">🎙</div><b>一句话记账</b>
+        <p>按你平时说话的方式写，自动识别金额、收支、分类、对象、日期，赊账还会自动进往来台账。</p>
+        <span class="say">"给景区文创店发了2万货，月底结款"</span></div>
+      <div class="c"><div class="ic">💰</div><b>往来台账</b>
+        <p>别人欠我 / 我欠别人 / 已结清三本账，逾期天数列得清清楚楚，按账龄排序。</p>
+        <span class="say">逾期的永远排在最上面</span></div>
+      <div class="c"><div class="ic">📢</div><b>一键催款</b>
+        <p>自动生成一段能直接发的催款消息，复制粘贴到微信即可，还支持潮汕话客气版话术。</p>
+        <span class="say">"老板好，那笔 ¥12,000 已逾期 5 天，唔该有闲处理下"</span></div>
+      <div class="c"><div class="ic">📊</div><b>老板看板</b>
+        <p>近半年收支走势、毛利率、陶土釉料花在哪、哪家文创店贡献最大，一张图看懂生意。</p>
+        <span class="say">不用翻账本，看板讲明白</span></div>
+      <div class="c"><div class="ic">🏺</div><b>作品存证</b>
+        <p>新花样随手拍，自动编号（如 TC-20260925-001）并带时间戳，被抄、被抢注时就是你的在先证据。存证 ≠ 版权登记。</p>
+        <span class="say">先存一份，心里不慌</span></div>
+      <div class="c"><div class="ic">🏮</div><b>非遗政策雷达</b>
+        <p>传承人补助、大师工作室经费、工坊补贴、版权登记补贴，按你的作品存证与经营规模自动测算。</p>
+        <span class="say">只测算提醒，不代办申领</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec gray">
+  <div class="wrap">
+    <div class="sec-hd"><span class="eyebrow">怎么用</span><h2>三步，从记一笔到把钱要回来</h2></div>
+    <div class="steps">
+      <div class="s"><div class="n">1</div><b>说一句话</b>
+        <p>「给景区文创店发了2万货，月底结款」——金额、分类、对象、账期自动填好。</p></div>
+      <div class="s"><div class="n">2</div><b>自动分流</b>
+        <p>进账入账本，赊账那部分同时进往来台账，约定日期自动排好。</p></div>
+      <div class="s"><div class="n">3</div><b>到期就催</b>
+        <p>过了约定日自动标红置顶，点一下生成潮汕话催款消息，复制发出去。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="who">
+  <div class="wrap">
+    <div class="sec-hd"><span class="eyebrow">适合谁</span>
+      <h2>没有会计、没有财务软件，非遗工坊也该有一本清楚的账</h2></div>
+    <div class="who">
+      <div><div class="ic">🏺</div><b>非遗工坊主</b><span>陶瓷 / 木雕 / 潮绣作坊</span></div>
+      <div><div class="ic">👨‍🎨</div><b>非遗传承人</b><span>区级 / 市级 / 省级 / 国家级</span></div>
+      <div><div class="ic">🧑‍🏫</div><b>师徒作坊</b><span>大师带徒弟，记工时与传习</span></div>
+      <div><div class="ic">🛍️</div><b>景区文创供货</b><span>给文创店 / 平台供货有账期</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec gray" id="price">
+  <div class="wrap">
+    <div class="sec-hd"><span class="eyebrow">价格</span><h2>先把账记起来，再决定要不要花钱</h2></div>
+    <div class="price">
+      <div class="c"><h4>基础版</h4>
+        <div class="p">¥0<small> / 永久</small></div>
+        <ul><li>一句话记账</li><li>流水与分类统计</li><li>往来台账（20 笔内）</li><li>本地数据存储</li></ul>
+        <a class="btn o" href="app.html" target="_blank">直接开始用</a></div>
+      <div class="c hot"><span class="tag">最常被选</span><h4>专业版</h4>
+        <div class="p">¥19.9<small> / 月</small></div>
+        <ul><li>往来台账不限笔数</li><li>逾期提醒 + 潮汕话催款话术</li><li>老板经营看板</li><li>作品存证（不限件数，带时间戳）</li><li>非遗政策雷达与补贴测算</li></ul>
+        <a class="btn p" href="app.html" target="_blank">体验专业版功能</a></div>
+      <div class="c"><h4>代账服务</h4>
+        <div class="p">¥200<small> / 月起</small></div>
+        <ul><li>本地代账会计对接</li><li>月度报表与申报协助</li><li>票据整理建议</li><li>政策与补贴提醒</li></ul>
+        <a class="btn o" href="app.html#agent" target="_blank">找会计聊聊</a></div>
+    </div>
+    <p style="text-align:center;font-size:12.5px;color:var(--t3);margin-top:18px">
+      价格为演示示意，正式定价以产品上线后公布为准。</p>
+  </div>
+</section>
+
+<section class="sec" id="try">
+  <div class="wrap">
+    <div style="background:linear-gradient(150deg,#0E7C66,#14A085);border-radius:22px;
+      padding:52px 40px;text-align:center;color:#fff">
+      <h2 style="font-size:30px;font-weight:800">现在就说一句话，把今天的账记了</h2>
+      <p style="margin-top:12px;color:rgba(255,255,255,.85);font-size:15.5px">
+        注册后即可建立自己的本机账本，数据只存在你自己的设备上。</p>
+      <div style="margin-top:26px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a class="btn p lg" style="background:#fff;color:var(--primary);box-shadow:0 8px 22px rgba(0,0,0,.16)"
+          href="app.html" target="_blank">▶ 打开穗账达</a>
+        <button class="btn o lg" style="border-color:rgba(255,255,255,.5);color:#fff" id="open-dc">
+          免责声明</button>
+      </div>
+    </div>
+    <div class="disc" style="margin-top:22px">
+      <b>使用前请注意</b>
+      穗账达是面向非遗传承人、手工作坊主的记账辅助工具，页面中的税额测算、合规提示、补贴与政策信息均为基于公开政策的通用估算，
+      不构成税务、会计或法律意见，不替代执业财税顾问的专业服务，亦不提供代理记账、税务申报或补贴代办服务。
+      账目数据仅保存在你本机浏览器，请定期导出备份。
+      <button id="open-dc2">查看完整免责声明</button>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>
+      <div class="logo"><i>穗</i>穗账达</div>
+      <p style="margin-top:12px;max-width:280px">记好手工账，守好祖宗业。<br>
+        为非遗传承人、手工作坊主做的一本明白账。</p>
+    </div>
+    <div class="cols">
+      <div><b>产品</b><a href="#feat">核心功能</a><a href="#diff">与别家的差异</a>
+        <a href="#price">价格</a><a href="app.html" target="_blank">在线体验</a></div>
+      <div><b>场景</b><a href="#pain">为什么需要</a><a href="#who">适合谁</a>
+        <a href="app.html" target="_blank">往来台账</a><a href="app.html" target="_blank">老板看板</a></div>
+      <div><b>说明</b><a href="#" id="open-dc3">免责声明</a><a href="#try">数据安全</a>
+        <a href="#price">代账对接</a></div>
+    </div>
+  </div>
+  <div class="wrap bt">穗账达 · 非遗传承人手工账管家 · 新用户版　|　
+    税收政策与非遗扶持措施存在地区差异且会调整，一切以国家税务总局及属地主管部门最新公告为准。</div>
+</footer>
+
+<div class="mask" id="mask"></div>
+<div class="modal" id="modal">
+  <h4>免责声明</h4>
+  <div class="bd" id="modal-bd"></div>
+  <button id="dc-ok">我已阅读</button>
+</div>
+
+<script>
+var DISC='<b>一、服务性质</b>穗账达是一款面向非遗传承人、手工作坊主等小微经营者的记账辅助工具，'+
+'提供流水记录、往来台账、经营测算与政策提示。本工具并非会计师事务所或税务师事务所，'+
+'不提供审计、鉴证、代理记账或税务代理服务。<br>'+
+'<b>二、不构成专业意见</b>页面中的税额测算、合规提示、风险评分、补贴与政策信息，'+
+'均为基于公开政策的通用估算与示例，不构成税务、会计、法律或投资意见，'+
+'亦不能替代执业财税顾问针对具体情况出具的专业意见。你应结合自身实际经营情况，'+
+'并向主管税务机关或专业人士咨询后作出决策。<br>'+
+'<b>三、数据与责任</b>你的账目、往来、存证图片仅保存在本机浏览器，本工具不上传、不备份、不共享。'+
+'因设备丢失、浏览器数据清理、误操作等导致的数据丢失，本工具不承担责任，请定期导出 CSV 备份。'+
+'因依赖本工具内容作出决策而产生的任何直接或间接损失，本工具不承担责任。<br>'+
+'<b>四、政策时效</b>税收优惠与非遗扶持措施存在地区差异且会调整，页面展示的额度、税率、补贴标准可能滞后，'+
+'一切以国家税务总局及属地主管部门最新公告为准。<br>'+
+'<b>五、第三方服务</b>代账会计、补贴代办等由第三方机构提供，本工具仅作信息展示与对接，'+
+'不对第三方服务质量负责，请自行甄别并签约。<br>'+
+'<b>六、服务边界</b>本软件仅提供记账辅助与政策信息参考，'+
+'<b>不提供代理记账、纳税申报、补贴代办等服务</b>。'+
+'页面中的政策线索基于公开文件整理，只做前置提醒，'+
+'具体能否申领、申领标准与最终结果，<b>以政府主管部门的官方解释为准</b>。<br>'+
+'<b>七、对比说明</b>页面中的产品能力对比，依据为各产品公开功能页的常规版本，'+
+'仅作能力侧重说明，不构成对任何第三方产品的评价。';
+function openDc(){document.getElementById('modal-bd').innerHTML=DISC;
+  document.getElementById('modal').classList.add('on');
+  document.getElementById('mask').classList.add('on')}
+function closeDc(){document.getElementById('modal').classList.remove('on');
+  document.getElementById('mask').classList.remove('on')}
+['open-dc','open-dc2','open-dc3'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(el)el.addEventListener('click',function(e){e.preventDefault();openDc()});
+});
+document.getElementById('dc-ok').addEventListener('click',closeDc);
+document.getElementById('mask').addEventListener('click',closeDc);
+document.addEventListener('click',function(e){
+  var g=e.target.closest('[data-go]');
+  if(g){var s=document.querySelector(g.getAttribute('data-go'));
+    if(s)s.scrollIntoView({behavior:'smooth'})}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,2683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>穗账达 · 为非遗传承人记好手工账</title>
+<style>
+:root{
+  --primary:#0E7C66; --primary-2:#14A085; --primary-l:#E6F4F0;
+  --accent:#FF7A2F; --accent-l:#FFF1E7;
+  --danger:#E5484D; --danger-l:#FDECEC;
+  --warn:#B26A00; --warn-l:#FFF6E5;
+  --success:#17A673; --success-l:#E7F7F1;
+  --t1:#16211E; --t2:#5B6B67; --t3:#98A5A1;
+  --bg:#F4F7F6; --line:#E8EEEC;
+  --sh:0 2px 12px rgba(14,124,102,.07);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:#dfe5e3;color:var(--t1);font-size:16px;line-height:1.5}
+.app{max-width:420px;margin:0 auto;min-height:100vh;background:var(--bg);
+  position:relative;padding-bottom:78px;overflow-x:hidden}
+.page{display:none}
+.page.active{display:block}
+
+/* ============ Hero ============ */
+.hero{background:linear-gradient(150deg,#0E7C66 0%,#14A085 60%,#19B092 100%);
+  padding:22px 20px 26px;color:#fff;border-radius:0 0 24px 24px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-50px;top:-50px;width:170px;height:170px;
+  border-radius:50%;background:rgba(255,255,255,.08)}
+.hero-badge{display:inline-block;font-size:12px;background:rgba(255,255,255,.18);
+  padding:4px 10px;border-radius:999px;letter-spacing:.5px}
+.hero h1{font-size:30px;margin:12px 0 6px;font-weight:800;letter-spacing:1px}
+.hero-sub{margin:0;font-size:15px;color:#fff;font-weight:600;letter-spacing:.3px}
+.hero-sub2{margin:6px 0 0;font-size:12.5px;color:rgba(255,255,255,.78)}
+.hero-btn{margin-top:18px;width:100%;border:0;background:#fff;color:var(--primary);
+  font-size:17px;font-weight:700;padding:14px;border-radius:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,.12);cursor:pointer;font-family:inherit}
+.hero-btn:active{transform:scale(.98)}
+.hero-foot{margin-top:10px;font-size:12px;color:rgba(255,255,255,.7);text-align:center}
+.hero-foot b{color:#fff}
+
+/* ============ 一句话记账条 ============ */
+.saybar{margin:14px 16px 0;background:#fff;border-radius:16px;padding:12px 14px;
+  box-shadow:var(--sh);display:flex;align-items:center;gap:10px;cursor:pointer}
+.saybar:active{transform:scale(.99)}
+.saybar .mic{flex:none;width:38px;height:38px;border-radius:12px;
+  background:linear-gradient(135deg,#0E7C66,#14A085);color:#fff;display:grid;
+  place-items:center;font-size:19px}
+.saybar .ph{flex:1;font-size:14px;color:var(--t3)}
+.saybar .ph b{color:var(--t1);font-weight:600}
+.saybar .go{flex:none;font-size:13px;font-weight:700;color:var(--primary)}
+.exsay{display:flex;gap:8px;overflow-x:auto;padding:10px 16px 0;-webkit-overflow-scrolling:touch}
+.exsay::-webkit-scrollbar{display:none}
+.exsay div{flex:none;background:#fff;border:1px solid var(--line);border-radius:999px;
+  padding:7px 13px;font-size:12.5px;color:var(--t2);cursor:pointer;white-space:nowrap}
+.exsay div:active{background:var(--primary-l)}
+
+/* ============ 入口网格 ============ */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:14px 16px 0}
+.quick{background:#fff;border-radius:14px;padding:12px 4px;text-align:center;
+  display:flex;flex-direction:column;gap:6px;align-items:center;
+  box-shadow:var(--sh);cursor:pointer;position:relative}
+.quick:active{transform:scale(.96)}
+.quick i{font-style:normal;font-size:22px}
+.quick span{font-size:12px;color:var(--t2)}
+.quick .dot{position:absolute;top:8px;right:14px;min-width:16px;height:16px;padding:0 4px;
+  border-radius:999px;background:var(--danger);color:#fff;font-size:10px;font-weight:700;
+  display:grid;place-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px 16px 0}
+.big-btn{background:#fff;border-radius:16px;padding:18px 14px;box-shadow:var(--sh);
+  display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.big-btn:active{transform:scale(.97)}
+.big-btn i{font-size:26px;font-style:normal}
+.big-btn b{font-size:15px}
+.big-btn span{font-size:12px;color:var(--t3)}
+
+/* ============ 卡片 ============ */
+.card{background:#fff;margin:12px 16px 0;border-radius:16px;padding:16px;box-shadow:var(--sh)}
+.card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.card-hd h3{margin:0;font-size:16px;font-weight:700}
+.card-hd h3 small{font-size:11px;color:var(--t3);font-weight:400;margin-left:6px}
+.more{font-size:13px;color:var(--t3);cursor:pointer}
+
+/* ============ 统计 ============ */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);text-align:center}
+.stat4{display:grid;grid-template-columns:repeat(4,1fr);text-align:center}
+.stat-row .lbl,.stat4 .lbl{display:block;font-size:12px;color:var(--t3);margin-bottom:4px}
+.num{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums}
+.num.sm{font-size:16px}
+.num.green{color:var(--success)}
+.num.red{color:var(--danger)}
+.num.orange{color:var(--accent)}
+.quota{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.quota-hd{display:flex;justify-content:space-between;font-size:13px;color:var(--t2);margin-bottom:8px}
+.quota-hd b{color:var(--t1)}
+.bar{height:8px;background:#EEF3F1;border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;
+  background:linear-gradient(90deg,#17A673,#3ECF9A);transition:width .4s}
+.bar.hot i{background:linear-gradient(90deg,#FF7A2F,#FFA45C)}
+.bar.full i{background:linear-gradient(90deg,#E5484D,#FF7A6B)}
+.quota-tip{margin-top:8px;font-size:13px;color:var(--success)}
+.quota-tip.warn{color:var(--warn)} .quota-tip.danger{color:var(--danger)}
+
+/* ============ 预警 ============ */
+.alert{border-radius:12px;padding:12px;font-size:13px;
+  display:flex;flex-direction:column;gap:4px}
+.alert b{font-size:14px}
+.alert span{color:var(--t2);line-height:1.45}
+.alert.warn{background:var(--warn-l)} .alert.warn b{color:var(--warn)}
+.alert.danger{background:var(--danger-l)} .alert.danger b{color:var(--danger)}
+.alert.ok{background:var(--success-l)} .alert.ok b{color:var(--success)}
+.alert+.alert{margin-top:8px}
+
+/* ============ 往来（应收应付） ============ */
+.ar-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.ar-box{border-radius:14px;padding:12px 10px;text-align:center}
+.ar-box .lbl{font-size:12px;color:var(--t2);display:block;margin-bottom:2px}
+.ar-box b{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums;display:block}
+.ar-box small{font-size:11px;color:var(--t3)}
+.ar-box.a{background:var(--success-l)} .ar-box.a b{color:var(--success)}
+.ar-box.b{background:var(--accent-l)} .ar-box.b b{color:var(--accent)}
+.ar-box.c{background:var(--danger-l)} .ar-box.c b{color:var(--danger)}
+.ar-item{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.ar-item.late{border-color:#F6C9CA;background:#FFFBFB}
+.ar-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.ar-hd .nm{font-size:15px;font-weight:700}
+.ar-hd .nm em{font-style:normal;font-size:11px;font-weight:700;padding:2px 6px;
+  border-radius:6px;margin-left:6px}
+.em-rec{background:var(--success-l);color:var(--success)}
+.em-pay{background:var(--accent-l);color:var(--accent)}
+.ar-hd .am{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;flex:none}
+.ar-meta{font-size:12px;color:var(--t3);margin-top:4px}
+.ar-act{display:flex;gap:8px;margin-top:10px}
+.btn-sm{flex:1;border:0;border-radius:10px;padding:9px;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit}
+.btn-sm.dun{background:var(--danger);color:#fff}
+.btn-sm.ok{background:var(--primary-l);color:var(--primary)}
+.btn-sm.gh{background:#F2F6F5;color:var(--t2)}
+.late-tag{display:inline-block;font-size:11px;font-weight:700;color:#fff;
+  background:var(--danger);border-radius:6px;padding:2px 7px;margin-left:6px}
+
+/* ============ 看板 ============ */
+.chart{width:100%;height:150px;display:block}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--t2);margin-top:6px;justify-content:center}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px}
+.str{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.str .n{flex:none;width:72px;font-size:13px;color:var(--t2)}
+.str .b{flex:1;height:10px;background:#EEF3F1;border-radius:999px;overflow:hidden}
+.str .b i{display:block;height:100%;border-radius:999px;background:var(--primary-2)}
+.str .v{flex:none;width:74px;text-align:right;font-size:13px;font-weight:700;
+  font-variant-numeric:tabular-nums}
+
+/* ============ 导航 ============ */
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:420px;background:#fff;display:grid;
+  grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);
+  padding:6px 0 calc(6px + env(safe-area-inset-bottom));z-index:50}
+.tabbar a{text-align:center;font-size:11px;color:var(--t3);
+  display:flex;flex-direction:column;gap:2px;align-items:center;
+  padding:4px 0;cursor:pointer;position:relative}
+.tabbar a i{font-style:normal;font-size:20px;opacity:.45;transition:.2s}
+.tabbar a.on{color:var(--primary);font-weight:600}
+.tabbar a.on i{opacity:1;transform:translateY(-1px)}
+.tabbar a .dot{position:absolute;top:2px;right:50%;margin-right:-18px;min-width:15px;
+  height:15px;padding:0 4px;border-radius:999px;background:var(--danger);color:#fff;
+  font-size:10px;font-weight:700;display:grid;place-items:center}
+.app.sub .tabbar{display:none}
+.app.sub{padding-bottom:24px}
+
+.nav-bar{display:flex;align-items:center;gap:12px;padding:14px 16px;
+  background:#fff;position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line)}
+.nav-bar a{font-size:24px;color:var(--t1);line-height:1;cursor:pointer;padding:0 2px}
+.nav-bar h2{font-size:17px;margin:0;font-weight:700}
+.nav-bar .act{margin-left:auto;font-size:14px;color:var(--primary);font-weight:600;cursor:pointer}
+
+/* ============ 表单 ============ */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:9px 16px;border-radius:999px;background:#F2F6F5;font-size:14px;
+  color:var(--t2);border:1px solid transparent;cursor:pointer;transition:.15s}
+.chip.on{background:var(--primary-l);color:var(--primary);
+  border-color:var(--primary);font-weight:600}
+.q{font-size:15px;margin:0 0 12px;font-weight:600}
+.seg{display:flex;background:#F2F6F5;border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:transparent;padding:9px;border-radius:9px;
+  font-size:14px;color:var(--t2);cursor:pointer;font-family:inherit}
+.seg button.on{background:#fff;color:var(--primary);font-weight:700;box-shadow:var(--sh)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;color:var(--t2);margin-bottom:8px}
+.amt-box{display:flex;align-items:baseline;gap:6px;border-bottom:2px solid var(--primary);
+  padding-bottom:6px}
+.amt-box s{font-size:22px;font-weight:800;color:var(--primary);text-decoration:none}
+.amt-box input{border:0;outline:0;font-size:32px;font-weight:800;width:100%;
+  font-variant-numeric:tabular-nums;background:transparent;color:var(--t1);
+  font-family:inherit;padding:0}
+.inp{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;
+  font-size:15px;outline:0;background:#fff;color:var(--t1);font-family:inherit}
+.inp:focus{border-color:var(--primary)}
+textarea.inp{min-height:88px;resize:none;line-height:1.55}
+.switch-row{display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.switch-row span{font-size:14px}
+.switch-row small{display:block;color:var(--t3);font-size:12px;margin-top:2px}
+.switch{width:46px;height:26px;border-radius:999px;background:#DDE5E3;position:relative;
+  transition:.2s;cursor:pointer;flex:none}
+.switch i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+  background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on{background:var(--primary)} .switch.on i{left:23px}
+.btn-primary{background:linear-gradient(135deg,#0E7C66,#14A085);color:#fff;
+  border:0;font-size:16px;font-weight:700;padding:14px;border-radius:14px;
+  cursor:pointer;box-shadow:0 6px 16px rgba(14,124,102,.25);font-family:inherit}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:disabled{opacity:.4;box-shadow:none;cursor:not-allowed}
+.btn-primary.full{display:block;width:calc(100% - 32px);margin:20px 16px}
+.btn-ghost{display:block;width:calc(100% - 32px);margin:10px 16px 0;background:#fff;
+  border:1px solid var(--line);color:var(--t2);font-size:15px;padding:13px;
+  border-radius:14px;cursor:pointer;font-family:inherit}
+
+/* ============ 列表 ============ */
+.flow{display:flex;justify-content:space-between;align-items:center;
+  padding:11px 0;border-bottom:1px solid var(--line)}
+.flow:last-child{border-bottom:0}
+.fl-l b{display:block;font-size:14px;font-weight:600}
+.fl-l span{font-size:12px;color:var(--t3)}
+.fl-r{display:flex;align-items:center;gap:10px}
+.fl-r em{font-style:normal;color:var(--t3);font-size:12px;cursor:pointer;padding:2px 4px}
+.in{color:var(--success);font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.out{color:var(--t1);font-size:16px;font-weight:700;font-variant-numeric:tabular-nums}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:13px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.row:last-child{border-bottom:0}
+.row-l b{display:block;font-size:14px;font-weight:600}
+.row-l span{font-size:12px;color:var(--t3);display:block;margin-top:2px}
+.row-r{font-size:13px;color:var(--t2);display:flex;align-items:center;gap:6px;flex:none}
+.chev{color:var(--t3);font-size:14px}
+
+/* ============ 合规 ============ */
+.health{display:flex;justify-content:space-between;align-items:center}
+.health .lbl{font-size:13px;color:var(--t2)}
+.health .lbl b{display:block;font-size:15px;color:var(--t1);margin-bottom:4px}
+.ring{width:92px;height:92px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:conic-gradient(var(--success) 0%,#EEF3F1 0%)}
+.ring i{width:74px;height:74px;border-radius:50%;background:#fff;display:grid;
+  place-items:center;font-style:normal;font-size:26px;font-weight:800;
+  font-variant-numeric:tabular-nums}
+.issue{display:flex;gap:10px;padding:12px;border-radius:12px;background:#FAFCFB;
+  border:1px solid var(--line);margin-bottom:10px}
+.issue .lv{flex:none;font-size:11px;padding:3px 8px;border-radius:6px;
+  height:fit-content;font-weight:700;margin-top:2px}
+.issue .bd{flex:1}
+.issue b{font-size:14px;display:block;margin-bottom:3px}
+.issue p{margin:0;font-size:12.5px;color:var(--t2);line-height:1.55}
+.lv.h{background:var(--danger-l);color:var(--danger)}
+.lv.m{background:var(--warn-l);color:var(--warn)}
+.lv.l{background:var(--primary-l);color:var(--primary)}
+.lv.ok{background:var(--success-l);color:var(--success)}
+
+/* ============ 存证 ============ */
+.proof-g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.proof{position:relative;border-radius:12px;overflow:hidden;background:#EEF3F1;
+  aspect-ratio:1/1;cursor:pointer}
+.proof img{width:100%;height:100%;object-fit:cover;display:block}
+.proof .cap{position:absolute;left:0;right:0;bottom:0;background:rgba(22,33,30,.62);
+  color:#fff;font-size:10px;padding:3px 6px;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.proof .x{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;
+  background:rgba(0,0,0,.5);color:#fff;font-size:12px;display:grid;place-items:center}
+.proof.add{display:grid;place-items:center;font-size:26px;color:var(--t3);
+  border:1px dashed #CBD8D4;background:#fff}
+
+/* ============ 弹层 ============ */
+.mask{position:fixed;inset:0;background:rgba(10,25,22,.5);z-index:100;display:none}
+.mask.on{display:block}
+.sheet{position:fixed;left:50%;transform:translateX(-50%) translateY(100%);
+  bottom:0;width:100%;max-width:420px;background:#fff;border-radius:18px 18px 0 0;
+  padding:18px 16px calc(18px + env(safe-area-inset-bottom));z-index:101;
+  transition:transform .25s;max-height:86vh;overflow-y:auto}
+.sheet.on{transform:translateX(-50%) translateY(0)}
+.sheet h4{margin:0 0 14px;font-size:17px}
+.center{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:86%;
+  max-width:360px;background:#fff;border-radius:16px;padding:18px;z-index:101;display:none}
+.center.on{display:block}
+.center h4{margin:0 0 10px;font-size:17px}
+.center p{font-size:13px;color:var(--t2);line-height:1.6;margin:0 0 14px}
+.scrollbox{max-height:46vh;overflow-y:auto;font-size:12.5px;color:var(--t2);
+  line-height:1.75;background:#FAFCFB;border:1px solid var(--line);border-radius:12px;
+  padding:12px;margin-bottom:14px}
+
+/* ============ 新手引导 ============ */
+.gmask{position:fixed;z-index:200;border-radius:14px;
+  box-shadow:0 0 0 2000px rgba(10,25,22,.62);display:none;pointer-events:none;
+  border:2px solid #fff}
+.gmask.on{display:block}
+.gtip{position:fixed;z-index:201;left:50%;transform:translateX(-50%);width:80%;
+  max-width:340px;background:#fff;border-radius:14px;padding:16px;display:none;
+  box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.gtip.on{display:block}
+.gtip b{font-size:15px;display:block;margin-bottom:6px}
+.gtip p{margin:0;font-size:13px;color:var(--t2);line-height:1.6}
+.gtip .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.gtip .step{font-size:12px;color:var(--t3)}
+.gtip button{border:0;background:var(--primary);color:#fff;font-weight:700;
+  padding:8px 18px;border-radius:999px;font-size:13px;cursor:pointer;font-family:inherit}
+.gtip .skip{background:transparent;color:var(--t3);font-weight:400;padding:8px 6px}
+
+/* ============ 其他 ============ */
+.tag{font-size:11px;padding:2px 7px;border-radius:6px;background:#F2F6F5;
+  color:var(--t2);font-weight:600}
+.tag.b{background:var(--primary-l);color:var(--primary)}
+.tag.o{background:var(--accent-l);color:var(--accent)}
+.tag.r{background:var(--danger-l);color:var(--danger)}
+.tag.g{background:var(--success-l);color:var(--success)}
+.empty{text-align:center;color:var(--t3);font-size:13px;padding:26px 0}
+.note{font-size:12px;color:var(--t3);line-height:1.6;margin:14px 16px 0;text-align:center}
+.toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%) translateY(10px);
+  background:rgba(22,33,30,.92);color:#fff;padding:10px 18px;border-radius:999px;
+  font-size:14px;opacity:0;transition:.25s;z-index:300;pointer-events:none;max-width:80%}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.subsidy-row{display:flex;justify-content:space-between;align-items:center;
+  background:var(--accent-l);border-radius:12px;padding:12px}
+.subsidy-row+.subsidy-row{margin-top:8px}
+.subsidy-row b{display:block;font-size:15px}
+.subsidy-row span{font-size:12px;color:var(--t2)}
+.amount{font-size:20px;font-weight:800;color:var(--accent)}
+.dl{display:flex;justify-content:space-between;align-items:center;padding:11px 0;
+  border-bottom:1px solid var(--line)}
+.dl:last-child{border-bottom:0}
+.dl b{font-size:14px;font-weight:600}
+.dl small{display:block;color:var(--t3);font-size:12px;margin-top:2px}
+.dl .d{font-size:13px;font-weight:700;color:var(--primary)}
+.dl .d.soon{color:var(--danger)}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);
+  border-radius:12px;padding:12px 14px;margin-bottom:8px;background:#fff;
+  font-size:14px;cursor:pointer;font-family:inherit;color:var(--t1)}
+.opt.on{border-color:var(--primary);background:var(--primary-l);font-weight:600}
+@media(min-width:600px){.app{box-shadow:0 0 40px rgba(0,0,0,.12)}}
+/* 新用户流程 */
+.auth-layer{position:fixed;inset:0;background:linear-gradient(150deg,#0e7c66,#14a085);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}.auth-card{width:min(430px,100%);background:#fff;border-radius:24px;padding:28px 22px;box-shadow:0 24px 70px #0003}.auth-brand{text-align:center;color:#0e7c66;font-size:26px;font-weight:800}.auth-sub{text-align:center;color:#71807b;font-size:14px;margin:4px 0 22px}.auth-steps{display:flex;justify-content:space-between;margin:0 0 22px;padding:0;list-style:none}.auth-steps li{font-size:11px;color:#9aa9a4;text-align:center;flex:1}.auth-steps li.on{color:#0e7c66;font-weight:700}.auth-steps i{display:block;width:24px;height:24px;line-height:24px;border-radius:50%;background:#edf4f1;margin:0 auto 5px;font-style:normal}.auth-steps li.on i{background:#0e7c66;color:#fff}.auth-field{margin:14px 0}.auth-field label{display:block;font-size:13px;color:#4f625b;margin-bottom:7px}.auth-field input{width:100%;box-sizing:border-box;padding:13px 14px;border:1px solid #d8e3df;border-radius:12px;font-size:16px;outline:none}.auth-code{display:flex;gap:8px}.auth-code input{flex:1}.auth-code button{white-space:nowrap;border:0;border-radius:11px;background:#e8f4f0;color:#0e7c66;padding:0 12px;font-weight:700}.auth-main{width:100%;border:0;border-radius:12px;padding:14px;background:#0e7c66;color:#fff;font-size:16px;font-weight:700;margin-top:8px}.auth-link{border:0;background:none;color:#0e7c66;margin:14px auto 0;display:block;font-size:13px}.auth-hint{font-size:12px;color:#8b9a95;text-align:center;margin-top:10px}.first-guide{position:fixed;inset:0;z-index:990;background:#0c322a99;display:flex;align-items:center;justify-content:center;padding:24px}.first-guide-card{background:#fff;border-radius:22px;padding:26px 22px;text-align:center;width:min(340px,100%);box-shadow:0 18px 50px #0004}.first-guide-finger{font-size:58px;line-height:1;transform:rotate(-22deg);margin:4px 0 12px}.first-guide-card h3{margin:0 0 8px;font-size:20px;color:#163c33}.first-guide-card p{margin:0;color:#667a73;line-height:1.6;font-size:14px}.success-bubble{position:fixed;left:18px;right:18px;bottom:92px;z-index:995;background:#fff;border:1px solid #b9e0d2;border-radius:18px;padding:16px;box-shadow:0 12px 34px #0003}.success-bubble b{display:block;color:#0e7c66;margin-bottom:5px}.industry-card{position:fixed;inset:0;z-index:996;background:#0c322a73;display:flex;align-items:flex-end;justify-content:center;padding:16px}.industry-inner{background:#fff;border-radius:22px;padding:20px;width:min(470px,100%);box-shadow:0 16px 40px #0003}.industry-inner h3{margin:0 0 6px;color:#173d34}.industry-inner p{font-size:13px;color:#6e7e79;margin:0 0 14px}.industry-option{display:block;width:100%;text-align:left;border:1px solid #d8e3df;background:#fff;border-radius:13px;padding:13px 14px;margin:8px 0;font-size:14px}</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<!-- ==================== 首页 ==================== -->
+<section class="page active" id="p-home">
+  <div class="hero">
+    <span class="hero-badge">非遗小作坊专用 · 陶瓷 / 木雕 / 潮绣</span>
+    <h1>穗账达</h1>
+    <p class="hero-sub">为非遗传承人、手工作坊主而生</p>
+    <p class="hero-sub2">记好手工账，守好祖宗业</p>
+    <button class="hero-btn" data-go="say">🎙 说一句话，记一笔账</button>
+    <p class="hero-foot">本月已记 <b id="h-count">0</b> 笔 · 数据只存在你本机</p>
+  </div>
+
+  <div class="saybar" data-go="say" id="saybar">
+    <div class="mic">🎙</div>
+    <div class="ph"><b>试试说：</b>给古城文创店发了5把朱泥壶，收了2000定金，尾款3000下个月结</div>
+    <div class="go">去记账 ›</div>
+  </div>
+  <div class="exsay" id="exsay"></div>
+
+  <div class="grid4">
+    <div class="quick" data-go="say"><i>🎙</i><span>一句话记账</span></div>
+    <div class="quick" data-go="ar"><i>💰</i><span>往来台账</span><span class="dot" id="q-ar">0</span></div>
+    <div class="quick" data-go="board"><i>📊</i><span>老板看板</span></div>
+    <div class="quick" data-go="proof"><i>📷</i><span>作品存证</span></div>
+  </div>
+
+  <!-- 经营健康与信用报告（资产卡片 · 三态） -->
+  <div class="card" id="h-report-card" data-go="report" style="cursor:pointer">
+    <div class="card-hd"><h3>经营健康与信用报告</h3>
+      <span class="more" id="h-rep-tag">未解锁</span></div>
+    <div id="h-report-body"></div>
+  </div>
+
+  <!-- 应收应付（核心刚需） -->
+  <div class="card" id="h-ar-card">
+    <div class="card-hd"><h3>往来台账<small>谁欠我钱 · 我欠谁钱</small></h3>
+      <span class="more" data-go="ar">全部 ›</span></div>
+    <div class="ar-top">
+      <div class="ar-box a"><span class="lbl">别人欠我</span><b id="h-ar-rec">¥0</b><small id="h-ar-recn">0 笔</small></div>
+      <div class="ar-box b"><span class="lbl">我欠别人</span><b id="h-ar-pay">¥0</b><small id="h-ar-payn">0 笔</small></div>
+      <div class="ar-box c"><span class="lbl">已逾期</span><b id="h-ar-late">¥0</b><small id="h-ar-laten">0 笔</small></div>
+    </div>
+    <div id="h-ar-list" style="margin-top:12px"></div>
+  </div>
+
+  <!-- 数字资产存证（作品存证） -->
+  <div class="card" id="h-proof-card">
+    <div class="card-hd"><h3>作品存证<small>新花样 · 带时间戳</small></h3>
+      <span class="more" data-go="proof">去存证 ›</span></div>
+    <div id="h-proof-body"></div>
+  </div>
+
+  <!-- 身份自测状态（轻量提示） -->
+  <div class="card" id="h-quiz-card" style="display:none">
+    <div class="card-hd"><h3>经营身份</h3><span class="more" data-go="mine">去修改 ›</span></div>
+    <div id="h-quiz-result"></div>
+  </div>
+
+  <!-- 本月账本 -->
+  <div class="card">
+    <div class="card-hd"><h3>本月手工账</h3><span class="more" data-go="book">查看流水 ›</span></div>
+    <div class="stat-row">
+      <div><span class="lbl">收入</span><span class="num green" id="h-in">¥0</span></div>
+      <div><span class="lbl">支出</span><span class="num" id="h-out">¥0</span></div>
+      <div><span class="lbl">赚了</span><span class="num" id="h-net">¥0</span></div>
+    </div>
+    <div class="quota">
+      <div class="quota-hd"><span>季度免税额度（增值税）</span><b id="h-qtxt">0 / 30万</b></div>
+      <div class="bar" id="h-barw"><i id="h-bar" style="width:0%"></i></div>
+      <div class="quota-tip" id="h-qtip">额度充足，放心开票</div>
+    </div>
+  </div>
+
+  <!-- 经营看板摘要 -->
+  <div class="card">
+    <div class="card-hd"><h3>老板看板</h3><span class="more" data-go="board">看详细 ›</span></div>
+    <div class="stat4">
+      <div><span class="lbl">毛利率</span><span class="num sm orange" id="h-rate">0%</span></div>
+      <div><span class="lbl">最大客户</span><span class="num sm" id="h-top">—</span></div>
+      <div><span class="lbl">无票支出</span><span class="num sm red" id="h-noinv">¥0</span></div>
+      <div><span class="lbl">健康分</span><span class="num sm" id="h-score">0</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><h3>合规提醒</h3><span class="more" data-go="board">全部 ›</span></div>
+    <div id="h-alerts"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><h3>非遗政策雷达</h3><span class="more" data-go="subsidy">去看看 ›</span></div>
+    <div id="h-subsidy"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hd"><h3>隐私安全盾</h3><span class="more" id="h-pv-more">了解 ›</span></div>
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <span style="font-size:22px">\uD83D\uDEE1\uFE0F</span>
+      <div style="font-size:12.5px;color:var(--t2);line-height:1.6">
+        账本只存在你这台手机，<b>不上传服务器</b>。我们坚持本机存储，不收集与服务无关的个人信息，
+        也绝不泄露、篡改、毁损你的经营数据。
+      </div>
+    </div>
+    <button class="btn-ghost" style="width:100%;margin:10px 0 0" id="h-pv-backup">
+      加密本地备份 / 换机迁移 ›</button>
+  </div>
+
+  <p class="note">本软件仅提供记账辅助与政策信息参考，不提供代理记账与申报服务，具体申领以政府官方解释为准。</p>
+</section>
+
+<!-- ==================== 一句话记账 ==================== -->
+<section class="page" id="p-say">
+  <div class="nav-bar"><a data-back>‹</a><h2>一句话记账</h2><span class="act" id="say-clear">清空</span></div>
+  <div class="card">
+    <p class="q">用你平时说话的方式写，剩下的交给穗账达</p>
+    <textarea class="inp" id="say-txt" placeholder="试试用语音记录你的每一笔账"></textarea>
+    <div class="chips" style="margin-top:10px" id="say-ex"></div>
+    <button class="btn-primary" style="width:100%;margin-top:16px" id="say-parse">识别这句话</button>
+  </div>
+  <div id="say-result"></div>
+  <div class="card">
+    <div class="card-hd"><h3>能听懂什么</h3></div>
+    <div id="say-tips"></div>
+  </div>
+</section>
+
+<!-- ==================== 记账 ==================== -->
+<section class="page" id="p-book">
+  <div class="nav-bar"><h2>手工账本</h2><span class="act" data-go="say">🎙 一句话</span></div>
+  <div class="card">
+    <div class="card-hd"><h3 id="b-title">本月概览</h3><span class="more" id="b-export">导出 CSV</span></div>
+    <div class="stat-row">
+      <div><span class="lbl">收入</span><span class="num green" id="b-in">¥0</span></div>
+      <div><span class="lbl">支出</span><span class="num" id="b-out">¥0</span></div>
+      <div><span class="lbl">赚了</span><span class="num" id="b-net">¥0</span></div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="big-btn" data-go="say"><i>🎙</i><b>一句话记账</b><span>说人话就能记</span></div>
+    <div class="big-btn" data-go="bookadd" data-type="out"><i>✍️</i><b>手动记一笔</b><span>按表单填写</span></div>
+  </div>
+  <div class="card">
+    <p class="q">流水明细</p>
+    <div class="chips" id="b-chips">
+      <div class="chip on" data-f="all">全部</div>
+      <div class="chip" data-f="in">收入</div>
+      <div class="chip" data-f="out">支出</div>
+      <div class="chip" data-f="noinv">无票支出</div>
+    </div>
+    <div id="b-list" style="margin-top:6px"></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><h3>季度开票额度</h3><span class="more" id="i-period">第3季度</span></div>
+    <div class="quota" style="margin-top:0;padding-top:0;border-top:0">
+      <div class="quota-hd"><span>已开销售发票</span><b id="i-qtxt">0 / 30万</b></div>
+      <div class="bar" id="i-barw"><i id="i-bar" style="width:0%"></i></div>
+      <div class="quota-tip" id="i-qtip"></div>
+    </div>
+    <div style="margin-top:12px" id="i-list"></div>
+    <button class="btn-ghost" style="width:100%;margin:12px 0 0" data-go="invadd">＋ 记一张发票</button>
+  </div>
+</section>
+
+<!-- ==================== 手动记一笔 ==================== -->
+<section class="page" id="p-bookadd">
+  <div class="nav-bar"><a data-back>‹</a><h2 id="ba-title">记一笔支出</h2></div>
+  <div class="card">
+    <div class="field">
+      <div class="seg" id="ba-seg">
+        <button data-t="out" class="on">支出</button>
+        <button data-t="in">收入</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>金额（元）</label>
+      <div class="amt-box"><s>¥</s><input id="ba-amt" type="number" inputmode="decimal" placeholder="0.00"></div>
+    </div>
+    <div class="field"><label>分类 <span style="font-size:11px;color:var(--t3);font-weight:400">（国家统一一级科目）</span></label><div class="chips" id="ba-cats"></div></div>
+    <div class="field"><label>日期</label><input class="inp" id="ba-date" type="date"></div>
+    <div class="field"><label>往来对象（选填）</label>
+      <input class="inp" id="ba-party" placeholder="如：古城文创店"></div>
+    <div class="field"><label>备注（选填）</label>
+      <input class="inp" id="ba-note" placeholder="如：高岭土采购"></div>
+    <div class="switch-row">
+      <span id="ba-sw-lb">已取得发票<small>有票支出才能税前扣除</small></span>
+      <div class="switch on" id="ba-sw"><i></i></div>
+    </div>
+    <button class="btn-primary" style="width:100%;margin-top:16px" id="ba-save">保存这一笔</button>
+  </div>
+</section>
+
+<!-- ==================== 记发票 ==================== -->
+<section class="page" id="p-invadd">
+  <div class="nav-bar"><a data-back>‹</a><h2 id="ia-title">开销售发票</h2></div>
+  <div class="card">
+    <div class="field">
+      <div class="seg" id="ia-seg">
+        <button data-d="out" class="on">销项（开票）</button>
+        <button data-d="in">进项（收票）</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>金额（元）</label>
+      <div class="amt-box"><s>¥</s><input id="ia-amt" type="number" inputmode="decimal" placeholder="0.00"></div>
+    </div>
+    <div class="field"><label id="ia-party-lb">购方名称</label>
+      <input class="inp" id="ia-party" placeholder="如：古城文创店"></div>
+    <div class="field"><label>日期</label><input class="inp" id="ia-date" type="date"></div>
+    <div class="field"><label>发票类型</label>
+      <div class="chips" id="ia-cats">
+        <div class="chip on" data-c="普通发票">普通发票</div>
+        <div class="chip" data-c="专用发票">专用发票</div>
+        <div class="chip" data-c="电子发票">电子发票</div>
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%" id="ia-save">保存发票</button>
+  </div>
+  <p class="note">只记金额与对象，不做票据识别</p>
+</section>
+
+<!-- ==================== 往来台账 ==================== -->
+<section class="page" id="p-ar">
+  <div class="nav-bar"><h2>往来台账</h2><span class="act" id="ar-add">＋ 记一笔</span></div>
+  <div class="card">
+    <div class="card-hd"><h3>钱都在哪儿</h3></div>
+    <div class="ar-top">
+      <div class="ar-box a"><span class="lbl">别人欠我</span><b id="a-rec">¥0</b><small id="a-recn">0 笔</small></div>
+      <div class="ar-box b"><span class="lbl">我欠别人</span><b id="a-pay">¥0</b><small id="a-payn">0 笔</small></div>
+      <div class="ar-box c"><span class="lbl">已逾期</span><b id="a-late">¥0</b><small id="a-laten">0 笔</small></div>
+    </div>
+  </div>
+  <div id="a-late-zone"></div>
+  <div class="card">
+    <div class="seg" id="a-seg">
+      <button data-k="rec" class="on">别人欠我</button>
+      <button data-k="pay">我欠别人</button>
+      <button data-k="done">已结清</button>
+    </div>
+    <div id="a-list" style="margin-top:14px"></div>
+  </div>
+  <p class="note">赊账、尾款、定金都能记 · 到期自动标红提醒催</p>
+</section>
+
+<!-- ==================== 老板看板 ==================== -->
+<section class="page" id="p-board">
+  <div class="nav-bar"><h2>老板看板</h2><span class="act" id="r-refresh">刷新</span></div>
+  <div class="card">
+    <div class="card-hd"><h3 id="bd-title">本月经营</h3></div>
+    <div class="stat4">
+      <div><span class="lbl">收入</span><span class="num sm green" id="bd-in">¥0</span></div>
+      <div><span class="lbl">支出</span><span class="num sm" id="bd-out">¥0</span></div>
+      <div><span class="lbl">毛利</span><span class="num sm" id="bd-net">¥0</span></div>
+      <div><span class="lbl">毛利率</span><span class="num sm orange" id="bd-rate">0%</span></div>
+    </div>
+  </div>
+  <div class="card" id="bd-ar">
+    <div class="card-hd"><h3>谁欠我钱（应收台账）</h3><span class="more" data-go="ar">全部 ›</span></div>
+    <div id="bd-ar-body"></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><h3>近 6 个月走势</h3></div>
+    <div id="bd-chart"></div>
+    <div class="legend"><span><i style="background:#14A085"></i>收入</span>
+      <span><i style="background:#FF7A2F"></i>支出</span></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><h3>钱花在哪儿</h3></div>
+    <div id="bd-str"></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><h3>主要客户</h3></div>
+    <div id="bd-cust"></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><h3>合规体检</h3><span class="more" id="r-cnt">0 项</span></div>
+    <div class="health">
+      <div class="lbl"><b>财税健康分</b><span id="r-level">—</span></div>
+      <div class="ring" id="r-ring"><i><span id="r-score">0</span></i></div>
+    </div>
+    <div class="switch-row" style="margin-top:14px">
+      <span>已开立对公账户<small>公私账混用是常见风险点</small></span>
+      <div class="switch" id="r-corp"><i></i></div>
+    </div>
+    <div style="margin-top:14px" id="r-list"></div>
+    <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
+      <p class="q">非遗专属 · 传承人补助预估</p>
+      <div class="chips" id="r-heir-lv" style="margin-bottom:10px"></div>
+      <div id="r-heir"></div>
+    </div>
+    <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
+      <p class="q">隐私安全盾</p>
+      <div id="r-privacy"></div>
+    </div>
+    <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
+      <p class="q">申报提醒</p>
+      <div id="r-cal"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><h3>账记不过来？</h3></div>
+    <div style="background:var(--accent-l);border-radius:12px;padding:12px">
+      <b style="font-size:14px">找个懂行的会计帮你把账理顺</b>
+      <p style="margin:6px 0 10px;font-size:12.5px;color:var(--t2)">
+        免费对接本地代账会计 · 小规模代账低至 ¥200/月</p>
+      <button class="btn-primary" style="width:100%;padding:11px;font-size:15px" data-go="agent">看看会计 ›</button>
+    </div>
+  </div>
+  <div class="card" id="bd-sub">
+    <div class="card-hd"><h3>🎉 非遗补贴雷达</h3><span class="more" data-go="subsidy">去看看 ›</span></div>
+    <div id="bd-sub-body"></div>
+  </div>
+  <p class="note">看板数据来自你的账本，越记越准</p>
+</section>
+
+<!-- ==================== 经营健康与信用报告 ==================== -->
+<section class="page" id="p-report">
+  <div class="nav-bar"><a data-back>‹</a><h2>经营健康与信用报告</h2>
+    <span class="act" id="rp-share">分享</span></div>
+  <div id="report-body"></div>
+</section>
+
+<!-- ==================== 身份自测 ==================== -->
+<section class="page" id="p-quiz">
+  <div class="nav-bar"><a data-back>‹</a><h2>经营身份自测</h2></div>
+  <div id="quiz-body"></div>
+</section>
+
+<!-- ==================== 代账会计 ==================== -->
+<section class="page" id="p-agent">
+  <div class="nav-bar"><a data-back>‹</a><h2>找代账会计</h2></div>
+  <div class="card">
+    <div class="card-hd"><h3>说说你的情况</h3></div>
+    <div class="field"><label>所在地区</label><input class="inp" id="ag-city" placeholder="如：广州 番禺"></div>
+    <div class="field"><label>经营类型</label>
+      <div class="chips" id="ag-type">
+        <div class="chip on" data-c="非遗工坊">非遗工坊</div>
+        <div class="chip" data-c="陶瓷/木雕/潮绣">陶瓷·木雕·潮绣</div>
+        <div class="chip" data-c="小微公司">小微公司</div>
+        <div class="chip" data-c="展会集市">展会/集市</div>
+      </div>
+    </div>
+    <div class="field"><label>每月票据量</label>
+      <div class="chips" id="ag-vol">
+        <div class="chip on" data-c="30 张以内">30 张以内</div>
+        <div class="chip" data-c="30-100 张">30-100 张</div>
+        <div class="chip" data-c="100 张以上">100 张以上</div>
+      </div>
+    </div>
+    <div class="field"><label>联系电话（选填）</label>
+      <input class="inp" id="ag-tel" placeholder="留个号，顾问联系你"></div>
+    <button class="btn-primary" style="width:100%" id="ag-submit">提交，等会计联系</button>
+  </div>
+  <div class="card">
+    <div class="card-hd"><h3>为你推荐</h3></div>
+    <div id="ag-list"></div>
+  </div>
+  <p class="note">平台仅作信息对接，服务由第三方机构提供</p>
+</section>
+
+<!-- ==================== 数字资产存证（作品存证） ==================== -->
+<section class="page" id="p-proof">
+  <div class="nav-bar"><a data-back>‹</a><h2>作品存证</h2></div>
+  <div class="card">
+    <div class="card-hd"><h3>新花样，随手存一份</h3><span class="more" id="pf-cnt">0 件</span></div>
+    <div class="alert warn" style="margin-bottom:14px">
+      <b>存证 ≠ 版权登记</b>
+      <span>这里给作品生成带时间戳的创作凭证，证明「你在什么时候已经做出了这个花样」，日后被抄袭或被抢注时可作为<strong>在先证据</strong>。正式版权登记仍需向版权局申请。</span>
+    </div>
+    <div class="field"><label>作品名称</label>
+      <input class="inp" id="pf-name" placeholder="如：牡丹富贵 · 釉下彩赏瓶"></div>
+    <div class="field"><label>工艺类别</label>
+      <div class="chips" id="pf-cats"></div></div>
+    <div class="field"><label>作品编号（自动生成，全库唯一）</label>
+      <input class="inp" id="pf-no" readonly style="background:#F2F6F5;color:var(--t2)"></div>
+    <div class="field"><label>语音说明（选填 · 按住录音）</label>
+      <button class="btn-ghost" style="width:100%;margin:0" id="pf-rec">
+        按住说：这件作品的泥料 / 工艺 / 来历…</button>
+      <div id="pf-rec-state" style="font-size:12px;color:var(--t3);margin-top:6px">
+        可用潮州话或普通话讲一段，会随作品一起打上时间戳</div>
+    </div>
+    <div class="proof-g" id="pf-grid"></div>
+    <label class="btn-primary" style="display:block;width:100%;text-align:center;cursor:pointer;margin-top:14px">
+      拍摄作品 / 手稿
+      <input type="file" accept="image/*" id="pf-file" style="display:none">
+    </label>
+  </div>
+  <p class="note">作品照片与存证编号仅保存在本机浏览器，不会上传</p>
+</section>
+
+<!-- ==================== 非遗政策雷达 ==================== -->
+<section class="page" id="p-subsidy">
+  <div class="nav-bar"><a data-back>‹</a><h2>非遗政策雷达</h2></div>
+  <div class="card">
+    <div class="card-hd"><h3>测算结果</h3><span class="more" id="s-year"></span></div>
+    <div class="subsidy-row">
+      <div><b>预计可享金额</b><span id="s-sub">按当前经营规模与作品存证测算</span></div>
+      <div class="amount" id="s-total">¥0</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><h3>非遗专属政策</h3><span class="tag o" id="s-hcnt">—</span></div>
+    <div id="s-heritage"></div>
+  </div>
+  <div class="card">
+    <div class="card-hd"><h3>通用小微政策</h3><span class="tag b" id="s-gcnt">—</span></div>
+    <div id="s-list"></div>
+  </div>
+  <div class="card"><div class="card-hd"><h3>申报进度</h3></div><div id="s-progress"></div></div>
+  <p class="note">各地非遗补贴标准不同，以属地文旅 / 人社部门口径为准</p>
+</section>
+
+<!-- ==================== 我的 ==================== -->
+<section class="page" id="p-mine">
+  <div class="nav-bar"><h2>我的</h2></div>
+  <div class="card">
+    <div class="card-hd"><h3 id="m-name">—</h3><span class="tag b" id="m-type">—</span></div>
+    <div id="m-info"></div>
+  </div>
+  <div class="grid4">
+    <div class="quick" data-go="proof"><i>📷</i><span>作品存证</span></div>
+    <div class="quick" id="m-export"><i>📤</i><span>导出账套</span></div>
+    <div class="quick" data-go="subsidy"><i>🎁</i><span>政策雷达</span></div>
+    <div class="quick" data-go="agent"><i>🧑‍💼</i><span>代账会计</span></div>
+  </div>
+  <div class="card"><p class="q">常用</p><div id="m-set"></div></div>
+  <div class="card">
+    <div class="card-hd"><h3>数据安全</h3></div>
+    <div class="alert ok"><b>账本只在你这台机器上</b>
+      <span>全部数据保存在本机浏览器，不上传服务器。清理浏览器数据会一并清除，建议定期导出 CSV 备份。</span></div>
+  </div>
+  <button class="btn-ghost" id="m-reset">恢复示例账套（陈记手拉壶作坊）</button>
+  <p class="note">穗账达 v0.4 · 非遗传承人手工账管家 · 演示原型</p>
+</section>
+
+<nav class="tabbar" id="tabbar">
+  <a class="on" data-tab="home"><i>🏠</i>首页</a>
+  <a data-tab="book"><i>📒</i>账本</a>
+  <a data-tab="ar"><i>💰</i>往来<span class="dot" id="tab-ar" style="display:none">0</span></a>
+  <a data-tab="board"><i>📊</i>看板</a>
+  <a data-tab="mine"><i>👤</i>我的</a>
+</nav>
+</div>
+
+<div class="mask" id="mask"></div>
+<div class="sheet" id="sheet"></div>
+<div class="center" id="center"></div>
+<div class="gmask" id="gmask"></div>
+<div class="gtip" id="gtip"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ========================= 基础工具 ========================= */
+var STORE='szd_v1';
+/* 新用户数据版本：每次重构示例数据（如更换经营人设）都 +1，
+   旧版本缓存在本地的数据会自动重新铺最新 demo，避免「打开还是旧数据」 */
+var DATA_VER=3;
+var $=function(s){return document.querySelector(s)};
+function pad(n){return n<10?'0'+n:''+n}
+function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function md(s){return s?s.slice(5):''}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function money(n){return '¥'+Math.round(n).toLocaleString('zh-CN')}
+function wan(n){return (n/10000).toFixed(1)+'万'}
+function today(){return ymd(new Date())}
+function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/86400000)}
+function toast(t){var el=$('#toast');el.textContent=t;el.classList.add('show');
+  clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove('show')},1800)}
+
+/* 非遗小作坊记账科目：场景名在前（老板看得懂），括号内是国家统一一级科目（报税用得上） */
+var CATS={
+  out:['原料采买','大师工时费','学徒工资','展会差旅','作坊开支','其他支出'],
+  in:['作品销售','技艺服务']
+};
+/* 场景科目 → 国家统一一级科目 */
+var CAT_LABELS={
+  '作品销售':'主营业务收入',
+  '技艺服务':'其他业务收入',
+  '原料采买':'主营业务成本',
+  '大师工时费':'主营业务成本',
+  '学徒工资':'管理费用',
+  '展会差旅':'销售费用',
+  '作坊开支':'管理费用',
+  '其他支出':'其他支出'
+};
+
+/* ========================= 新用户空账本 ========================= */
+function seed(){return freshSeed()}
+/* 数据迁移：旧分类 / 一级科目 → 非遗场景科目 */
+var CAT_MIGRATE={
+  /* 一级科目版（v0.3） */
+  '主营业务成本':'原料采买','销售费用':'展会差旅','管理费用':'学徒工资',
+  '财务费用':'其他支出','主营业务收入':'作品销售','其他业务收入':'技艺服务',
+  /* 最早的业务版（v0.1-0.2） */
+  '原材料':'原料采买','辅料包装':'原料采买',
+  '人工工资':'学徒工资','房租水电':'作坊开支','设备维修':'作坊开支',
+  '招待差旅':'展会差旅','物流运费':'展会差旅','平台佣金':'展会差旅',
+  '产品销售':'作品销售','零售散单':'作品销售','平台回款':'作品销售',
+  '加工服务':'技艺服务','其他收入':'技艺服务'
+};
+function migrateCats(){
+  if(!S.records)return;
+  S.records.forEach(function(r){if(CAT_MIGRATE[r.cat])r.cat=CAT_MIGRATE[r.cat]});
+}
+var S;
+function freshSeed(){return {ver:DATA_VER,profile:{name:'',type:'个体工商户',craft:'',heirLevel:'dist',tax:'',method:'',period:'',corpAccount:false,setup:today()},records:[],invoices:[],ar:[],proofs:[],meta:{guide:false,disclaimer:true,quiz:null,auth:null,firstEntry:false}}}
+seed=freshSeed;
+try{
+  var raw=localStorage.getItem(STORE);
+  S=raw?JSON.parse(raw):seed();
+  // 新用户数据版本过低（旧缓存无 ver 或版本不符）→ 铺最新 demo，保证打开即新版人设
+  if(S.ver!==DATA_VER)S=seed();
+}catch(e){S=seed()}
+migrateCats();
+if(!S.meta)S.meta={guide:false,disclaimer:false,quiz:null};
+if(!S.ar)S.ar=[];if(!S.proofs)S.proofs=[];
+function save(){
+  try{localStorage.setItem(STORE,JSON.stringify(S))}
+  catch(e){toast('本机存储空间不足，建议删掉几张存证图')}
+}
+
+/* ========================= 计算 ========================= */
+function monthOf(s){return s.slice(0,7)}
+function thisMonth(){var n=new Date();return n.getFullYear()+'-'+pad(n.getMonth()+1)}
+function sum(a){return a.reduce(function(s,x){return s+(x.amt||0)},0)}
+function recMonth(){return S.records.filter(function(r){return monthOf(r.date)===thisMonth()})}
+function quarterSales(){
+  var n=new Date(),q=Math.floor(n.getMonth()/3),y=n.getFullYear();
+  var s=new Date(y,q*3,1),e=new Date(y,q*3+3,0);
+  return sum(S.invoices.filter(function(v){
+    if(v.dir!=='out')return false;var d=new Date(v.date);return d>=s&&d<=e}));
+}
+function stats(){
+  var rm=recMonth();
+  var i=sum(rm.filter(function(r){return r.type==='in'}));
+  var o=sum(rm.filter(function(r){return r.type==='out'}));
+  var noInv=sum(rm.filter(function(r){return r.type==='out'&&!r.inv}));
+  return {in:i,out:o,net:i-o,count:rm.length,noInv:noInv,ratio:o?noInv/o:0,
+    rate:i?(i-o)/i:0};
+}
+function arStat(){
+  var rec=S.ar.filter(function(a){return a.kind==='rec'&&!a.paid});
+  var pay=S.ar.filter(function(a){return a.kind==='pay'&&!a.paid});
+  var late=S.ar.filter(function(a){return !a.paid&&daysBetween(a.due,today())>0});
+  return {rec:sum(rec),pay:sum(pay),late:sum(late),recN:rec.length,payN:pay.length,lateN:late.length,lateList:late};
+}
+function overdueDays(a){return Math.max(0,daysBetween(a.due,today()))}
+function nextDeadline(){
+  var n=new Date(),y=n.getFullYear(),q=Math.floor(n.getMonth()/3);
+  var dl=new Date(y,q*3+3,15);if(dl<n)dl=new Date(y,(q+1)*3+3,15);return dl;
+}
+function check(){
+  var st=stats(),qs=quarterSales(),pct=qs/300000,issues=[],deduct=0;
+  if(st.ratio>0.4){issues.push({lv:'h',t:'无票支出占比 '+Math.round(st.ratio*100)+'%',d:'本季无票支出 '+money(st.noInv)+'，汇算时可能被调增应纳税所得额，多缴经营所得税约 '+money(st.noInv*0.05)+'。建议向供应商索取发票。'});deduct+=18}
+  else if(st.ratio>0.3){issues.push({lv:'m',t:'无票支出占比 '+Math.round(st.ratio*100)+'%',d:'无票支出 '+money(st.noInv)+'，税前扣除存在被调整风险。优先补齐进货成本、销售费用等大额支出的发票。'});deduct+=12}
+  else if(st.ratio>0.2){issues.push({lv:'l',t:'无票支出占比 '+Math.round(st.ratio*100)+'%',d:'占比尚可，建议 500 元以上的支出坚持要票。'});deduct+=6}
+  if(pct>=1){issues.push({lv:'h',t:'季度免税额度已用尽',d:'本季开票 '+wan(qs)+'，超出 30 万部分需按 1% 缴纳增值税。'});deduct+=15}
+  else if(pct>=0.85){issues.push({lv:'m',t:'季度免税额度剩余 '+Math.round((1-pct)*100)+'%',d:'已开票 '+wan(qs)+'，剩余 '+money(300000-qs)+'，超限部分按 1% 缴税，注意开票节奏。'});deduct+=10}
+  else if(pct>=0.6){issues.push({lv:'l',t:'季度免税额度已用 '+Math.round(pct*100)+'%',d:'已开票 '+wan(qs)+'，剩余 '+money(300000-qs)+'，额度充足。'});deduct+=3}
+  if(!S.profile.corpAccount){issues.push({lv:'m',t:'未使用对公账户收付款',d:'经营收款走个人微信/银行卡，易被认定为账外收入或公私混同。建议开立对公账户并留存合同、出库单佐证。'});deduct+=8}
+  var la=arStat();
+  if(la.lateN>0){issues.push({lv:'h',t:'有 '+la.lateN+' 笔往来款逾期未处理',d:'逾期金额 '+money(la.late)+'，账龄越长越难收回。建议今天就发催款消息，见「往来台账」。'});deduct+=10}
+  var dl=nextDeadline(),left=Math.ceil((dl-new Date())/86400000);
+  if(left<=7){issues.push({lv:'h',t:'申报期临近：还剩 '+left+' 天',d:'请于 '+ymd(dl)+' 前完成增值税及经营所得个税季度申报。'});deduct+=15}
+  else{issues.push({lv:'ok',t:'下次申报 '+ymd(dl)+'（还有 '+left+' 天）',d:'增值税（小规模·按季）与经营所得个税预缴同期申报。'})}
+  var last=S.records.map(function(r){return r.date}).sort().pop();
+  var gap=last?Math.round((new Date()-new Date(last))/86400000):999;
+  if(gap>7){issues.push({lv:'l',t:'已 '+gap+' 天未记账',d:'记账间隔过长易丢票据、成本失真。建议每天收摊后补录。'});deduct+=5}
+  var rank={h:0,m:1,l:2,ok:3};
+  issues.sort(function(a,b){return rank[a.lv]-rank[b.lv]});
+  return {issues:issues,score:Math.max(0,100-deduct),pct:pct,qs:qs,left:left,deadline:dl};
+}
+/* ========================= 经营健康与信用报告 ========================= */
+function monthKeys(){
+  var set={};S.records.forEach(function(r){set[monthOf(r.date)]=1});
+  return Object.keys(set).sort();
+}
+function monthsCovered(){return monthKeys().length}
+function avgMonthlyIn(){
+  var ks=monthKeys();if(!ks.length)return 0;
+  var rc=ks.slice(-6),t=0;
+  rc.forEach(function(k){
+    t+=sum(S.records.filter(function(r){return r.type==='in'&&monthOf(r.date)===k}))});
+  return t/rc.length;
+}
+function avgMonthlyNet(){
+  var ks=monthKeys();if(!ks.length)return 0;
+  var rc=ks.slice(-6),t=0;
+  rc.forEach(function(k){
+    var rs=S.records.filter(function(r){return monthOf(r.date)===k});
+    t+=sum(rs.filter(function(r){return r.type==='in'}))-
+      sum(rs.filter(function(r){return r.type==='out'}))});
+  return t/rc.length;
+}
+function creditScore(){
+  var st=stats(),la=arStat(),qs=quarterSales(),m=monthsCovered(),s=60,dims=[];
+  var stab=Math.min(15,m*3);s+=stab;
+  dims.push({n:'经营稳定性',v:Math.round(38+stab/15*62),d:'已记账 '+m+' 个月'});
+  var rate=st.rate,pv2;
+  if(rate>=0.3){s+=8;pv2=92}else if(rate>=0.15){s+=5;pv2=78}
+  else if(rate>0){s+=2;pv2=62}else{pv2=35}
+  dims.push({n:'盈利能力',v:pv2,d:'本月毛利率 '+Math.round(rate*100)+'%'});
+  var lr=la.rec?la.late/la.rec:0,pv3;
+  if(la.lateN===0){s+=10;pv3=95}
+  else if(lr<0.2){s+=2;pv3=70}
+  else if(lr<0.5){s-=8;pv3=48}
+  else{s-=18;pv3=26}
+  dims.push({n:'应收健康',v:Math.max(10,pv3),
+    d:la.lateN?la.lateN+' 笔逾期 '+money(la.late):'无逾期'});
+  var pv4=100;
+  if(st.ratio>0.4){s-=10;pv4=45}else if(st.ratio>0.3){s-=6;pv4=60}
+  else if(st.ratio>0.2){s-=3;pv4=75}
+  if(!S.profile.corpAccount){s-=4;pv4-=15}
+  dims.push({n:'合规水平',v:Math.max(20,pv4),
+    d:'无票支出 '+Math.round(st.ratio*100)+'%'+(S.profile.corpAccount?' · 已开对公':' · 未开对公')});
+  var pv5;
+  if(qs>=200000){s+=6;pv5=90}else if(qs>=100000){s+=5;pv5=78}
+  else if(qs>=30000){s+=2;pv5=62}else{pv5=42}
+  dims.push({n:'经营规模',v:pv5,d:'本季开票 '+wan(qs)});
+  s=Math.max(0,Math.min(100,Math.round(s)));
+  return {score:s,dims:dims};
+}
+function loanEstimate(cr){
+  var base=avgMonthlyIn();if(base<=0)return 0;
+  var coef=0.45+cr.score/100*0.6,la=arStat();
+  var pen=la.lateN===0?1:(la.rec&&la.late/la.rec>0.5?0.6:0.78);
+  return Math.max(0,Math.round(base*coef*pen/10000)*10000);
+}
+function creditLevel(s){
+  if(s>=85)return {t:'优秀',c:'var(--success)'};
+  if(s>=70)return {t:'良好',c:'var(--primary)'};
+  if(s>=55)return {t:'一般',c:'var(--warn)'};
+  return {t:'待改善',c:'var(--danger)'};
+}
+function reportData(){
+  var m=monthsCovered(),cr=creditScore();
+  return {months:m,unlocked:m>=3,credit:cr,loan:loanEstimate(cr),
+    la:arStat(),st:stats(),avgIn:avgMonthlyIn(),avgNet:avgMonthlyNet(),
+    level:creditLevel(cr.score)};
+}
+/* 通用小微政策 */
+function subsidies(){
+  var annual=Math.max(0,stats().net)*12,taxable=Math.min(annual,2000000);
+  return [
+    {n:'小规模纳税人增值税减免',d:'季销 30 万以内免征，超出部分 1%',v:Math.round(quarterSales()*0.01*4),s:'自动享受'},
+    {n:'六税两费减半征收',d:'城建税、印花税等按 50% 征收',v:2400,s:'自动享受'},
+    {n:'经营所得个税减半',d:'年应纳税所得额 '+wan(taxable)+'，按 5% 档估算',v:Math.round(taxable*0.05*0.5),s:'汇算享受'},
+    {n:'一次性创业补贴',d:'注册满 6 个月且正常经营',v:5000,s:'需申请'},
+    {n:'创业担保贷款贴息',d:'最高 300 万额度、财政贴息',v:0,s:'需申请'}
+  ];
+}
+/* 非遗专属政策（按作品存证数与经营规模自动匹配） */
+function heritageSubsidies(){
+  var pn=S.proofs.length,qs=quarterSales();
+  return [
+    {n:'非遗代表性传承人补助',d:'县级以上传承人年度传习补助',v:12000,s:'需申请'},
+    {n:'大师工作室建设经费',d:'设立大师工作室，一次性建设补助',v:50000,s:'需申报'},
+    {n:'非遗工坊专项补贴',d:'非遗工坊 / 传习所运营补贴',v:20000,s:'需申请'},
+    {n:'文创作品版权登记补贴',d:'作品版权登记费补贴（已存证 '+pn+' 件，约 300 元/件）',
+      v:pn*300,s:'需申请'}
+  ];
+}
+
+/* ============ 传承人补助估算（DOC002 第三条 + DOC004 第三十一条） ============
+   规则：区级传承人每人每年 4000 元；国家级/省级/市级按上级标准，区级财政 1:1 配套。
+   上级标准为公开常见参考值，页面须标注"以属地公布为准"。                      */
+var HEIR_LEVELS=[
+  {k:'none',n:'还不是传承人',up:0},
+  {k:'dist',n:'区级传承人',up:0},
+  {k:'city',n:'市级传承人',up:6000},
+  {k:'prov',n:'省级传承人',up:10000},
+  {k:'nat',n:'国家级传承人',up:20000}
+];
+function heirSubsidy(){
+  var lv=S.profile.heirLevel||'none',up=0;
+  HEIR_LEVELS.forEach(function(x){if(x.k===lv)up=x.up});
+  if(lv==='dist')return {lv:lv,total:4000,up:0,match:0,
+    line:'区级财政每人每年 4000 元补助，用于带徒授艺、展演展示、资料整理、学术交流'};
+  if(!up)return {lv:lv,total:0,up:0,match:0,
+    line:'先申报认定为非遗代表性传承人，认定后即可按级申领补助'};
+  return {lv:lv,total:up*2,up:up,match:up,
+    line:'上级补助 '+money(up)+' 元 + 区级财政 1:1 配套 '+money(up)+' 元'};
+}
+function heirName(){
+  var lv=S.profile.heirLevel||'none',n='—';
+  HEIR_LEVELS.forEach(function(x){if(x.k===lv)n=x.n});return n;
+}
+
+/* ========================= 非遗政策触发规则库 =========================
+   后台按法条存规则，前端只说大白话：绝不出现「XX办法第X条」的原始表述。
+   触发时机：一句话记账保存后 / 手动记账保存后（不新增任何一级入口）      */
+var POLICY_RULES=[
+  {
+    id:'apprentice',
+    match:function(r,t){
+      return r.cat==='学徒工资'||/徒弟|学徒|带徒|授徒|传习|教手艺|收徒/.test(t);
+    },
+    icon:'\uD83D\uDC68\u200D\uD83C\uDF93',
+    title:'您在「师带徒」，有一笔补助可以看看',
+    say:'老板，系统发现您在带徒弟传手艺。潮州正在大力推广「师带徒」传承培养模式，已创建非遗人才示范工作室 12 个、非遗传习所 14 家，带徒授艺、传习活动都有对应的补助和经费扶持。您符合条件吗？',
+    money:'区级传承人 4000 元/年',
+    src:'DOC001 段落4「师带徒」培养模式 · DOC002 第三条',
+    page:'board'
+  },
+  {
+    id:'tourism',
+    match:function(r,t){
+      return r.cat==='展会差旅'||
+        /景区|展位|摊位|文创|集市|购物节|展会|参展|潮玩|名街/.test(t);
+    },
+    icon:'\uD83C\uDFD8\uFE0F',
+    title:'这笔文旅支出，记得留票据',
+    say:'老板，这笔景区 / 展会的支出，票据请留好。潮州在推「非遗 + 文旅」，依托景区打造了「潮玩古城」「乐享名街」「非遗购物节」等品牌活动，文创产品开发与旅游展销也有专项经费扶持，参展支出是重要佐证。',
+    money:'文创开发经费 · 活动补贴（以奖代补）',
+    src:'DOC001 段落5「非遗+文旅」 · DOC002 第九条、第十条',
+    page:'board'
+  },
+  {
+    id:'master',
+    match:function(r,t){
+      return r.cat==='大师工时费'||/大师|传承人|工艺师/.test(t);
+    },
+    icon:'\uD83C\uDFA8',
+    title:'请大师出工，可关注工作室经费',
+    say:'老板，请传承人或大师出工的费用记得单独留档。非遗人才示范工作室建设、传习基地运行都有专项经费扶持，这类工时支出正是申报时的重要材料。',
+    money:'大师工作室建设经费 · 以奖代补',
+    src:'DOC001 段落4 · DOC002 第四条',
+    page:'board'
+  },
+  {
+    id:'material',
+    match:function(r,t){
+      return r.cat==='原料采买'&&/泥|陶土|瓷土|高岭土|木|丝线|绣线/.test(t);
+    },
+    icon:'\uD83E\uDDF1',
+    title:'原料采购可计入项目保护传承经费',
+    say:'老板，特色原料（泥料 / 木材 / 丝线）的采购是项目保护传承的重要支出。县级以上对本级非遗代表性项目有项目保护传承经费，濒危或急需抢救的项目还会重点扶持。',
+    money:'项目保护传承经费',
+    src:'DOC004 第三十一条 · DOC002 第四条',
+    page:'board'
+  }
+];
+function policyMatch(r,txt){
+  var t=txt||'',hit=[];
+  POLICY_RULES.forEach(function(p){if(p.match(r,t))hit.push(p)});
+  return hit;
+}
+/* 保存流水后自动触发（同一规则只提示一次，避免打扰） */
+function firePolicyTip(rec){
+  if(!S.meta.tips)S.meta.tips={};
+  var txt=(rec.note||'')+' '+(rec.cat||'')+' '+(rec.party||'');
+  var hits=policyMatch(rec,txt);
+  if(!hits.length)return false;
+  for(var i=0;i<hits.length;i++){
+    if(!S.meta.tips[hits[i].id]){S.meta.tips[hits[i].id]=1;save();showPolicyTip(hits[i]);return true}
+  }
+  return false;
+}
+function showPolicyTip(p){
+  openCenter('<h4>'+p.icon+' '+p.title+'</h4>'+
+    '<div class="scrollbox"><div class="alert ok" style="margin-bottom:12px">'+
+    '<b>'+p.say+'</b></div>'+
+    '<div class="row"><div class="row-l"><b>可能对应</b></div>'+
+    '<div class="row-r">'+p.money+'</div></div>'+
+    '<div style="font-size:11.5px;color:var(--t3);margin-top:10px;line-height:1.6">'+
+    '依据：'+p.src+'。以上为政策线索提醒，具体标准与申领口径以属地文旅部门官方解释为准。</div></div>'+
+    '<button class="btn-primary" style="width:100%;margin-top:12px" id="tip-go">一键预评估 ›</button>'+
+    '<button class="btn-ghost" style="width:100%" id="tip-later">知道了</button>');
+  $('#tip-go').onclick=function(){closeCenter();go('board');toast('已跳到合规体检 · 非遗专属')};
+  $('#tip-later').onclick=closeCenter;
+}
+
+/* ========================= 自然语言记账（核心） ========================= */
+var NUM=/(\d+(?:\.\d+)?)\s*(万元|万|千元|千|元|块|块钱|毛)?/;
+var IN_STRONG=['收了','收到','卖了','进账','回款','到账','发了','发货','出货','营业额','定金','订金','结算','打入','作品','定制','授课','体验课','景区','代销','批发给'];
+var OUT_STRONG=['付了','付给','买了','花了','采购','工资','房租','水电','运费','请客','批发','进货','租金','交了','参展','展会','工时','学徒','大师','窑','维修','摊位'];
+var IN_WEAK=['收','卖','赚','货款','营收','作品','课程'];
+var OUT_WEAK=['付','买','花','修','维修','成本','材料','原料','泥','釉','木','丝','窑'];
+var CREDIT_WORDS=['欠','赊','挂账','没给钱','没付','未付','月底付','下月','后付','过几天','先欠','账期','结款','缓几天','还没给','尾款'];
+/* 非遗场景关键词：按「具体 → 泛指」排序，先命中具体的 */
+var CAT_MAP_OUT=[
+  ['大师工时费',/大师|工时|工艺师|传承人|老师傅|名家|省级|市级|请师傅|绘制费|创作费/],
+  ['学徒工资',/学徒|徒弟|帮工|杂工|临时工|工资|工钱|人工|薪水|发钱|加班/],
+  ['原料采买',/泥料|陶土|瓷土|高岭土|釉料|釉|颜料|泥|坯|陶|瓷|木材|木料|红木|樟木|丝线|绣线|绸|缎|原料|材料|采购|进货|锦盒|包装/],
+  ['展会差旅',/展会|展览|参展|展位|摊位|布展|文博|非遗展|差旅|出差|车费|住宿|机票|高铁|路费|运费|物流|快递|配送|运输|佣金|扣点|平台费/],
+  ['作坊开支',/窑|窑炉|柴窑|气窑|拉坯|工具|刻刀|刀具|设备|维修|保养|机器|房租|租金|水电|物业|作坊|场地|厂房/]
+];
+var CAT_MAP_IN=[
+  ['技艺服务',/授课|教学|体验课|培训|讲座|传习|收徒|代工|加工|定制|手工费|工费|修复|鉴定|技艺|设计费/],
+  ['作品销售',/卖|销售|作品|出货|发货|订单|货款|景区|文创|门店|客人|客户|回款|结算|到账|平台|代销|批发|壶|瓶|摆件|摆饰|赏瓶|花瓶|营业额|零售|散客|现金|定金|订金/]
+];
+var PARTY_SUF=/([\u4e00-\u9fa5A-Za-z0-9]{1,8}(?:超市|便利|连锁|干货|粮油|市场|平台|公司|工厂|厂|店|商行|老板|师傅|客户|文创店|文创|景区|陶土|釉料|发行|工坊|博物馆|文旅|协会))/;
+function parseSay(txt){
+  var t=(txt||'').trim(),r={ok:false,type:null,amt:null,cat:null,party:'',date:today(),
+    credit:false,due:null,note:t,reason:''};
+  // —— 定金 + 尾款 拆解（如：收了2000定金，尾款3000下个月结）——
+  // 兼顾「2000定金 / 定金2000」「3000尾款 / 尾款3000」两种语序
+  var depM=t.match(/(\d+(?:\.\d+)?)\s*(?:万|千|元|块|块钱)?\s*(?:定金|订金|首付|预付款|预收款|先付)|(?:定金|订金|首付|预付款|预收款|先付)\s*(?:约|了)?\s*(\d+(?:\.\d+)?)\s*(?:万|千|元|块|块钱)?/);
+  var balM=t.match(/(\d+(?:\.\d+)?)\s*(?:万|千|元|块|块钱)?\s*(?:尾款|余款|剩余|欠款)|(?:尾款|余款|剩余|欠款)\s*(?:约|了)?\s*(\d+(?:\.\d+)?)\s*(?:万|千|元|块|块钱)?/);
+  var dep=depM?parseFloat(depM[1]||depM[2]):0,bal=balM?parseFloat(balM[1]||balM[2]):0;
+  if(dep>0&&bal>0){
+    r.type='in';r.cat='作品销售';r.amt=dep;r.deposit=dep;r.balance=bal;r.credit=true;r.note=t;
+    var n2=new Date();
+    if(/月底|月末/.test(t))r.due=ymd(new Date(n2.getFullYear(),n2.getMonth()+1,0));
+    else if(/下月|下个月/.test(t))r.due=ymd(new Date(n2.getFullYear(),n2.getMonth()+1,15));
+    else if(/下周/.test(t))r.due=ymd(new Date(Date.now()+7*86400000));
+    else{var dn=t.match(/(\d+)\s*天(?:后|内)/);r.due=ymd(new Date(Date.now()+(dn?parseInt(dn[1]):30)*86400000))}
+    var pnx=t.match(PARTY_SUF);if(pnx)r.party=pnx[1].replace(/^[给向付收还从跟找帮替请叫让]/,'');
+    r.reason='货款/加工费（定金）';r.ok=true;return r;
+  }
+  // 先剔掉日期里的数字，避免「9月房租3800」只认到 9
+  var tAmt=t.replace(/\d{1,2}\s*月\s*\d{1,2}\s*[日号]/g,' ').replace(/\d{1,2}\s*月/g,' ');
+  var wm=tAmt.match(/(\d+(?:\.\d+)?)\s*万\s*(\d)/);
+  if(wm){r.amt=Math.round(parseFloat(wm[1])*10000+parseFloat(wm[2])*1000)}
+  else{
+    var mn=tAmt.match(NUM);
+    if(mn){
+      var v=parseFloat(mn[1]),u=mn[2]||'';
+      if(u.indexOf('万')===0)v*=10000; else if(u.indexOf('千')===0)v*=1000;
+      r.amt=Math.round(v);
+    }
+  }
+  var scoreIn=0,scoreOut=0;
+  IN_STRONG.forEach(function(w){if(t.indexOf(w)>=0)scoreIn+=3});
+  OUT_STRONG.forEach(function(w){if(t.indexOf(w)>=0)scoreOut+=3});
+  IN_WEAK.forEach(function(w){if(t.indexOf(w)>=0)scoreIn+=1});
+  OUT_WEAK.forEach(function(w){if(t.indexOf(w)>=0)scoreOut+=1});
+  if(scoreIn>scoreOut&&scoreIn>0)r.type='in';
+  else if(scoreOut>scoreIn&&scoreOut>0)r.type='out';
+  else if(r.amt)r.type='out';
+  CREDIT_WORDS.forEach(function(w){if(t.indexOf(w)>=0)r.credit=true});
+  var map=r.type==='in'?CAT_MAP_IN:CAT_MAP_OUT;
+  for(var i=0;i<map.length;i++){if(map[i][1].test(t)){r.cat=map[i][0];break}}
+  if(!r.cat)r.cat=r.type==='in'?'作品销售':'其他支出';
+  var pn=t.match(PARTY_SUF);
+  if(pn)r.party=pn[1].replace(/^[给向付收还从跟找帮替请叫让]/,'');
+  // 日期
+  if(/昨天/.test(t))r.date=ymd(new Date(Date.now()-86400000));
+  else if(/前天/.test(t))r.date=ymd(new Date(Date.now()-2*86400000));
+  else if(/大前天/.test(t))r.date=ymd(new Date(Date.now()-3*86400000));
+  var dm=t.match(/(\d{1,2})月(\d{1,2})[日号]/);
+  if(dm){var n=new Date();r.date=ymd(new Date(n.getFullYear(),parseInt(dm[1])-1,parseInt(dm[2])))}
+  // 到期日
+  if(r.credit){
+    var n2=new Date();
+    if(/月底|月末/.test(t))r.due=ymd(new Date(n2.getFullYear(),n2.getMonth()+1,0));
+    else if(/下月|下个月/.test(t))r.due=ymd(new Date(n2.getFullYear(),n2.getMonth()+1,15));
+    else if(/下周/.test(t))r.due=ymd(new Date(Date.now()+7*86400000));
+    else{var dn=t.match(/(\d+)\s*天(?:后|内)/);
+      r.due=ymd(new Date(Date.now()+(dn?parseInt(dn[1]):30)*86400000))}
+  }
+  r.ok=!!(r.amt&&r.type);
+  r.reason=(r.type==='in'?'货款/加工费':'采购款')+(r.credit?'（赊账）':'');
+  return r;
+}
+
+/* ========================= 渲染 ========================= */
+function renderHome(){
+  var st=stats(),c=check(),la=arStat();
+  $('#h-count').textContent=st.count;
+  $('#h-in').textContent=money(st.in);
+  $('#h-out').textContent=money(st.out);
+  $('#h-net').textContent=money(st.net);
+  $('#h-qtxt').textContent=wan(c.qs)+' / 30万';
+  $('#h-bar').style.width=Math.min(100,c.pct*100)+'%';
+  $('#h-barw').className='bar'+(c.pct>=1?' full':c.pct>=0.85?' hot':'');
+  var tip=$('#h-qtip');
+  if(c.pct>=1){tip.className='quota-tip danger';tip.textContent='额度已用尽，超出部分按 1% 缴增值税'}
+  else if(c.pct>=0.85){tip.className='quota-tip warn';tip.textContent='剩余 '+money(300000-c.qs)+'，注意开票节奏'}
+  else{tip.className='quota-tip';tip.textContent='剩余 '+money(300000-c.qs)+'，额度充足'}
+
+  // 往来
+  $('#h-ar-rec').textContent=money(la.rec);$('#h-ar-recn').textContent=la.recN+' 笔';
+  $('#h-ar-pay').textContent=money(la.pay);$('#h-ar-payn').textContent=la.payN+' 笔';
+  $('#h-ar-late').textContent=money(la.late);$('#h-ar-laten').textContent=la.lateN+' 笔';
+  var late=la.lateList.slice().sort(function(a,b){return overdueDays(b)-overdueDays(a)}).slice(0,2);
+  $('#h-ar-list').innerHTML=late.length?late.map(function(a){
+    return '<div class="ar-item late" data-ar="'+a.id+'"><div class="ar-hd">'+
+      '<div class="nm">'+(a.kind==='rec'?'应收':'应付')+' · '+a.party+
+      '<span class="late-tag">逾期 '+overdueDays(a)+' 天</span></div>'+
+      '<div class="am">'+money(a.amt)+'</div></div>'+
+      '<div class="ar-meta">'+a.reason+' · 应收日 '+md(a.due)+'</div></div>';
+  }).join(''):'<div class="empty">没有逾期款项，钱都在该在的地方</div>';
+  var dot=$('#q-ar'),tdot=$('#tab-ar');
+  if(la.lateN>0){dot.style.display='';dot.textContent=la.lateN;tdot.style.display='';tdot.textContent=la.lateN}
+  else{dot.style.display='none';tdot.style.display='none'}
+
+  // 看板摘要
+  $('#h-rate').textContent=Math.round(st.rate*100)+'%';
+  var cust=topCustomer();
+  $('#h-top').textContent=cust?cust.name:'—';
+  $('#h-noinv').textContent=money(st.noInv);
+  $('#h-score').textContent=c.score;
+  $('#h-score').style.color=c.score>=85?'var(--success)':c.score>=70?'var(--warn)':'var(--danger)';
+
+  var box=$('#h-alerts');box.innerHTML='';
+  c.issues.slice(0,3).forEach(function(x){
+    var cls=x.lv==='h'?'danger':x.lv==='m'?'warn':x.lv==='ok'?'ok':'warn';
+    box.innerHTML+='<div class="alert '+cls+'"><b>'+x.t+'</b><span>'+x.d+'</span></div>';
+  });
+  var sb=subsidies();
+  var sh=heritageSubsidies(),sg=subsidies(),all=sh.concat(sg);
+  $('#h-subsidy').innerHTML=sh.slice(0,2).map(function(s){
+    return '<div class="subsidy-row"><div><b>'+s.n+'</b><span>'+s.d+'</span></div>'+
+      '<div class="amount">'+money(s.v)+'</div></div>';
+  }).join('')+'<div style="font-size:12px;color:var(--t3);margin-top:10px">非遗专属 '+sh.length+
+    ' 项 + 通用 '+sg.length+' 项，预计 '+
+    money(all.reduce(function(a,b){return a+b.v},0))+'</div>';
+
+  // 身份自测状态卡片
+  var qzCard=$('#h-quiz-card'),qzRes=$('#h-quiz-result');
+  if(S.meta.quiz){
+    qzCard.style.display='';
+    qzRes.innerHTML='<div style="display:flex;align-items:center;gap:10px">'+
+      '<span class="tag b" style="font-size:13px;padding:6px 12px">'+S.meta.quiz+'</span>'+
+      '<span style="font-size:13px;color:var(--t2)">已测 · 去「我的」可重新自测</span></div>';
+  }else{
+    qzCard.style.display='none';
+  }
+  renderReportCard();
+  renderHomeProof();
+}
+/* 首页作品存证卡 */
+function renderHomeProof(){
+  var b=$('#h-proof-body');if(!b)return;
+  var ps=S.proofs.slice().reverse();
+  if(!ps.length){
+    b.innerHTML='<div style="background:var(--primary-l);border-radius:12px;padding:14px">'+
+      '<div style="display:flex;align-items:center;gap:8px">'+
+      '<span style="font-size:18px">\uD83C\uDFA8</span>'+
+      '<b style="font-size:14px">新花样出来了，先存一份</b></div>'+
+      '<div style="font-size:12.5px;color:var(--t2);margin-top:6px;line-height:1.5">'+
+      '拍下手稿或成品，自动生成带时间戳的存证编号。万一被抄袭、被抢注，这就是你的在先证据。</div>'+
+      '<button class="btn-primary" style="width:100%;margin-top:12px;padding:10px;font-size:14px" '+
+      'data-go="proof">拍作品存证 ›</button></div>';
+    return;
+  }
+  b.innerHTML='<div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px">'+
+    ps.slice(0,3).map(function(p){
+      return '<div style="flex:none;width:84px;text-align:center;cursor:pointer" data-pfview="'+p.id+'">'+
+        '<img src="'+p.img+'" style="width:84px;height:84px;object-fit:cover;border-radius:10px;display:block">'+
+        '<div style="font-size:11px;color:var(--t2);margin-top:4px;'+
+        'overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(p.name||'未命名')+'</div>'+
+        '<div style="font-size:10px;color:var(--t3)">'+(p.no||'')+'</div></div>'}).join('')+'</div>'+
+    '<div style="font-size:12px;color:var(--t3);margin-top:10px">已存证 '+S.proofs.length+
+    ' 件 · 最新 '+(ps[0].no||'')+' · 点击缩略图看凭证</div>';
+}
+/* 首页资产卡片：三态（未解锁 / 已生成 / 有逾期） */
+function renderReportCard(){
+  var d=reportData(),tag=$('#h-rep-tag'),body=$('#h-report-body'),la=d.la,mo=d.months;
+  var card=$('#h-report-card');
+  card.setAttribute('data-go',mo<3?'say':'report'); /* 未解锁时点卡片引导去记账 */
+  if(mo<3){
+    tag.textContent='未解锁';
+    var need=3-mo,pctm=Math.min(100,mo/3*100);
+    body.innerHTML='<div style="background:#F2F6F5;border-radius:12px;padding:14px;text-align:center">'+
+      '<div style="font-size:24px">\uD83D\uDCC4</div>'+
+      '<b style="display:block;font-size:15px;margin:6px 0 4px">开始记第一笔账，解锁经营信用报告</b>'+
+      '<span style="font-size:12.5px;color:var(--t2);display:block">'+
+      '连续记满 3 个月，就能生成一份可对外出示的经营信用报告</span>'+
+      '<div style="margin-top:14px"><div class="bar"><i style="width:'+pctm+'%"></i></div>'+
+      '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--t3);margin-top:6px">'+
+      '<span>已记 '+mo+' 个月</span><span>还差 '+need+' 个月解锁</span></div></div>'+
+      '<button class="btn-primary" style="width:100%;margin-top:14px;padding:11px;font-size:15px" '+
+      'data-go="say">去记第一笔 ›</button></div>';
+    return;
+  }
+  var mk=monthKeys().pop();
+  tag.textContent='已更新 · '+(mk?(+mk.split('-')[1])+'月':'');
+  if(la.lateN>0){
+    body.innerHTML='<div style="background:var(--danger-l);border-radius:12px;padding:14px">'+
+      '<div style="display:flex;align-items:center;gap:8px">'+
+      '<span style="font-size:18px">\u26A0\uFE0F</span>'+
+      '<b style="font-size:15px;color:var(--danger)">报告已更新：应收风险偏高</b></div>'+
+      '<div style="margin-top:8px;font-size:13px;color:var(--t2)">'+
+      la.lateN+' 笔往来款逾期 '+money(la.late)+'，账龄越长越难收回</div>'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">'+
+      '<span style="font-size:12px;color:var(--t3)">信用 '+d.credit.score+' 分 · 已影响授信测算</span>'+
+      '<span style="font-size:13px;font-weight:700;color:var(--danger)">查看催款建议 ›</span></div></div>';
+    return;
+  }
+  body.innerHTML='<div style="background:var(--primary-l);border-radius:12px;padding:14px">'+
+    '<div style="display:flex;align-items:center;gap:8px">'+
+    '<span style="font-size:18px">\u2705</span>'+
+    '<b style="font-size:15px;color:var(--primary)">报告已生成！</b></div>'+
+    '<div style="display:flex;align-items:baseline;gap:8px;margin-top:10px">'+
+    '<span style="font-size:13px;color:var(--t2)">预估贷款额度</span>'+
+    '<span style="font-size:24px;font-weight:800;color:var(--accent);'+
+    'font-variant-numeric:tabular-nums">'+money(d.loan)+'</span></div>'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">'+
+    '<span style="font-size:12px;color:var(--t3)">信用 '+d.credit.score+' 分 · '+d.level.t+'</span>'+
+    '<span style="font-size:13px;font-weight:700;color:var(--primary)">去查看 ›</span></div></div>';
+}
+/* ---- 经营健康与信用报告页 ---- */
+function renderReport(){
+  var d=reportData(),cr=d.credit,la=d.la,lv=d.level;
+  if(d.months<3){
+    var need=3-d.months,pctm=Math.min(100,d.months/3*100);
+    $('#report-body').innerHTML='<div class="card" style="text-align:center;padding:26px 16px">'+
+      '<div style="font-size:38px">\uD83D\uDD12</div>'+
+      '<b style="display:block;font-size:17px;margin:10px 0 6px">报告还没解锁</b>'+
+      '<span style="font-size:13px;color:var(--t2);display:block">'+
+      '连续记满 3 个月，这里会自动生成你的经营信用报告</span>'+
+      '<div style="margin:18px 0 8px"><div class="bar"><i style="width:'+pctm+'%"></i></div>'+
+      '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--t3);margin-top:6px">'+
+      '<span>已记 '+d.months+' 个月</span><span>还差 '+need+' 个月</span></div></div>'+
+      '<button class="btn-primary" style="width:100%;margin-top:14px" data-go="say">去记一笔 ›</button></div>'+
+      '<div class="card"><div class="card-hd"><h3>解锁后你能拿到</h3></div>'+
+      [['经营信用分','五维测算，一眼看清经营健康度'],
+       ['预估授信额度','按流水与信用分测算，贷款心里有底'],
+       ['可对外出示','复制摘要发给银行、供应商、合伙人'],
+       ['自动成长','每记一笔，报告同步更新']
+      ].map(function(x){
+        return '<div class="dl"><div><b>'+x[0]+'</b><small>'+x[1]+'</small></div></div>'}).join('')+'</div>';
+    return;
+  }
+  var ks=monthKeys();
+  var span=ks.length?(ks[0].replace('-',' 年 ')+' 月 至 '+ks[ks.length-1].replace('-',' 年 ')+' 月'):'—';
+  var col=cr.score>=85?'var(--success)':cr.score>=70?'var(--primary)':
+          cr.score>=55?'var(--warn)':'var(--danger)';
+  var h='';
+  h+='<div class="card"><div class="card-hd"><h3>经营信用分</h3>'+
+    '<span class="more">'+ymd(new Date())+' 生成</span></div>'+
+    '<div class="health"><div class="lbl"><b>综合信用评分</b>'+
+    '<span style="color:'+col+';font-weight:700">'+lv.t+'</span></div>'+
+    '<div class="ring" id="rp-ring"><i><span id="rp-score">0</span></i></div></div>'+
+    '<div style="font-size:12px;color:var(--t3);margin-top:10px">'+
+    '基于 '+d.months+' 个月真实流水，从稳定性、盈利能力、应收健康、合规水平、经营规模五维测算</div></div>';
+  h+='<div class="card"><div class="card-hd"><h3>预估授信额度</h3></div>'+
+    '<div style="background:var(--accent-l);border-radius:14px;padding:16px;text-align:center">'+
+    '<div style="font-size:13px;color:var(--t2)">按月均流水与信用分测算</div>'+
+    '<div style="font-size:32px;font-weight:800;color:var(--accent);margin:6px 0;'+
+    'font-variant-numeric:tabular-nums">'+money(d.loan)+'</div>'+
+    '<div style="font-size:12px;color:var(--t2)">'+
+    (la.lateN>0?'存在 '+la.lateN+' 笔逾期，额度已按风险折让':'信用良好，可作贷款申请辅助材料')+
+    '</div></div>'+
+    '<div style="font-size:12px;color:var(--t3);margin-top:10px">'+
+    '月均流水 '+money(d.avgIn)+' · 月均结余 '+money(d.avgNet)+'</div></div>';
+  h+='<div class="card"><div class="card-hd"><h3>五维评分</h3></div>'+
+    cr.dims.map(function(x){
+      var c2=x.v>=70?'var(--success)':x.v>=50?'var(--warn)':'var(--danger)';
+      return '<div class="str"><span class="n">'+x.n+'</span>'+
+        '<span class="b"><i style="width:'+x.v+'%;background:'+c2+'"></i></span>'+
+        '<span class="v">'+x.v+'</span></div>'+
+        '<div style="font-size:11.5px;color:var(--t3);margin:-4px 0 10px 82px">'+x.d+'</div>';
+    }).join('')+'</div>';
+  h+='<div class="card"><div class="card-hd"><h3>经营数据摘要</h3></div>'+
+    [['记账区间',span],['记账月数',d.months+' 个月'],['月均流水',money(d.avgIn)],
+     ['月均结余',money(d.avgNet)],
+     ['应收未收',money(la.rec)+'（'+la.recN+' 笔）'],
+     ['应付未付',money(la.pay)+'（'+la.payN+' 笔）'],
+     ['逾期金额',money(la.late)+'（'+la.lateN+' 笔）'],
+     ['本季开票',wan(quarterSales())]
+    ].map(function(x){
+      return '<div class="row"><div class="row-l"><b>'+x[0]+'</b></div>'+
+        '<div class="row-r">'+x[1]+'</div></div>'}).join('')+'</div>';
+  var good=[],bad=[];
+  cr.dims.forEach(function(x){if(x.v>=70)good.push(x.n+'：'+x.d)});
+  cr.dims.forEach(function(x){if(x.v<55)bad.push(x.n+'：'+x.d)});
+  if(la.lateN>0)bad.push('应收逾期 '+la.lateN+' 笔 '+money(la.late)+' 未收回，建议今天就催');
+  if(!S.profile.corpAccount)bad.push('公私账混用，经营款走个人账户，建议开立对公账户');
+  h+='<div class="card"><div class="card-hd"><h3>亮点与待改善</h3></div>'+
+    (good.length?'<div class="alert ok"><b>信用亮点</b><span>'+good.join('；')+'</span></div>':'')+
+    (bad.length?'<div class="alert '+(la.lateN>0?'danger':'warn')+'"><b>待改善</b>'+
+      '<span>'+bad.join('；')+'</span></div>':'')+'</div>';
+  h+='<div class="card"><div class="card-hd"><h3>重要声明</h3></div>'+
+    '<div style="font-size:12.5px;color:var(--t2);line-height:1.7">'+
+    '本报告由穗账达依据你在本机记录的流水自动生成，<b>仅供经营参考</b>，'+
+    '不构成信用评级、授信承诺或贷款审批依据。预估额度为按流水规模与信用分的简化测算，'+
+    '实际额度以银行或金融机构审批结果为准。用于正式贷款申请时，请另行提供经审计或税务确认的财务资料。</div></div>';
+  h+='<button class="btn-primary full" id="rp-copy">复制报告摘要</button>'+
+    '<button class="btn-ghost" data-go="agent">需要正式报表？找代账会计</button>'+
+    '<p class="note">报告随账本自动更新，越记越准</p>';
+  $('#report-body').innerHTML=h;
+  $('#rp-ring').style.background='conic-gradient('+col+' '+cr.score+'%,#EEF3F1 '+cr.score+'%)';
+  $('#rp-score').textContent=cr.score;$('#rp-score').style.color=col;
+}
+function reportSummaryText(){
+  var d=reportData(),la=d.la;
+  return '【经营健康与信用报告】'+S.profile.name+'\n'+
+    '信用分：'+d.credit.score+' 分（'+d.level.t+'）\n'+
+    '预估授信额度：'+money(d.loan)+'\n'+
+    '记账月数：'+d.months+' 个月\n'+
+    '月均流水：'+money(d.avgIn)+' · 月均结余：'+money(d.avgNet)+'\n'+
+    '应收未收：'+money(la.rec)+'（'+la.recN+' 笔）\n'+
+    '逾期：'+money(la.late)+'（'+la.lateN+' 笔）\n'+
+    '生成日期：'+ymd(new Date())+'\n'+
+    '—— 由穗账达生成，仅供经营参考，不作为授信依据。';
+}
+function topCustomer(){
+  var m={};
+  S.records.filter(function(r){return r.type==='in'&&r.party&&r.party!=='散客'})
+    .forEach(function(r){m[r.party]=(m[r.party]||0)+r.amt});
+  var arr=Object.keys(m).map(function(k){return {name:k,amt:m[k]}})
+    .sort(function(a,b){return b.amt-a.amt});
+  return arr[0]||null;
+}
+
+/* ---- 一句话记账页 ---- */
+var EXAMPLES=['给古城文创店发了5把朱泥壶，收了2000定金，尾款3000下个月结',
+  '今天卖手拉壶收了3800现金','买朱泥花了8600','付了9月作坊租金3800',
+  '发学徒工资1万5','牌坊街3万货款还没给','请陈师傅画壶，工时费2万'];
+var TIPS=[
+  ['💰','金额：2万 / 8600 / 3.5万，都能认'],
+  ['🔁','收支：卖、收、回款 → 收入；买、付、花了 → 支出'],
+  ['🧾','赊账：提到「欠/赊/月底付/尾款」，自动记进往来台账'],
+  ['🏺','非遗科目：泥料·木材·丝线 → 原料采买；大师 → 工时费'],
+  ['👤','对象：带文创店、景区、陶土行这类词，自动填往来对象'],
+  ['📅','时间：今天、昨天、9月5日，都能认']
+];
+function renderSay(){
+  $('#say-ex').innerHTML=EXAMPLES.map(function(e){
+    return '<div class="chip" data-ex="'+e+'">'+e+'</div>'}).join('');
+  $('#say-tips').innerHTML=TIPS.map(function(t){
+    return '<div class="dl"><div><b>'+t[0]+' '+t[1].split('：')[0]+'</b>'+
+      '<small>'+t[1].split('：')[1]+'</small></div></div>'}).join('');
+}
+
+/* ---- 账本 ---- */
+var filter='all';
+function renderBook(){
+  var st=stats();
+  $('#b-in').textContent=money(st.in);
+  $('#b-out').textContent=money(st.out);
+  $('#b-net').textContent=money(st.net);
+  $('#b-title').textContent=thisMonth().replace('-','年')+'月概览';
+  var list=S.records.slice().sort(function(a,b){return a.date<b.date?1:-1});
+  if(filter==='in')list=list.filter(function(r){return r.type==='in'});
+  if(filter==='out')list=list.filter(function(r){return r.type==='out'});
+  if(filter==='noinv')list=list.filter(function(r){return r.type==='out'&&!r.inv});
+  $('#b-list').innerHTML=list.length?list.map(function(r){
+    return '<div class="flow"><div class="fl-l"><b>'+r.cat+
+      (r.inv?' <span class="tag b">有票</span>':' <span class="tag r">无票</span>')+
+      '</b><span>'+md(r.date)+(r.party?' · '+r.party:'')+(r.note?' · '+r.note:'')+'</span></div>'+
+      '<div class="fl-r"><span class="'+(r.type==='in'?'in':'out')+'">'+
+      (r.type==='in'?'+':'-')+money(r.amt)+'</span><em data-del="'+r.id+'">✕</em></div></div>';
+  }).join(''):'<div class="empty">还没有记录，说一句话就能记</div>';
+
+  var c=check(),n=new Date(),q=Math.floor(n.getMonth()/3)+1;
+  $('#i-period').textContent='第'+q+'季度';
+  $('#i-qtxt').textContent=wan(c.qs)+' / 30万';
+  $('#i-bar').style.width=Math.min(100,c.pct*100)+'%';
+  $('#i-barw').className='bar'+(c.pct>=1?' full':c.pct>=0.85?' hot':'');
+  $('#i-qtip').className='quota-tip'+(c.pct>=1?' danger':c.pct>=0.85?' warn':'');
+  $('#i-qtip').textContent='剩余免税额度 '+money(Math.max(0,300000-c.qs));
+  var inv=S.invoices.slice().sort(function(a,b){return a.date<b.date?1:-1}).slice(0,4);
+  $('#i-list').innerHTML=inv.map(function(v){
+    return '<div class="flow"><div class="fl-l"><b>'+
+      (v.dir==='out'?'<span class="tag o">销项</span> ':'<span class="tag b">进项</span> ')+
+      (v.party||'未填写')+'</b><span>'+md(v.date)+' · '+v.cat+'</span></div>'+
+      '<div class="fl-r"><span class="out">'+money(v.amt)+'</span><em data-idel="'+v.id+'">✕</em></div></div>';
+  }).join('');
+}
+
+/* ---- 往来台账 ---- */
+var arKind='rec';
+function renderAr(){
+  var la=arStat();
+  $('#a-rec').textContent=money(la.rec);$('#a-recn').textContent=la.recN+' 笔';
+  $('#a-pay').textContent=money(la.pay);$('#a-payn').textContent=la.payN+' 笔';
+  $('#a-late').textContent=money(la.late);$('#a-laten').textContent=la.lateN+' 笔';
+  // 逾期专区
+  var late=la.lateList.slice().sort(function(a,b){return overdueDays(b)-overdueDays(a)});
+  $('#a-late-zone').innerHTML=late.length?('<div class="card">'+
+    '<div class="card-hd"><h3>⏰ 该催了（'+late.length+' 笔 / '+money(la.late)+'）</h3></div>'+
+    late.map(function(a){return arCard(a,true)}).join('')+'</div>'):'';
+  var list=S.ar.filter(function(a){
+    if(arKind==='done')return a.paid;
+    return !a.paid&&a.kind===arKind;
+  }).sort(function(a,b){return a.due<b.due?-1:1});
+  $('#a-list').innerHTML=list.length?list.map(function(a){return arCard(a,false)}).join(''):
+    '<div class="empty">'+(arKind==='done'?'还没有结清的款项':'没有待收/待付的款项')+'</div>';
+}
+function arCard(a,isLate){
+  var od=overdueDays(a);
+  var btn=a.kind==='rec'?
+    '<div class="btn-sm dun" data-dun="'+a.id+'">发催款</div>':
+    '<div class="btn-sm ok" data-pay="'+a.id+'">安排付款</div>';
+  if(a.paid)btn='<div class="btn-sm gh" data-undone="'+a.id+'">撤销结清</div>';
+  return '<div class="ar-item'+(od>0&&!a.paid?' late':'')+'">'+
+    '<div class="ar-hd"><div class="nm">'+a.party+
+      '<em class="'+(a.kind==='rec'?'em-rec':'em-pay')+'">'+(a.kind==='rec'?'别人欠我':'我欠别人')+'</em>'+
+      (od>0&&!a.paid?'<span class="late-tag">逾期 '+od+' 天</span>':'')+'</div>'+
+      '<div class="am">'+money(a.amt)+'</div></div>'+
+    '<div class="ar-meta">'+a.reason+' · 发生 '+md(a.date)+' · 约定 '+md(a.due)+
+      (a.paid?' · <span class="tag g">已结清</span>':'')+'</div>'+
+    '<div class="ar-act">'+(isLate?btn:'')+
+      (a.paid?'<div class="btn-sm gh" data-ardel="'+a.id+'">删除</div>':
+        '<div class="btn-sm ok" data-done="'+a.id+'">标记结清</div>'+
+        '<div class="btn-sm gh" data-ardel="'+a.id+'">删除</div>')+'</div></div>';
+}
+function openDunning(a){
+  $('#center').setAttribute('data-id',a.id||'');
+  openCenter('<h4>催款话术</h4>'+
+    '<div class="chips" style="margin-bottom:10px">'+
+    DUN_STYLES.map(function(s){
+      return '<div class="chip'+(s.k===dunStyle?' on':'')+'" data-dstyle="'+s.k+'">'+s.n+'</div>'}).join('')+'</div>'+
+    '<div class="scrollbox">'+dunningText(a)+'</div>'+
+    '<button class="btn-primary" style="width:100%" id="dun-copy">复制这段话</button>'+
+    '<button class="btn-ghost" style="width:100%" id="dun-sent">已发送，标记提醒</button>');
+}
+/* 催款话术：潮汕人做生意讲人情、留余地，三档语气可选 */
+function craftShort(){var c=S.profile.craft||'';var i=c.indexOf('·');var w=i>=0?c.slice(i+1).trim():c;
+  if(w.indexOf('手拉壶')>=0)return '手拉壶';
+  if(w.indexOf('木雕')>=0)return '木雕';
+  if(w.indexOf('潮绣')>=0)return '潮绣';
+  if(w.indexOf('陶瓷')>=0)return '陶瓷';
+  return w||'手艺'}
+function bossName(){var n=(S.profile.name||'本店').replace(/(作坊|工坊|工作室|店)$/,'');return n.slice(0,2)}
+var DUN_STYLES=[
+  {k:'polite',n:'客气版',
+   f:function(a,od){
+     var cs=craftShort();
+     return a.party+'老板，您好啊。我是做'+cs+'的'+bossName()+'。\n'+
+       '上次给您发的那批'+cs+'（'+(a.reason||'货款')+'，'+money(a.amt)+'），约定 '+md(a.due)+
+       ' 结清，到今天有 '+od+' 天了。\n'+
+       '这两天我这边要囤一批上等原料，手头稍微有点紧。您看那剩下的 '+money(a.amt)+
+       ' 尾款，方便这两天帮衬一下吗？\n'+
+       '多谢关照咱潮州手艺！[抱拳]';
+   }},
+  {k:'soft',n:'温和提醒',
+   f:function(a,od){
+     return a.party+'老板您好，跟您对一下数：\n'+
+       md(a.date)+'那笔 '+money(a.amt)+'（'+(a.reason||'货款')+'），约定 '+md(a.due)+
+       ' 结清，目前逾期 '+od+' 天。\n'+
+       '可能是您忙忘了，我先跟您提一声。方便的话这两天安排一下，'+
+       '有啥情况跟我说一声都得。谢谢！';
+   }},
+  {k:'direct',n:'直接版',
+   f:function(a,od){
+     return a.party+'老板，'+md(a.date)+'那笔 '+money(a.amt)+' 的'+(a.reason||'货款')+
+       '，约定 '+md(a.due)+' 结清，现已逾期 '+od+' 天。\n'+
+       '麻烦您这两天安排付款，收到后立即销账。'+
+       '如一次性付款有困难，请回复一个付款计划，我这边配合。谢谢。';
+   }}
+];
+var dunStyle='polite';
+function dunningText(a){
+  var od=overdueDays(a),s=DUN_STYLES.filter(function(x){return x.k===dunStyle})[0]||DUN_STYLES[0];
+  return s.f(a,od);
+}
+function copyText(t,msg){
+  var ta=document.createElement('textarea');ta.value=t;
+  ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);
+  ta.select();
+  try{document.execCommand('copy');toast(msg||'催款话术已复制，去微信粘贴吧')}
+  catch(e){toast('复制失败，请长按文字手动复制')}
+  document.body.removeChild(ta);
+}
+
+/* ---- 看板 ---- */
+function renderBoard(){
+  var st=stats();
+  $('#bd-title').textContent=thisMonth().replace('-','年')+'月经营';
+  $('#bd-in').textContent=money(st.in);
+  $('#bd-out').textContent=money(st.out);
+  $('#bd-net').textContent=money(st.net);
+  $('#bd-rate').textContent=Math.round(st.rate*100)+'%';
+  // 应收台账置顶（红 + 账龄分桶）
+  (function(){
+    var recs=S.ar.filter(function(a){return a.kind==='rec'&&!a.paid})
+      .sort(function(a,b){return a.due<b.due?-1:1});
+    var ab=$('#bd-ar-body');
+    if(!recs.length){ab.innerHTML='<div class="empty">暂时没人欠您钱，钱都收回来了</div>';return}
+    function bk(a){var d=overdueDays(a);return d>60?2:d>30?1:0}
+    var groups=[['30 天内','var(--warn)',0],['30–60 天','#E5762B',1],['60 天以上','var(--danger)',2]];
+    var html='';
+    groups.forEach(function(g){
+      var items=recs.filter(function(a){return bk(a)===g[2]});
+      if(!items.length)return;
+      html+='<div style="font-size:12px;font-weight:700;color:'+g[1]+';margin:10px 0 6px">'+
+        g[0]+'（'+items.length+' 笔）</div>';
+      items.forEach(function(a){
+        var od=overdueDays(a);
+        html+='<div class="ar-item'+(od>0?' late':'')+'"><div class="ar-hd">'+
+          '<div class="nm">'+a.party+'<em class="em-rec">别人欠我</em>'+
+          (od>0?'<span class="late-tag">逾期 '+od+' 天</span>':
+            '<span style="font-size:11px;color:var(--t3);margin-left:6px">还有 '+daysBetween(today(),a.due)+' 天</span>')+
+          '</div><div class="am">'+money(a.amt)+'</div></div>'+
+          '<div class="ar-meta">'+a.reason+' · 约定 '+md(a.due)+'</div>'+
+          '<div class="ar-act"><div class="btn-sm dun" data-dun="'+a.id+'">发催款</div></div></div>';
+      });
+    });
+    ab.innerHTML=html;
+  })();
+  // 近 6 月
+  var n=new Date(),data=[];
+  for(var i=5;i>=0;i--){
+    var d=new Date(n.getFullYear(),n.getMonth()-i,1),key=d.getFullYear()+'-'+pad(d.getMonth()+1);
+    var rs=S.records.filter(function(r){return monthOf(r.date)===key});
+    data.push({label:(d.getMonth()+1)+'月',
+      inc:sum(rs.filter(function(r){return r.type==='in'})),
+      exp:sum(rs.filter(function(r){return r.type==='out'}))});
+  }
+  var max=Math.max(1,Math.max.apply(null,data.map(function(d){return Math.max(d.inc,d.exp)})));
+  var W=340,H=150,gw=W/6,bw=11;
+  var svg='<svg class="chart" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">';
+  [0,0.5,1].forEach(function(p){
+    var y=18+(H-38)*(1-p);
+    svg+='<line x1="0" y1="'+y+'" x2="'+W+'" y2="'+y+'" stroke="#EEF3F1" stroke-width="1"/>';
+  });
+  data.forEach(function(d,i){
+    var x=i*gw+gw/2;
+    var hi=(H-38)*(d.inc/max),he=(H-38)*(d.exp/max);
+    svg+='<rect x="'+(x-bw-2)+'" y="'+(18+(H-38)-hi)+'" width="'+bw+'" height="'+Math.max(1,hi)+'" rx="3" fill="#14A085"/>';
+    svg+='<rect x="'+(x+2)+'" y="'+(18+(H-38)-he)+'" width="'+bw+'" height="'+Math.max(1,he)+'" rx="3" fill="#FF7A2F"/>';
+    svg+='<text x="'+x+'" y="'+(H-6)+'" font-size="11" fill="#98A5A1" text-anchor="middle">'+d.label+'</text>';
+  });
+  svg+='</svg>';
+  $('#bd-chart').innerHTML=svg;
+  // 支出结构
+  var mm={};
+  recMonth().filter(function(r){return r.type==='out'}).forEach(function(r){
+    mm[r.cat]=(mm[r.cat]||0)+r.amt});
+  var arr=Object.keys(mm).map(function(k){return {n:k,v:mm[k]}}).sort(function(a,b){return b.v-a.v}).slice(0,5);
+  var tot=arr.reduce(function(a,b){return a+b.v},0)||1;
+  $('#bd-str').innerHTML=arr.length?arr.map(function(x){
+    return '<div class="str"><span class="n">'+x.n+'</span>'+
+      '<span class="b"><i style="width:'+Math.round(x.v/tot*100)+'%"></i></span>'+
+      '<span class="v">'+money(x.v)+'</span></div>';
+  }).join(''):'<div class="empty">本月还没有支出记录</div>';
+  // 客户
+  var cm={};
+  S.records.filter(function(r){return r.type==='in'&&r.party}).forEach(function(r){
+    cm[r.party]=(cm[r.party]||0)+r.amt});
+  var carr=Object.keys(cm).map(function(k){return {n:k,v:cm[k]}}).sort(function(a,b){return b.v-a.v}).slice(0,4);
+  var ctot=carr.reduce(function(a,b){return a+b.v},0)||1;
+  $('#bd-cust').innerHTML=carr.length?carr.map(function(x){
+    return '<div class="str"><span class="n" style="width:88px">'+x.n+'</span>'+
+      '<span class="b"><i style="width:'+Math.round(x.v/ctot*100)+'%"></i></span>'+
+      '<span class="v">'+money(x.v)+'</span></div>';
+  }).join(''):'<div class="empty">还没有客户数据</div>';
+  // 合规
+  var c=check(),col=c.score>=85?'var(--success)':c.score>=70?'var(--warn)':'var(--danger)';
+  $('#r-ring').style.background='conic-gradient('+col+' '+c.score+'%,#EEF3F1 '+c.score+'%)';
+  $('#r-score').textContent=c.score;$('#r-score').style.color=col;
+  $('#r-level').innerHTML='<b>'+(c.score>=85?'健康':c.score>=70?'亚健康':'需整改')+'</b>共 '+c.issues.length+' 项事项';
+  $('#r-corp').className='switch'+(S.profile.corpAccount?' on':'');
+  $('#r-cnt').textContent=c.issues.length+' 项';
+  $('#r-list').innerHTML=c.issues.map(function(x){
+    return '<div class="issue"><span class="lv '+x.lv+'">'+
+      (x.lv==='h'?'高':x.lv==='m'?'中':x.lv==='ok'?'正常':'低')+'</span>'+
+      '<div class="bd"><b>'+x.t+'</b><p>'+x.d+'</p></div></div>';
+  }).join('');
+  var y=new Date().getFullYear(),dl=c.deadline;
+  var cal=[
+    {t:'增值税（小规模·按季）',d:ymd(dl),l:c.left},
+    {t:'经营所得个税预缴',d:ymd(dl),l:c.left},
+    {t:'下一季度申报',d:ymd(new Date(y,12,15)),l:Math.max(0,Math.ceil((new Date(y,12,15)-new Date())/86400000))},
+    {t:'经营所得年度汇算',d:(y+1)+'-03-31',l:Math.max(0,Math.ceil((new Date(y+1,2,31)-new Date())/86400000))}
+  ];
+  $('#r-cal').innerHTML=cal.map(function(x){
+    return '<div class="dl"><div><b>'+x.t+'</b><small>截止 '+x.d+'</small></div>'+
+      '<div class="d'+(x.l<=7?' soon':'')+'">'+x.l+' 天</div></div>';
+  }).join('');
+
+  /* 非遗专属 · 传承人补助（法条翻译成大白话） */
+  var hs=heirSubsidy();
+  $('#r-heir-lv').innerHTML=HEIR_LEVELS.map(function(x){
+    return '<div class="chip'+(x.k===(S.profile.heirLevel||'none')?' on':'')+
+      '" data-heir="'+x.k+'">'+x.n+'</div>'}).join('');
+  $('#r-heir').innerHTML=
+    '<div style="background:var(--success-l);border-radius:12px;padding:12px">'+
+    '<div style="display:flex;align-items:baseline;gap:8px">'+
+    '<span style="font-size:13px;color:var(--t2)">'+heirName()+'，预估每年可领</span>'+
+    '<span style="font-size:22px;font-weight:800;color:var(--success);'+
+    'font-variant-numeric:tabular-nums">'+(hs.total?money(hs.total):'—')+'</span></div>'+
+    '<div style="font-size:12.5px;color:var(--t2);margin-top:6px">'+hs.line+'</div></div>'+
+    '<div style="font-size:12px;color:var(--t3);margin-top:10px;line-height:1.6">'+
+    '各级 1:1 配套参考（上级补助 + 区级配套）：国家级 约 '+money(40000)+
+    ' / 省级 约 '+money(20000)+' / 市级 约 '+money(12000)+' / 区级 '+money(4000)+
+    '。上级标准为公开常见参考值，实际以属地文旅部门公布为准。</div>'+
+    '<div class="alert ok" style="margin-top:10px"><b>这笔钱谁也动不了</b>'+
+    '<span>按规定，任何单位和个人不得截留、挪用、挤占项目保护传承经费和传承人补助费；'+
+    '补助由文旅部门按年度实际评选人数申请核拨，直接发放到传承人。</span></div>';
+
+  /* 隐私安全盾 */
+  $('#r-privacy').innerHTML=
+    '<div style="display:flex;gap:10px;align-items:flex-start">'+
+    '<span style="font-size:22px">\uD83D\uDEE1\uFE0F</span>'+
+    '<div><b style="font-size:13px">本机存储 · 不收集无关信息</b>'+
+    '<div style="font-size:12px;color:var(--t2);margin-top:4px;line-height:1.6">'+
+    '根据《个人信息保护法》及网络安全相关规定，穗账达坚持本机存储，'+
+    '不收集与服务无关的个人信息；绝不泄露、篡改、毁损您的经营数据。</div></div></div>'+
+    '<button class="btn-ghost" style="width:100%;margin:10px 0 0" id="pv-backup">'+
+    '加密本地备份 / 换机迁移 ›</button>';
+  // 非遗补贴雷达（终极杀器）
+  (function(){
+    var incM=recMonth().filter(function(r){return r.type==='in'&&
+      (r.cat==='作品销售'||r.cat==='技艺服务')}).length;
+    var hasWage=S.records.some(function(r){return r.cat==='学徒工资'||r.cat==='大师工时费'});
+    var sb=$('#bd-sub-body');
+    var sWork=heritageSubsidies().filter(function(s){return /工坊|工作室/.test(s.n)})[0];
+    var est=sWork?sWork.v:20000;
+    if(incM>0&&hasWage){
+      sb.innerHTML='<div style="background:var(--success-l);border-radius:12px;padding:13px">'+
+        '<b style="font-size:14px;color:var(--success)">系统检测到您本月有稳定出货，且已带徒 / 雇工</b>'+
+        '<div style="font-size:13px;color:var(--t2);margin-top:6px;line-height:1.65">'+
+        '您完全符合潮州市「非遗人才示范工作室」或「非遗工坊建设经费」的申报条件，预估可领 '+
+        '<b style="color:var(--success)">'+money(est)+'</b>！</div>'+
+        '<button class="btn-primary" style="width:100%;margin-top:12px;padding:11px" id="bd-pack">一键生成申报材料包 ›</button></div>';
+      var bp=$('#bd-pack');if(bp)bp.onclick=function(){generateSubsidyPack()};
+    }else{
+      sb.innerHTML='<div style="font-size:13px;color:var(--t2);line-height:1.65">'+
+        '持续记账 + 稳定出货 + 带徒 / 雇工，系统会自动匹配「非遗工坊建设经费」「师带徒传习补贴」等专属政策。'+
+        '本月已记 '+incM+' 笔出货、'+(hasWage?'已记录人工成本':'尚未记录带徒 / 工时费')+'。</div>';
+    }
+  })();
+}
+
+/* ---- 身份自测 ---- */
+var QUIZ=[
+  {q:'你的手艺是哪一门？',multi:false,o:['非遗手工作坊（手拉壶 / 陶瓷）','木雕','潮绣','其他非遗手艺']},
+  {q:'平时怎么收钱？',multi:true,tip:'用几种选几种',
+   o:['微信/支付宝个人码','对公账户','文创平台 / 电商代收','景区 / 展会现结','现金为主']},
+  {q:'现在最头疼的是？',multi:true,tip:'几个头疼就选几个',
+   o:['赊出去的货款收不回','泥料丝线成本算不清','学徒工钱和大师费用对不上','怕被税务查','花样被别人抄了']}
+];
+var quizStep=0;
+var quizAns=[[],[],[]];
+function resetQuiz(){quizStep=0;quizAns=[[],[],[]]}
+function finishQuiz(){
+  if(quizStep<QUIZ.length)return;
+  var r=quizResult();S.meta.quiz=r.tag;save();renderHome();renderMine();
+  // 首次自测（还没做过引导）→ 先弹文化温度的「安全与补贴卡片」，再走新手引导
+  if(!S.meta.guide){showSafetyCard();}
+  else{go('home');toast('已更新经营身份：'+r.tag)}
+}
+function renderQuiz(){
+  var b=$('#quiz-body');
+  if(quizStep<QUIZ.length){
+    var i=quizStep,q=QUIZ[i],sel=quizAns[i],multi=!!q.multi;
+    b.innerHTML='<div class="card"><div class="card-hd"><h3>第 '+(i+1)+' / '+QUIZ.length+' 题</h3>'+
+      '<span class="more">'+(multi?'可多选':'单选')+'</span></div>'+
+      '<p class="q">'+q.q+(q.tip?'<span style="font-size:12px;color:var(--t3);font-weight:400"> · '+q.tip+'</span>':'')+'</p>'+
+      q.o.map(function(o,k){
+        var on=sel.indexOf(k)>=0;
+        return '<button class="opt'+(on?' on':'')+'" data-qa="'+k+'">'+
+          (multi?'<span style="display:inline-block;width:18px">'+(on?'☑':'☐')+'</span>':'')+
+          o+'</button>'}).join('')+
+      (multi?'<div style="display:flex;gap:10px;margin-top:8px">'+
+        '<button class="btn-primary" style="flex:1;margin:0"'+
+        (sel.length?'':' disabled')+' id="qz-next">'+
+        (i===QUIZ.length-1?'看看我的方案':'下一题')+'</button></div>'+
+        '<div style="font-size:12px;color:var(--t3);text-align:center;margin-top:8px">'+
+        '已选 '+sel.length+' 项，可以再勾别的</div>':'')+
+      (i>0?'<button class="btn-ghost" style="width:100%;margin:10px 0 0" id="qz-back">‹ 上一题</button>':'')+
+      '</div>';
+    return;
+  }
+  var r=quizResult();
+  b.innerHTML='<div class="card"><div class="card-hd"><h3>你的经营身份</h3></div>'+
+    '<div style="background:var(--primary-l);border-radius:14px;padding:16px;text-align:center">'+
+    '<div style="font-size:26px">'+r.icon+'</div>'+
+    '<b style="font-size:18px;display:block;margin:6px 0 4px">'+r.tag+'</b>'+
+    '<span style="font-size:13px;color:var(--t2)">'+r.desc+'</span></div>'+
+    '<div style="margin-top:12px">'+
+    (r.sum||[]).map(function(s){
+      return '<div class="row"><div class="row-l"><b>'+s.k+'</b></div>'+
+        '<div class="row-r" style="text-align:right;max-width:60%;font-size:13px">'+s.v+'</div></div>'}).join('')+'</div>'+
+    '<div style="margin-top:14px"><p class="q">穗账达给你的方案</p>'+
+    r.plan.map(function(p){
+      return '<div class="dl" data-go="'+p.page+'"><div><b>'+p.t+'</b><small>'+p.d+'</small></div>'+
+        '<div class="d">去用 ›</div></div>'}).join('')+'</div>'+
+    '<button class="btn-primary" style="width:100%;margin-top:16px" data-go="say">开始记第一笔账</button>'+
+    '<button class="btn-ghost" style="width:100%" data-go="agent">找会计帮我理一遍</button>'+
+    '<button class="btn-ghost" style="width:100%" id="qz-again">重新测一次</button></div>'+
+    '<div class="card"><div class="card-hd"><h3>同行的老板也在用</h3></div>'+
+    '<div class="alert ok"><b>把穗账达分享给一起干的同行</b>'+
+    '<span>陶瓷、木雕、潮绣这些手艺活，账最难记——说一句话就能记清，推荐给一起干的非遗同行。</span></div>'+
+    '<button class="btn-ghost" style="width:100%" id="qz-share">复制推荐语</button></div>';
+}
+var CRAFT_NAME=['非遗手工作坊（手拉壶 / 陶瓷）','木雕','潮绣','其他非遗手艺'];
+var PAY_NAME=['个人码','对公账户','文创平台','景区/展会现结','现金'];
+var PAIN_NAME=['货款收不回','成本算不清','工钱对不上','怕被查账','花样被抄'];
+function quizResult(){
+  var craft=(quizAns[0].length?quizAns[0][0]:0),pay=quizAns[1],pain=quizAns[2];
+  var usePersonal=pay.indexOf(0)>=0,useCorp=pay.indexOf(1)>=0;
+  var tag,icon,desc,plan=[],sum=[];
+  if(craft===1){tag='木雕 · 非遗工坊';icon='\uD83E\uDE93';
+    desc='木料与工时，是最难算清的两笔账';}
+  else if(craft===2){tag='潮绣 · 非遗工坊';icon='\uD83E\uDDF6';
+    desc='丝线按色号买，工时按针法计';}
+  else if(craft===3){tag='非遗手艺 · 手工作坊';icon='\uD83C\uDFA8';
+    desc='手艺人的账，说人话就能记清';}
+  else{tag='手拉壶 · 非遗工坊';icon='\uD83C\uDFA8';
+    desc='拉坯、上釉、烧窑，每道工序都是钱';}
+  var chn=pay.map(function(k){return PAY_NAME[k]});
+  sum.push({k:'收钱方式',v:chn.join(' + ')+
+    (chn.length>=3?'（'+chn.length+' 种并存，账最容易散）':chn.length===2?'（2 种并存）':'')});
+  sum.push({k:'最头疼',v:pain.map(function(k){return PAIN_NAME[k]}).join('、')});
+  plan.push({t:'一句话记账',d:'说人话就能记，不用学会计术语',page:'say'});
+  if(pain.indexOf(0)>=0)
+    plan.push({t:'往来台账 + 一键催款',d:'谁欠你钱、逾期几天，自动生成催款话术',page:'ar'});
+  else plan.push({t:'往来台账',d:'应收应付集中管理，到期提醒',page:'ar'});
+  if(pain.indexOf(1)>=0)
+    plan.push({t:'原料成本归类',d:'泥料·木材·丝线自动归到原料采买',page:'book'});
+  if(pain.indexOf(2)>=0)
+    plan.push({t:'大师工时 / 学徒工资',d:'两笔人工分开记，别混成一团',page:'book'});
+  if(pain.indexOf(3)>=0)
+    plan.push({t:'合规体检',d:'无票支出、免税额度、申报期提醒',page:'board'});
+  if(pain.indexOf(4)>=0)
+    plan.push({t:'作品存证',d:'新花样随手拍，生成带时间戳的在先证据',page:'proof'});
+  else plan.push({t:'作品存证',d:'作品拍一张，自动编号、带时间戳',page:'proof'});
+  if(!useCorp&&usePersonal)
+    plan.push({t:'建议开对公账户',d:'个人码收经营款易被认定账外收入',page:'mine'});
+  if(plan.length<3)plan.push({t:'老板看板',d:'毛利率、主要客户、钱花哪儿，一张图看懂',page:'board'});
+  return {tag:tag,icon:icon,desc:desc,plan:plan,sum:sum};
+}
+/* 首用身份自测完成后的「安全与补贴卡片」：用文化温度承接，而非生硬警告 */
+function showSafetyCard(){
+  openCenter('<h4>🏺 非遗管家提醒</h4>'+
+    '<div class="scrollbox">'+
+    '<p style="font-size:14px;line-height:1.75;color:var(--t1);margin:0 0 4px">'+
+    '老板，手拉壶是咱们潮州的骄傲。但做一把好壶周期长，泥料垫资多，给经销商发货经常被压尾款。'+
+    '为了帮您<b>守好手艺和钱袋子</b>：</p>'+
+    '<div style="margin:12px 0;padding:13px;background:var(--primary-l);border-radius:12px">'+
+    '<div style="display:flex;gap:8px;align-items:center;margin-bottom:7px">'+
+    '<span style="font-size:17px">🔒</span><b style="font-size:13.5px;color:var(--primary)">① 本机加密存储</b></div>'+
+    '<span style="font-size:13px;color:var(--t2);display:block">您每天的流水和往来账，本机加密存储，绝不泄露。</span>'+
+    '<div style="display:flex;gap:8px;align-items:center;margin:11px 0 7px">'+
+    '<span style="font-size:17px">🎁</span><b style="font-size:13.5px;color:var(--primary)">② 每笔交易都是补贴凭证</b></div>'+
+    '<span style="font-size:13px;color:var(--t2);display:block">您作为手艺人的每一笔稳定交易，都可以作为申请「非遗工坊建设补贴」或「师带徒传习补贴」的凭证。</span>'+
+    '</div></div>'+
+    '<div style="display:flex;gap:10px;margin-top:6px">'+
+    '<button class="btn-primary" style="flex:1;padding:12px" id="sc-rec">好，马上记一笔</button>'+
+    '<button class="btn-ghost" style="flex:1;padding:12px" id="sc-sub">查查我能领多少非遗补贴</button></div>');
+  $('#sc-rec').onclick=function(){closeCenter();go('home');
+    if(!S.meta.guide)setTimeout(startGuide,450)};
+  $('#sc-sub').onclick=function(){closeCenter();go('subsidy')};
+}
+
+/* ---- 代账会计 ---- */
+var AGENTS=[
+  {n:'陈会计',e:'👩‍💼',tag:'非遗工坊 · 陶瓷木雕',score:'4.9',price:'¥200/月起',
+    d:'12 年代账经验，熟悉非遗工坊查账征收与原料进项票补齐'},
+  {n:'李税务师',e:'🧑‍💼',tag:'非遗补贴 · 税务筹划',score:'4.8',price:'¥380/月起',
+    d:'熟悉传承人补助、大师工作室经费申报，帮客户年均省税 1.8 万'},
+  {n:'王记账团队',e:'👨‍💻',tag:'手工账 · 快速交付',score:'4.7',price:'¥260/月起',
+    d:'3 人小组，月度票据 500 张以内 3 天出报表'}
+];
+function renderAgent(){
+  $('#ag-list').innerHTML=AGENTS.map(function(a){
+    return '<div class="card" style="margin:0 0 10px;padding:14px">'+
+      '<div class="ar-hd"><div class="nm">'+a.e+' '+a.n+
+      '<em class="em-rec">'+a.score+' 分</em></div>'+
+      '<div class="am" style="font-size:15px;color:var(--accent)">'+a.price+'</div></div>'+
+      '<div class="ar-meta">'+a.tag+' · '+a.d+'</div>'+
+      '<div class="ar-act"><div class="btn-sm ok" data-ag="'+a.n+'">预约咨询</div>'+
+      '<div class="btn-sm gh" data-ag="'+a.n+'">看评价</div></div></div>';
+  }).join('');
+}
+
+/* ---- 存证 ---- */
+/* 非遗工艺类别 → 作品编号前缀 */
+var CRAFTS=['陶瓷','木雕','潮绣','其他'];
+var CRAFT_CODE={'陶瓷':'TC','木雕':'MD','潮绣':'CX','其他':'QT'};
+var pfCat='陶瓷';
+function makeWorkNo(cat){
+  var d=new Date(),ds=''+d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+  var code=CRAFT_CODE[cat]||'QT';
+  var n=S.proofs.filter(function(p){return p.cat===cat}).length+1;
+  return code+'-'+ds+'-'+('00'+n).slice(-3);
+}
+function makeHash(s){
+  var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;
+  return ('0000000'+h.toString(16).toUpperCase()).slice(-8);
+}
+function renderProofCats(){
+  $('#pf-cats').innerHTML=CRAFTS.map(function(c){
+    return '<div class="chip'+(c===pfCat?' on':'')+'" data-pfcat="'+c+'">'+c+'</div>'}).join('');
+  $('#pf-no').value=makeWorkNo(pfCat);
+}
+function renderProof(){
+  var g=$('#pf-grid'),h='<div class="proof add" id="pf-add">＋</div>';
+  S.proofs.slice().reverse().forEach(function(p){
+    h+='<div class="proof" data-pfview="'+p.id+'"><img src="'+p.img+'" alt="作品">'+
+      '<div class="cap">'+(p.name||'未命名作品')+'</div>'+
+      '<div class="x" data-pfdel="'+p.id+'">✕</div></div>';
+  });
+  g.innerHTML=h;
+  var cnt=$('#pf-cnt');if(cnt)cnt.textContent=S.proofs.length+' 件';
+}
+/* 声音存证：按住录音，随作品一起打时间戳（可作对接潮州非遗数智平台的素材） */
+var pfAudio='',pfRec=null,pfStream=null,pfChunks=[];
+function startRec(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||typeof MediaRecorder==='undefined'){
+    toast('这个浏览器不支持录音，可跳过');return}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){
+    pfStream=st;pfChunks=[];
+    var mr;try{mr=new MediaRecorder(st)}catch(e){toast('不支持录音编码');return}
+    pfRec=mr;
+    mr.ondataavailable=function(e){if(e.data&&e.data.size)pfChunks.push(e.data)};
+    mr.onstop=function(){
+      var blob=new Blob(pfChunks,{type:'audio/webm'});
+      if(blob.size>600000){toast('录音偏长，本机放不下，建议控制在 20 秒内');
+        $('#pf-rec-state').textContent='录音过长未保存，可重新录一段';return}
+      var fr=new FileReader();
+      fr.onload=function(ev){
+        pfAudio=ev.target.result;
+        $('#pf-rec-state').innerHTML='已录好语音说明（'+Math.round(blob.size/1024)+
+          ' KB），存证时会一起带上';
+        toast('录音完成');
+      };
+      fr.readAsDataURL(blob);
+      if(pfStream)pfStream.getTracks().forEach(function(t){t.stop()});
+    };
+    mr.start();
+    $('#pf-rec-state').textContent='正在录音…松开手指结束';
+  }).catch(function(){toast('没拿到麦克风权限，可跳过语音')});
+}
+function stopRec(){if(pfRec&&pfRec.state!=='inactive')pfRec.stop()}
+function initRec(){
+  var btn=$('#pf-rec');if(!btn)return;
+  var down=function(e){e.preventDefault();startRec()};
+  var up=function(e){e.preventDefault();stopRec()};
+  btn.addEventListener('mousedown',down);btn.addEventListener('mouseup',up);
+  btn.addEventListener('mouseleave',up);
+  btn.addEventListener('touchstart',down,{passive:false});
+  btn.addEventListener('touchend',up,{passive:false});
+}
+function proofCertText(p){
+  return '【数字资产存证凭证】\n'+
+    '作品名称：'+(p.name||'未命名作品')+'\n'+
+    '作品编号：'+p.no+'\n'+
+    '工艺类别：'+p.cat+'\n'+
+    '存证时间：'+p.ts+'\n'+
+    '校验码：'+p.hash+'\n'+
+    (p.audio?'附语音说明：有（创作者口述工艺与来历）\n':'')+
+    '—— 由穗账达生成，证明持有人于上述时间已完成该作品创作，\n'+
+    '可作为在先证据使用。正式著作权登记请向版权局申请。';
+}
+function openProofCert(id){
+  var p=S.proofs.filter(function(x){return x.id===id})[0];if(!p)return;
+  openCenter('<h4>数字资产存证凭证</h4>'+
+    '<div class="scrollbox"><div style="text-align:center;margin-bottom:12px">'+
+    '<img src="'+p.img+'" style="max-width:100%;max-height:200px;border-radius:10px"></div>'+
+    [['作品名称',p.name||'未命名作品'],['作品编号',p.no],['工艺类别',p.cat],
+     ['存证时间',p.ts],['校验码',p.hash]].map(function(x){
+      return '<div class="row"><div class="row-l"><b>'+x[0]+'</b></div>'+
+        '<div class="row-r">'+x[1]+'</div></div>'}).join('')+
+    (p.audio?'<div style="margin-top:10px"><div style="font-size:12px;'+
+      'color:var(--t2);margin-bottom:6px">创作者语音说明</div>'+
+      '<audio controls src="'+p.audio+'" style="width:100%"></audio></div>':'')+
+    '<div style="font-size:11.5px;color:var(--t3);margin-top:10px;line-height:1.6">'+
+    '本凭证记录作品的创作时间与内容摘要，可作为在先完成的证据，不等同于著作权登记。</div></div>'+
+    '<button class="btn-primary" style="width:100%;margin-top:12px" id="pf-copycert">复制存证凭证</button>');
+  $('#pf-copycert').onclick=function(){copyText(proofCertText(p),'存证凭证已复制')};
+}
+
+/* ---- 我的 ---- */
+function renderMine(){
+  var p=S.profile;
+  $('#m-name').textContent=p.name;$('#m-type').textContent=p.type;
+  $('#m-info').innerHTML=[
+    ['工艺类别',p.craft||'—'],
+    ['纳税人识别号',p.tax],['征收方式',p.method],['申报周期',p.period],
+    ['开业日期',p.setup],['账本笔数',S.records.length+' 笔'],
+    ['作品存证',S.proofs.length+' 件'],
+    ['往来挂账',arStat().recN+arStat().payN+' 笔未结']
+  ].map(function(x){return '<div class="row"><div class="row-l"><b>'+x[0]+'</b></div>'+
+    '<div class="row-r">'+x[1]+'</div></div>'}).join('');
+  var rd=reportData();
+  $('#m-set').innerHTML=[
+    ['合规体检','财税健康分 '+check().score+' 分'],
+    ['经营身份自测',S.meta.quiz?'已测：'+S.meta.quiz:'3 秒测出该记哪种账'],
+    ['新手引导','重新看一遍'],
+    ['免责声明','重要，请阅读'],
+    ['对公账户',p.corpAccount?'已开立':'未开立'],
+    ['经营信用报告',rd.months>=3?
+      ('信用 '+rd.credit.score+' 分 · 预估额度 '+money(rd.loan)):
+      ('已记 '+rd.months+' 个月，记满 3 个月解锁')]
+  ].map(function(x,i){return '<div class="row" data-set="'+i+'">'+
+    '<div class="row-l"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>'+
+    '<div class="row-r"><span class="chev">›</span></div></div>'}).join('');
+}
+function policyRows(arr){
+  return arr.map(function(s){
+    var need=s.s.indexOf('需')===0;
+    return '<div class="flow"><div class="fl-l"><b>'+s.n+
+      ' <span class="tag'+(need?' o':' b')+'">'+s.s+'</span></b><span>'+s.d+'</span></div>'+
+      '<div class="fl-r"><span class="'+(s.v>0?'in':'out')+'">'+(s.v>0?money(s.v):'额度')+'</span></div></div>';
+  }).join('');
+}
+function renderSubsidy(){
+  var sg=subsidies(),sh=heritageSubsidies();
+  var total=sg.concat(sh).reduce(function(a,b){return a+b.v},0);
+  $('#s-year').textContent=new Date().getFullYear()+' 年度';
+  $('#s-total').textContent=money(total);
+  $('#s-sub').textContent='按季开票 '+wan(quarterSales())+' · '+S.proofs.length+' 件作品存证测算';
+  $('#s-heritage').innerHTML=policyRows(sh);
+  $('#s-list').innerHTML=policyRows(sg);
+  $('#s-hcnt').textContent=sh.length+' 项';
+  $('#s-gcnt').textContent=sg.length+' 项';
+  $('#s-progress').innerHTML=[
+    {n:'增值税减免',s:'已享受',d:'按季自动申报，无需单独申请'},
+    {n:'六税两费减半',s:'已享受',d:'申报时自动减半'},
+    {n:'非遗传承人补助',s:'待申请',d:'需传承人认定文件与年度传习记录'},
+    {n:'大师工作室经费',s:'可申报',d:'需向文旅部门提交工作室建设方案'},
+    {n:'版权登记补贴',s:'可申请',d:'凭作品存证与版权登记证书申领'}
+  ].map(function(x){
+    return '<div class="row"><div class="row-l"><b>'+x.n+'</b><span>'+x.d+'</span></div>'+
+      '<div class="row-r"><span class="tag '+(x.s==='待申请'?'o':'b')+'">'+x.s+'</span></div></div>';
+  }).join('');
+}
+function renderAll(){renderHome();renderBook();renderAr();renderBoard();renderSubsidy();renderMine();renderProof();renderReport()}
+/* 一键生成非遗补贴申报材料包（按本机流水 / 往来 / 存证汇总，供参考申报） */
+function generateSubsidyPack(){
+  var p=S.profile,qs=quarterSales(),wm=monthsCovered();
+  var recUnpaid=S.ar.filter(function(a){return a.kind==='rec'&&!a.paid});
+  var recAmt=sum(recUnpaid),recN=recUnpaid.length;
+  var hs=heritageSubsidies();
+  var sWork=hs.filter(function(s){return /工坊|工作室/.test(s.n)})[0];
+  var est=sWork?sWork.v:20000;
+  var txt='【非遗工坊建设经费 / 师带徒传习补贴 · 申报材料包（由穗账达生成）】\n'+
+    '经营主体：'+p.name+'（'+(p.type||'—')+'）\n'+
+    '工艺类别：'+(p.craft||'—')+'\n'+
+    '纳税人识别号：'+(p.tax||'—')+'\n'+
+    '经营时长：已记账 '+wm+' 个月\n'+
+    '本季开票：'+wan(qs)+'（'+money(qs)+'）\n'+
+    '应收未收：'+money(recAmt)+'（'+recN+' 笔）\n'+
+    '作品存证：'+S.proofs.length+' 件\n'+
+    '预估可申报：'+(sWork?sWork.n:'非遗工坊建设经费')+' 约 '+money(est)+'\n\n'+
+    '—— 本材料包依据您在本机记录的流水、往来与存证自动汇总，供您向属地文旅 / 人社部门参考申报。\n'+
+    '具体申领标准、额度与结果，以政府主管部门的官方解释为准。';
+  openCenter('<h4>📦 申报材料包已生成</h4>'+
+    '<div class="scrollbox"><pre style="white-space:pre-wrap;font-size:12.5px;line-height:1.7;'+
+    'color:var(--t2);margin:0">'+txt+'</pre>'+
+    '<div style="font-size:11.5px;color:var(--t3);margin-top:10px">'+
+    '材料包为辅助整理用途，不构成申报承诺；正式申报请按主管部门要求提交。</div></div>'+
+    '<button class="btn-primary" style="width:100%;margin-top:12px" id="pk-copy">复制材料包</button>'+
+    '<button class="btn-ghost" style="width:100%" id="pk-dl">下载为 .txt</button>');
+  $('#pk-copy').onclick=function(){copyText(txt,'申报材料包已复制')};
+  $('#pk-dl').onclick=function(){
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));
+    a.download='穗账达_非遗补贴申报材料包_'+today()+'.txt';a.click();toast('已下载材料包');
+  };
+}
+
+/* ========================= 页面切换 ========================= */
+var MAIN={home:1,book:1,ar:1,board:1,mine:1};
+var lastMain='home';
+function go(id){
+  var ps=document.querySelectorAll('.page');
+  for(var i=0;i<ps.length;i++)ps[i].classList.remove('active');
+  $('#p-'+id).classList.add('active');
+  $('#app').className='app'+(MAIN[id]?'':' sub');
+  var as=document.querySelectorAll('#tabbar a');
+  for(var j=0;j<as.length;j++)as[j].classList.toggle('on',as[j].getAttribute('data-tab')===id);
+  window.scrollTo(0,0);
+}
+
+/* ========================= 弹层 ========================= */
+function openSheet(html){
+  $('#sheet').innerHTML=html;$('#sheet').classList.add('on');$('#mask').classList.add('on');
+}
+function closeSheet(){$('#sheet').classList.remove('on');$('#mask').classList.remove('on')}
+function openCenter(html){$('#center').innerHTML=html;$('#center').classList.add('on');$('#mask').classList.add('on')}
+function closeCenter(){$('#center').classList.remove('on');$('#mask').classList.remove('on')}
+$('#mask').addEventListener('click',function(){closeSheet();closeCenter()});
+
+/* ========================= 交互 ========================= */
+document.addEventListener('click',function(e){
+  var t=e.target;
+  var g=t.closest('[data-go]');
+  if(g){var p=g.getAttribute('data-go');
+    if(p==='bookadd')openAdd(g.getAttribute('data-type')||'out');
+    else if(p==='invadd')openInv(g.getAttribute('data-d')||'out');
+    else if(p==='quiz'){resetQuiz();renderQuiz();go('quiz')}
+    else go(p);
+    return}
+  if(t.closest('[data-back]')){go(lastMain);return}
+  var tb=t.closest('[data-tab]');
+  if(tb){lastMain=tb.getAttribute('data-tab');go(lastMain);return}
+  // 流水删除
+  var dl=t.closest('[data-del]');
+  if(dl){S.records=S.records.filter(function(r){return r.id!==dl.getAttribute('data-del')});
+    save();renderAll();toast('已删除');return}
+  var di=t.closest('[data-idel]');
+  if(di){S.invoices=S.invoices.filter(function(r){return r.id!==di.getAttribute('data-idel')});
+    save();renderAll();toast('已删除');return}
+  // 筛选
+  var fc=t.closest('#b-chips .chip');
+  if(fc){filter=fc.getAttribute('data-f');
+    var cs=document.querySelectorAll('#b-chips .chip');
+    for(var i=0;i<cs.length;i++)cs[i].classList.remove('on');
+    fc.classList.add('on');renderBook();return}
+  var ex=t.closest('[data-ex]');
+  if(ex){$('#say-txt').value=ex.getAttribute('data-ex');doParse();return}
+  // 往来
+  var ds=t.closest('[data-dstyle]');
+  if(ds){dunStyle=ds.getAttribute('data-dstyle');
+    var cur=S.ar.filter(function(x){return x.id===$('#center').getAttribute('data-id')})[0];
+    if(cur)openDunning(cur);return}
+  var dn=t.closest('[data-dun]');
+  if(dn){var a=S.ar.filter(function(x){return x.id===dn.getAttribute('data-dun')})[0];
+    if(a)openDunning(a);
+    return}
+  var py=t.closest('[data-pay]');
+  if(py){var b=S.ar.filter(function(x){return x.id===py.getAttribute('data-pay')})[0];
+    if(b)openCenter('<h4>安排付款</h4><p>'+b.party+' 的 '+money(b.amt)+
+      '（'+b.reason+'）约定 '+md(b.due)+' 前付清。</p>'+
+      '<button class="btn-primary" style="width:100%" id="pay-copy">复制付款备忘</button>');
+    return}
+  var dn2=t.closest('[data-done]');
+  if(dn2){var c=S.ar.filter(function(x){return x.id===dn2.getAttribute('data-done')})[0];
+    if(c){openCenter('<h4>确认标记结清</h4><p>确定将「'+c.party+'」的 '+money(c.amt)+' 标记为已结清吗？</p>'+
+      '<div style="display:flex;gap:10px;margin-top:16px">'+
+      '<button class="btn-sm gh" style="flex:1;padding:12px" id="cnl-settle">取消</button>'+
+      '<button class="btn-sm ok" style="flex:1;padding:12px" id="ok-settle">确认结清</button></div>');
+    $('#ok-settle').onclick=function(){c.paid=true;save();renderAll();closeCenter();toast('已标记结清')};
+    $('#cnl-settle').onclick=closeCenter;}return}
+  var ud=t.closest('[data-undone]');
+  if(ud){var d2=S.ar.filter(function(x){return x.id===ud.getAttribute('data-undone')})[0];
+    if(d2){d2.paid=false;save();renderAll();toast('已撤销结清')}return}
+  var ad=t.closest('[data-ardel]');
+  if(ad){var target=S.ar.filter(function(x){return x.id===ad.getAttribute('data-ardel')})[0];
+    openCenter('<h4>确认删除</h4><p>确定删除「'+target.party+'」的 '+money(target.amt)+' 这条往来记录吗？删除后无法恢复。</p>'+
+      '<div style="display:flex;gap:10px;margin-top:16px">'+
+      '<button class="btn-sm gh" style="flex:1;padding:12px" id="cnl-del">取消</button>'+
+      '<button class="btn-sm dun" style="flex:1;padding:12px" id="ok-del">确认删除</button></div>');
+    $('#ok-del').onclick=function(){S.ar=S.ar.filter(function(x){return x.id!==ad.getAttribute('data-ardel')});
+      save();renderAll();closeCenter();toast('已删除');};
+    $('#cnl-del').onclick=closeCenter;return}
+  var ak=t.closest('#a-seg button');
+  if(ak){arKind=ak.getAttribute('data-k');
+    var bs=document.querySelectorAll('#a-seg button');
+    for(var k=0;k<bs.length;k++)bs[k].classList.remove('on');
+    ak.classList.add('on');renderAr();return}
+  var ai=t.closest('[data-ar]');
+  if(ai){go('ar');return}
+  // 存证
+  var pd=t.closest('[data-pfdel]');
+  if(pd){S.proofs=S.proofs.filter(function(x){return x.id!==pd.getAttribute('data-pfdel')});
+    save();renderProof();toast('已删除存证');return}
+  if(t.closest('#pf-add')){$('#pf-file').click();return}
+  var pfv=t.closest('[data-pfview]');
+  if(pfv){openProofCert(pfv.getAttribute('data-pfview'));return}
+  var pfc=t.closest('[data-pfcat]');
+  if(pfc){pfCat=pfc.getAttribute('data-pfcat');renderProofCats();return}
+  // 自测（第 2/3 题为多选）
+  var qa=t.closest('[data-qa]');
+  if(qa){
+    var k=+qa.getAttribute('data-qa');
+    if(QUIZ[quizStep]&&QUIZ[quizStep].multi){
+      var arr=quizAns[quizStep],p=arr.indexOf(k);
+      if(p>=0)arr.splice(p,1);else arr.push(k);  // 多选：勾选/取消，停在当前题
+      renderQuiz();return}
+    quizAns[quizStep]=[k];quizStep++;renderQuiz();  // 单选：直接下一题
+    finishQuiz();return}
+  if(t.closest('#qz-next')){quizStep++;renderQuiz();finishQuiz();return}
+  if(t.closest('#qz-again')){resetQuiz();renderQuiz();return}
+  if(t.closest('#qz-back')){if(quizStep>0){quizStep--;renderQuiz()}return}
+  // 信用报告
+  if(t.closest('#rp-copy')||t.closest('#rp-share')){
+    copyText(reportSummaryText(),'报告摘要已复制，可发给银行或合伙人');return}
+  if(t.closest('#qz-share')){copyText('推荐个记账工具「穗账达」——专门给非遗手艺人做的。'+
+    '不用懂会计，说一句话就把手工账记清；谁欠你钱、什么时候该催，它替你盯着；'+
+    '新花样拍张照就能带时间戳存证，还能匹配传承人补助这些政策。'+
+    '潮州陶瓷、木雕、潮绣的师傅都在用。');return}
+  // 会计
+  var ag=t.closest('[data-ag]');
+  if(ag){toast('已记录，'+ag.getAttribute('data-ag')+'会尽快联系你');return}
+  var agc=t.closest('#ag-type .chip');
+  if(agc){var a1=document.querySelectorAll('#ag-type .chip');
+    for(var m=0;m<a1.length;m++)a1[m].classList.remove('on');agc.classList.add('on');return}
+  var agv=t.closest('#ag-vol .chip');
+  if(agv){var a2=document.querySelectorAll('#ag-vol .chip');
+    for(var n2=0;n2<a2.length;n2++)a2[n2].classList.remove('on');agv.classList.add('on');return}
+  // 开关
+  var sw=t.closest('#ba-sw');if(sw){sw.classList.toggle('on');return}
+  var rc=t.closest('#r-corp');
+  if(rc){S.profile.corpAccount=!S.profile.corpAccount;save();renderBoard();renderHome();renderMine();
+    toast(S.profile.corpAccount?'已标记开立对公账户':'已标记未开立对公账户');return}
+  var hl=t.closest('[data-heir]');
+  if(hl){S.profile.heirLevel=hl.getAttribute('data-heir');save();renderBoard();renderMine();
+    toast('已设为'+heirName());return}
+  if(t.closest('#pv-backup')||t.closest('#h-pv-backup')){openBackup();return}
+  if(t.closest('#h-pv-more')){showPrivacy();return}
+  // 我的设置
+  var st2=t.closest('[data-set]');
+  if(st2){
+    var key=+st2.getAttribute('data-set');
+    if(key===0)go('board');
+    else if(key===1){resetQuiz();renderQuiz();go('quiz')}
+    else if(key===2)startGuide();
+    else if(key===3)showDisclaimer(true);
+    else if(key===4)go('board'); /* 对公账户：跳转看板页合规体检区统一管理 */
+    else if(key===5)go('report'); /* 经营信用报告 */
+    return}
+  // 弹层内按钮
+  if(t.closest('#dun-copy')){copyText($('#center').querySelector('.scrollbox').textContent);return}
+  if(t.closest('#dun-sent')){closeCenter();toast('已记一笔催款提醒');return}
+  if(t.closest('#pay-copy')){copyText($('#center').querySelector('p').textContent);return}
+});
+
+/* ---- 一句话记账解析 ---- */
+function doParse(){
+  var r=parseSay($('#say-txt').value);
+  if(!r.ok){$('#say-result').innerHTML='<div class="card"><div class="alert warn">'+
+    '<b>没听出金额</b><span>试着加上数字，比如「今天卖货收了3800」。也可以直接用下面的手动记账。</span></div></div>';return}
+  var h='<div class="card"><div class="card-hd"><h3>我听懂了</h3>'+
+    '<span class="tag '+(r.type==='in'?'g':'o')+'">'+(r.type==='in'?'收入':'支出')+'</span></div>'+
+    '<div class="amt-box" style="margin-bottom:14px"><s>¥</s>'+
+    '<input id="rs-amt" type="number" value="'+r.amt+'"></div>'+
+    '<div class="field"><label>分类 <span style="font-size:11px;color:var(--t3);font-weight:400">（国家统一一级科目）</span></label><div class="chips" id="rs-cats">'+
+    CATS[r.type].map(function(c){
+      return '<div class="chip'+(c===r.cat?' on':'')+'" data-c="'+c+'">'+c+
+        '<span style="font-size:11px;opacity:.65;margin-left:3px">· '+CAT_LABELS[c]+'</span></div>'}).join('')+'</div></div>'+
+    '<div class="field"><label>往来对象</label><input class="inp" id="rs-party" value="'+r.party+'" placeholder="如：古城文创店"></div>'+
+    '<div class="field"><label>日期</label><input class="inp" id="rs-date" type="date" value="'+r.date+'"></div>'+
+    '<div class="switch-row"><span>这笔是赊账<small>打开后自动记进往来台账，到期提醒你催</small></span>'+
+    '<div class="switch'+(r.credit?' on':'')+'" id="rs-sw"><i></i></div></div>'+
+    '<div class="field" id="rs-duef" style="margin-top:14px;display:'+(r.credit?'block':'none')+'">'+
+    '<label>约定收款日</label><input class="inp" id="rs-due" type="date" value="'+(r.due||r.date)+'"></div>'+
+    +(r.balance?('<div class="alert ok" style="margin-top:12px"><b>💰 今日入账 '+money(r.amt)+'（定金）</b>'+
+      '<span>另自动记一笔应收尾款 '+money(r.balance)+'（约定 '+md(r.due)+'），到期提醒您催。</span></div>'):'')+
+    '<div class="switch-row" style="border-top:0">'+
+    '<span>'+(r.type==='in'?'已开具发票':'已取得发票')+
+    '<small>'+(r.type==='in'?'计入季度免税额度':'有票才能在税前扣除')+'</small></span>'+
+    '<div class="switch" id="rs-inv"><i></i></div></div>'+
+    '<button class="btn-primary" style="width:100%;margin-top:16px" id="rs-save">确认记这一笔</button></div>';
+  $('#say-result').innerHTML=h;
+  var cc=document.querySelectorAll('#rs-cats .chip');
+  for(var i=0;i<cc.length;i++)cc[i].addEventListener('click',function(){
+    var p=document.querySelectorAll('#rs-cats .chip');
+    for(var j=0;j<p.length;j++)p[j].classList.remove('on');
+    this.classList.add('on');r.cat=this.getAttribute('data-c')});
+  $('#rs-sw').addEventListener('click',function(){
+    this.classList.toggle('on');
+    $('#rs-duef').style.display=this.classList.contains('on')?'block':'none'});
+  $('#rs-inv').addEventListener('click',function(){this.classList.toggle('on')});
+  $('#rs-save').addEventListener('click',function(){
+    var amt=parseFloat($('#rs-amt').value)||r.amt;
+    var party=$('#rs-party').value||'';
+    var date=$('#rs-date').value||r.date;
+    var cat=r.cat,hasInv=$('#rs-inv').classList.contains('on');
+    var rec={id:uid(),type:r.type,amt:amt,cat:cat,date:date,
+      note:r.note,inv:hasInv,party:party};
+    S.records.push(rec);
+    if(hasInv){
+      S.invoices.push({id:uid(),dir:r.type==='in'?'out':'in',amt:amt,
+        party:party||(r.type==='in'?'散客':'零星采购'),date:date,cat:'普通发票'});
+    }
+    var credit=$('#rs-sw').classList.contains('on'),arEntry=null;
+    if(credit){
+      if(r.balance){
+        arEntry={id:uid(),kind:'rec',party:party||'客户',amt:r.balance,
+          reason:'尾款',date:date,due:$('#rs-due').value||date,paid:false};
+      }else{
+        arEntry={id:uid(),kind:r.type==='in'?'rec':'pay',party:party||(r.type==='in'?'客户':'供应商'),
+          amt:amt,reason:cat,date:date,due:$('#rs-due').value||date,paid:false};
+      }
+      S.ar.push(arEntry);
+    }
+    save();renderAll();
+    if(afterRecordSaved(rec))return;
+    $('#say-txt').value='';$('#say-result').innerHTML='';
+    if(r.balance&&arEntry){showSaveConfirm(rec,arEntry)}
+    else if(!firePolicyTip(rec)){go('book')}   /* 命中政策线索则先弹提示，否则直接回账本 */
+  });
+}
+$('#say-parse').addEventListener('click',doParse);
+$('#say-clear').addEventListener('click',function(){$('#say-txt').value='';$('#say-result').innerHTML=''});
+
+/* 记一笔后的「已记账」反馈：定金入账 + 应收尾款 + 顺手存证（带文化温度的提示） */
+function showSaveConfirm(rec,ar){
+  var cnt=(rec.note.match(/(\d+)\s*把/)||[])[1]||'几';
+  openCenter('<h4>✅ 已记账！</h4>'+
+    '<div class="scrollbox">'+
+    '<div style="background:var(--primary-l);border-radius:12px;padding:13px">'+
+    '<div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px">'+
+    '<span style="color:var(--t2)">💰 今日入账</span><b>'+money(rec.amt)+' 元（定金）</b></div>'+
+    (ar?'<div style="display:flex;justify-content:space-between;font-size:14px">'+
+      '<span style="color:var(--danger)">📒 新增应收</span><b style="color:var(--danger)">'+
+      (ar.party||'客户')+' · 尾款 '+money(ar.amt)+' 元（'+md(ar.due)+'）</b></div>':'')+
+    '</div>'+
+    '<div class="alert warn" style="margin-top:12px"><b>🏺 守好手艺，也守好成本</b>'+
+    '<span>老板，这把壶的泥料（朱泥）成本有记录吗？手拉壶的纯手工制作工时费，也是您可以抵扣的成本哦。'+
+    '另外，拍了壶的照片可以存证，防止被抄袭！</span></div>'+
+    '<div style="margin-top:12px;padding:12px;background:var(--accent-l);border-radius:12px">'+
+    '<div style="font-size:13px;color:var(--t2);line-height:1.6">📸 <b style="color:var(--accent)">顺便存个证</b>：'+
+    '拍下这'+cnt+'把壶的照片，生成带时间戳的存证，保护您的原创版权。</div>'+
+    '<button class="btn-primary" style="width:100%;margin-top:10px;padding:11px" id="sc-proof">一键存证 ›</button>'+
+    '</div></div>'+
+    '<button class="btn-ghost" style="width:100%" id="sc-done">先到这儿，看账本 ›</button>');
+  $('#sc-proof').onclick=function(){closeCenter();go('proof')};
+  $('#sc-done').onclick=function(){closeCenter();go('book')};
+}
+
+/* ---- 手动记账 ---- */
+var curType='out',curCat='原料采买';
+function openAdd(tp){
+  curType=tp||'out';
+  var bs=document.querySelectorAll('#ba-seg button');
+  for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',bs[i].getAttribute('data-t')===curType);
+  $('#ba-title').textContent=curType==='out'?'记一笔支出':'记一笔收入';
+  $('#ba-sw-lb').innerHTML=curType==='out'?'已取得发票<small>有票支出才能税前扣除</small>':
+    '已开具发票<small>开票金额计入季度免税额度</small>';
+  curCat=CATS[curType][0];
+  $('#ba-cats').innerHTML=CATS[curType].map(function(x,i){
+    return '<div class="chip'+(i===0?' on':'')+'" data-c="'+x+'">'+x+
+      '<span style="font-size:11px;opacity:.65;margin-left:3px">· '+CAT_LABELS[x]+'</span></div>'}).join('');
+  $('#ba-amt').value='';$('#ba-note').value='';$('#ba-party').value='';
+  $('#ba-date').value=today();$('#ba-sw').className='switch on';
+  go('bookadd');
+}
+var bc=document.querySelector('#ba-cats');
+bc.addEventListener('click',function(e){
+  var c=e.target.closest('.chip');if(!c)return;
+  curCat=c.getAttribute('data-c');
+  var all=this.querySelectorAll('.chip');
+  for(var i=0;i<all.length;i++)all[i].classList.remove('on');
+  c.classList.add('on');
+});
+$('#ba-seg').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;openAdd(b.getAttribute('data-t'));
+});
+$('#ba-save').addEventListener('click',function(){
+  var amt=parseFloat($('#ba-amt').value);
+  if(!amt||amt<=0){toast('请输入金额');return}
+  var has=$('#ba-sw').classList.contains('on');
+  var date=$('#ba-date').value||today();
+  var rec={id:uid(),type:curType,amt:amt,cat:curCat,date:date,
+    note:$('#ba-note').value,inv:has,party:$('#ba-party').value};
+  S.records.push(rec);
+  if(has&&curType==='out'){
+    S.invoices.push({id:uid(),dir:'in',amt:amt,party:$('#ba-party').value||'零星采购',
+      date:date,cat:'普通发票'});
+  }
+  if(has&&curType==='in'){
+    S.invoices.push({id:uid(),dir:'out',amt:amt,party:$('#ba-party').value||'散客',
+      date:date,cat:'普通发票'});
+  }
+  save();renderAll();if(afterRecordSaved(rec))return;toast(curType==='out'?'支出已入账':'收入已入账');
+  if(!firePolicyTip(rec))go('book');   /* 命中政策线索则先弹提示 */
+});
+
+/* ---- 发票 ---- */
+var curDir='out',curInvCat='普通发票';
+function openInv(d){
+  curDir=d||'out';
+  var bs=document.querySelectorAll('#ia-seg button');
+  for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',bs[i].getAttribute('data-d')===curDir);
+  $('#ia-title').textContent=curDir==='out'?'开销售发票':'录进项发票';
+  $('#ia-party-lb').textContent=curDir==='out'?'购方名称':'销方名称';
+  $('#ia-amt').value='';$('#ia-party').value='';$('#ia-date').value=today();
+  go('invadd');
+}
+$('#ia-seg').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;openInv(b.getAttribute('data-d'));
+});
+var ic=document.querySelector('#ia-cats');
+ic.addEventListener('click',function(e){
+  var c=e.target.closest('.chip');if(!c)return;
+  curInvCat=c.getAttribute('data-c');
+  var all=this.querySelectorAll('.chip');
+  for(var i=0;i<all.length;i++)all[i].classList.remove('on');
+  c.classList.add('on');
+});
+$('#ia-save').addEventListener('click',function(){
+  var amt=parseFloat($('#ia-amt').value);
+  if(!amt||amt<=0){toast('请输入金额');return}
+  S.invoices.push({id:uid(),dir:curDir,amt:amt,party:$('#ia-party').value||'未填写',
+    date:$('#ia-date').value||today(),cat:curInvCat});
+  save();renderAll();go('book');toast('发票已入账');
+});
+
+/* ---- 新增往来 ---- */
+$('#ar-add').addEventListener('click',function(){
+  openSheet('<h4>记一笔往来</h4>'+
+    '<div class="seg" style="margin-bottom:14px" id="ns-seg">'+
+    '<button data-k="rec" class="on">别人欠我</button><button data-k="pay">我欠别人</button></div>'+
+    '<div class="field"><label>对方名称</label><input class="inp" id="ns-party" placeholder="如：古城文创店"></div>'+
+    '<div class="field"><label>金额（元）</label><input class="inp" id="ns-amt" type="number" placeholder="0"></div>'+
+    '<div class="field"><label>事由</label><input class="inp" id="ns-reason" placeholder="如：9月货款"></div>'+
+    '<div class="field"><label>约定收付日</label><input class="inp" id="ns-due" type="date"></div>'+
+    '<button class="btn-primary" style="width:100%" id="ns-save">保存</button>');
+  $('#ns-due').value=ymd(new Date(Date.now()+30*86400000));
+  var kind='rec';
+  document.querySelector('#ns-seg').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;kind=b.getAttribute('data-k');
+    var all=this.querySelectorAll('button');
+    for(var i=0;i<all.length;i++)all[i].classList.remove('on');
+    b.classList.add('on');
+  });
+  $('#ns-save').addEventListener('click',function(){
+    var amt=parseFloat($('#ns-amt').value);
+    if(!amt||amt<=0){toast('请输入金额');return}
+    S.ar.push({id:uid(),kind:kind,party:$('#ns-party').value||'未填写',amt:amt,
+      reason:$('#ns-reason').value||'往来款',date:today(),due:$('#ns-due').value||today(),paid:false});
+    save();renderAll();closeSheet();toast('已记入往来台账');
+  });
+});
+
+/* ---- 存证上传 ---- */
+$('#pf-file').addEventListener('change',function(e){
+  var f=e.target.files&&e.target.files[0];if(!f)return;
+  var fr=new FileReader();
+  fr.onload=function(ev){
+    var img=new Image();
+    img.onload=function(){
+      var max=640,scale=Math.min(1,max/Math.max(img.width,img.height));
+      var c=document.createElement('canvas');
+      c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      var data=c.toDataURL('image/jpeg',0.72);
+      var nm=($('#pf-name').value||'').trim()||'未命名作品';
+      var no=makeWorkNo(pfCat);
+      var ts=new Date().toLocaleString('zh-CN',{hour12:false});
+      S.proofs.push({id:uid(),img:data,name:nm,cat:pfCat,no:no,date:today(),
+        ts:ts,hash:makeHash(nm+pfCat+no+ts),audio:pfAudio||''});
+      $('#pf-name').value='';pfAudio='';
+      $('#pf-rec-state').textContent='可用潮州话或普通话讲一段，会随作品一起打上时间戳';
+      save();renderProof();renderProofCats();
+      toast('已存证 · 编号 '+no);
+    };
+    img.src=ev.target.result;
+  };
+  fr.readAsDataURL(f);
+  e.target.value='';
+});
+
+/* ---- 导出 ---- */
+function exportCSV(){
+  var rows=[['日期','类型','分类','金额','有无发票','往来对象','备注']];
+  S.records.slice().sort(function(a,b){return a.date<b.date?1:-1}).forEach(function(r){
+    rows.push([r.date,r.type==='in'?'收入':'支出',r.cat,r.amt,r.inv?'有票':'无票',r.party||'',r.note||''])});
+  rows.push([]);rows.push(['往来台账']);
+  rows.push(['类型','对方','金额','事由','发生日','约定日','状态']);
+  S.ar.forEach(function(a){
+    rows.push([a.kind==='rec'?'别人欠我':'我欠别人',a.party,a.amt,a.reason,a.date,a.due,
+      a.paid?'已结清':(overdueDays(a)>0?'逾期'+overdueDays(a)+'天':'未结')])});
+  var csv='\ufeff'+rows.map(function(r){return r.map(function(c){
+    return '"'+String(c).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download='穗账达_账套_'+thisMonth()+'.csv';a.click();toast('已导出 CSV');
+}
+$('#b-export').addEventListener('click',exportCSV);
+$('#m-export').addEventListener('click',exportCSV);
+
+/* ---- 加密本地备份 / 换机迁移 ----
+   说明：采用轻量本地加密（口令混淆 + 编码），可防止他人直接打开查看；
+   这不是金融级加密，重要数据请勿上传网盘或外发。文案上不夸大。 */
+function xorStr(s,pwd){
+  var out='';
+  for(var i=0;i<s.length;i++)out+=String.fromCharCode(s.charCodeAt(i)^pwd.charCodeAt(i%pwd.length));
+  return out;
+}
+function toB64(s){return btoa(unescape(encodeURIComponent(s)))}
+function fromB64(s){return decodeURIComponent(escape(atob(s)))}
+function backupPayload(){
+  return JSON.stringify({v:1,app:'穗账达',ts:new Date().toISOString(),
+    profile:S.profile,records:S.records,invoices:S.invoices,ar:S.ar,
+    proofs:S.proofs,meta:S.meta});
+}
+function doBackup(pwd){
+  var data=backupPayload();
+  var out=pwd?toB64(xorStr(data,pwd)):toB64(data);
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([out],{type:'text/plain'}));
+  a.download='穗账达备份_'+today()+(pwd?'_已加密':'')+'.szd';
+  a.click();
+  toast(pwd?'已生成加密备份文件':'已生成备份文件（未设密码）');
+}
+function openBackup(){
+  openCenter('<h4>\uD83D\uDD10 加密本地备份</h4>'+
+    '<div class="scrollbox">'+
+    '<div class="alert ok" style="margin-bottom:12px"><b>账本只存在你这台手机</b>'+
+    '<span>穗账达不上传服务器，因此换手机时请用这个文件整体迁移。'+
+    '文件生成后只保存在本机，请自行保管，不要上传到网盘或发给他人。</span></div>'+
+    '<div class="field"><label>备份密码（可选）</label>'+
+    '<input class="inp" id="bk-pwd" type="password" placeholder="设一个只有你记得的密码">'+
+    '</div>'+
+    '<div style="font-size:11.5px;color:var(--t3);line-height:1.6">'+
+    '采用本地轻量加密，可防止他人直接打开查看文件，不等于金融级加密。'+
+    '涉及经营数据，请注意保管。</div></div>'+
+    '<button class="btn-primary" style="width:100%;margin-top:12px" id="bk-go">生成备份文件</button>'+
+    '<button class="btn-ghost" style="width:100%" id="bk-restore">从备份文件恢复 ›</button>'+
+    '<input type="file" id="bk-file" accept=".szd,.txt,.json" style="display:none">');
+  $('#bk-go').onclick=function(){doBackup($('#bk-pwd').value||'');closeCenter()};
+  $('#bk-restore').onclick=function(){$('#bk-file').click()};
+  $('#bk-file').onchange=function(e){
+    var f=e.target.files&&e.target.files[0];if(!f)return;
+    var fr=new FileReader();
+    fr.onload=function(ev){
+      var raw=String(ev.target.result||''),txt='';
+      try{txt=fromB64(raw)}catch(err){txt=raw}
+      var ok=false;
+      try{
+        var obj=JSON.parse(txt);
+        if(obj&&obj.app==='穗账达'){applyBackup(obj);ok=true}
+      }catch(err){
+        var pwd=prompt('这份备份设有密码，请输入备份密码：');
+        if(pwd!=null){
+          try{
+            var obj2=JSON.parse(xorStr(txt,pwd));
+            if(obj2&&obj2.app==='穗账达'){applyBackup(obj2);ok=true}
+          }catch(e2){}
+        }
+      }
+      if(!ok)toast('没能读取这份备份，请确认文件或密码');
+      e.target.value='';
+    };
+    fr.readAsText(f);
+  };
+}
+function showPrivacy(){
+  openCenter('<h4>\uD83D\uDEE1\uFE0F 隐私安全盾</h4>'+
+    '<div class="scrollbox"><div style="font-size:13px;line-height:1.75;color:var(--t2)">'+
+    '<b style="color:var(--t1)">一、数据在哪</b><br>'+
+    '你的账本、往来台账、作品存证全部存在这台手机的本地存储里，不上传任何服务器，'+
+    '我们也没有后台能看到你的数据。<br><br>'+
+    '<b style="color:var(--t1)">二、我们收集什么</b><br>'+
+    '根据《个人信息保护法》及网络安全相关规定，我们遵循合法、正当、必要原则，'+
+    '不收集与服务无关的个人信息，也不把你的经营数据用于其他用途。<br><br>'+
+    '<b style="color:var(--t1)">三、我们承诺什么</b><br>'+
+    '绝不泄露、篡改、毁损你的经营数据；未经你同意，不向任何第三方提供。<br><br>'+
+    '<b style="color:var(--t1)">四、换手机怎么办</b><br>'+
+    '正因为数据不上传云端，换手机需要你主动用「加密本地备份」导出文件，再到新手机恢复。'+
+    '这是本机存储的代价，也正是隐私的保障。<br><br>'+
+    '<span style="font-size:11.5px;color:var(--t3)">依据：《中华人民共和国网络安全法》'+
+    '第四十二条至第四十四条、《中华人民共和国个人信息保护法》。'+
+    '本说明为产品承诺，不构成法律意见。</span></div></div>'+
+    '<button class="btn-primary" style="width:100%;margin-top:12px" id="pv-ok">我知道了</button>');
+  $('#pv-ok').onclick=closeCenter;
+}
+function applyBackup(o){
+  if(!o.records)return;
+  S.profile=o.profile||S.profile;
+  S.records=o.records;S.invoices=o.invoices||[];S.ar=o.ar||[];
+  S.proofs=o.proofs||[];S.meta=o.meta||S.meta;
+  if(!S.meta)S.meta={guide:true,disclaimer:true,quiz:null,tips:{}};
+  save();renderAll();renderProofCats();closeCenter();
+  toast('已从备份恢复 '+S.records.length+' 笔账');
+}
+$('#r-refresh').addEventListener('click',function(){renderAll();toast('已刷新')});
+$('#m-reset').addEventListener('click',function(){
+  if(!confirm('将用最新示例账套（陈记手拉壶作坊）覆盖当前数据，确定？'))return;
+  S=seed();save();renderAll();toast('已恢复为「陈记手拉壶作坊」示例账套');
+});
+$('#ag-submit').addEventListener('click',function(){
+  var city=$('#ag-city').value.trim();
+  if(!city){toast('填一下所在地区');return}
+  S.meta.lead={city:city,tel:$('#ag-tel').value,at:today()};save();
+  openCenter('<h4>已提交</h4><p>我们会在 24 小时内安排本地代账会计与你联系。'+
+    '你也可以直接在下方挑一位，主动发起咨询。</p>'+
+    '<button class="btn-primary" style="width:100%" id="ag-ok">好的</button>');
+  $('#ag-ok').addEventListener('click',closeCenter);
+});
+
+/* ========================= 免责声明 ========================= */
+var DISCLAIMER='<b>一、服务性质</b><br>穗账达是一款面向非遗传承人、手工作坊主等小微经营者的记账辅助工具，'+
+'提供流水记录、往来台账、经营测算与政策提示。本工具并非会计师事务所或税务师事务所，不提供审计、鉴证、代理记账或税务代理服务。<br><br>'+
+'<b>二、不构成专业意见</b><br>页面中的税额测算、合规提示、风险评分、补贴与政策信息，均为基于公开政策的通用估算与示例，'+
+'不构成税务、会计、法律或投资意见，亦不能替代执业财税顾问针对具体情况出具的专业意见。'+
+'你应结合自身实际经营情况，并向主管税务机关或专业人士咨询后作出决策。<br><br>'+
+'<b>三、数据与责任</b><br>你的账目、往来、存证图片仅保存在本机浏览器，本工具不上传、不备份、不共享。'+
+'因设备丢失、浏览器数据清理、误操作等导致的数据丢失，本工具不承担责任，请定期导出 CSV 备份。'+
+'因依赖本工具内容作出决策而产生的任何直接或间接损失，本工具不承担责任。<br><br>'+
+'<b>四、政策时效</b><br>税收优惠政策存在地区差异且会调整，页面展示的额度、税率、补贴标准可能滞后，'+
+'一切以国家税务总局及属地主管部门最新公告为准。<br><br>'+
+'<b>五、第三方服务</b><br>代账会计、补贴代办等由第三方机构提供，本工具仅作信息展示与对接，'+
+'不对第三方服务质量负责，请自行甄别并签约。<br><br>'+
+'<b>六、服务边界</b><br>本软件仅提供记账辅助与政策信息参考，'+
+'<b>不提供代理记账、纳税申报、补贴代办等服务</b>。'+
+'页面中的政策线索基于公开文件整理，只做前置提醒，'+
+'具体能否申领、申领标准与最终结果，<b>以政府主管部门的官方解释为准</b>。';
+function showDisclaimer(force){
+  openCenter('<h4>免责声明</h4><div class="scrollbox">'+DISCLAIMER+'</div>'+
+    '<button class="btn-primary" style="width:100%" id="dc-ok">'+
+    (force?'我已阅读':'我已阅读并同意')+'</button>');
+  $('#dc-ok').addEventListener('click',function(){
+    S.meta.disclaimer=true;save();closeCenter();
+    /* 首用：看完声明 → 紧接着做身份自测；自测做过则看引导 */
+    if(!S.meta.quiz){resetQuiz();renderQuiz();go('quiz')}
+    else if(!S.meta.guide){startGuide()}
+  });
+}
+
+/* ========================= 新手引导 ========================= */
+var GUIDE=[
+  {page:'home',sel:'#saybar',t:'一句话就把账记了',
+   d:'不用学会计、不用选科目。直接说「给古城文创店发了5把朱泥壶，收了2000定金，尾款3000下个月结」，金额、定金尾款、赊账全自动填好。'},
+  {page:'ar',sel:'#p-ar .ar-top',t:'谁欠你钱，一眼看清',
+   d:'应收应付分开记，到期自动标红，还能一键生成催款话术。这是很多记账工具都没做到的刚需。'},
+  {page:'home',sel:'#h-proof-card',t:'新花样，先存一份',
+   d:'拍下手稿或成品，自动生成带时间戳的作品编号。被抄袭、被抢注时，这就是你的在先证据。'},
+  {page:'home',sel:'#h-subsidy',t:'非遗政策自动匹配',
+   d:'传承人补助、大师工作室经费、工坊补贴、版权登记补贴，按你的作品存证与经营规模自动测算。'}
+];
+var gStep=0;
+function startGuide(){
+  gStep=0;showGuideStep();
+}
+function showGuideStep(){
+  if(gStep>=GUIDE.length){endGuide();return}
+  var s=GUIDE[gStep];
+  if(!$('#p-'+s.page).classList.contains('active'))go(s.page);
+  setTimeout(function(){
+    var el=document.querySelector(s.sel);
+    if(!el){gStep++;showGuideStep();return}
+    var r=el.getBoundingClientRect();
+    var gm=$('#gmask'),gt=$('#gtip');
+    gm.style.top=(r.top-6)+'px';gm.style.left=(r.left-6)+'px';
+    gm.style.width=(r.width+12)+'px';gm.style.height=(r.height+12)+'px';
+    gm.classList.add('on');
+    var below=r.bottom+150<window.innerHeight;
+    gt.innerHTML='<b>'+s.t+'</b><p>'+s.d+'</p><div class="foot">'+
+      '<span class="step">'+(gStep+1)+' / '+GUIDE.length+'</span>'+
+      '<span><button class="skip" id="g-skip">跳过</button>'+
+      '<button id="g-next">'+(gStep===GUIDE.length-1?'开始用':'下一步')+'</button></span></div>';
+    gt.style.top=(below?(r.bottom+16):Math.max(20,r.top-150))+'px';
+    gt.classList.add('on');
+    $('#g-next').onclick=function(){gStep++;showGuideStep()};
+    $('#g-skip').onclick=endGuide;
+  },260);
+}
+function endGuide(){
+  $('#gmask').classList.remove('on');$('#gtip').classList.remove('on');
+  S.meta.guide=true;save();go('home');toast('随时可以在「我的 - 新手引导」重看');
+}
+
+
+/* 注册 / 登录与新用户流程 */
+function showAuth(){var layer=document.createElement('div');layer.className='auth-layer';layer.id='auth-layer';document.body.appendChild(layer);var mode='register',step=1,phone='';function bad(t){var h=layer.querySelector('.auth-hint');if(h){h.textContent=t;h.style.color='#d45d42'}}function render(){var login=mode==='login';layer.innerHTML='<div class="auth-card"><div class="auth-brand">穗账达</div><div class="auth-sub">为食品类与非食品类非遗手艺人记好每一笔账</div><ol class="auth-steps">'+['手机号','验证码','店铺名称','登录密码'].map(function(x,i){return '<li class="'+((!login&&i+1===step)?'on':'')+'"><i>'+(i+1)+'</i>'+x+'</li>'}).join('')+'</ol>'+(login?'<h3 style="margin:0 0 6px">欢迎回来</h3><p class="auth-hint">登录后继续管理您的账本</p>':'')+'<div id="auth-body"></div><button class="auth-link" id="auth-switch">'+(login?'还没有账号？立即注册':'已有账号？直接登录')+'</button></div>';var b=layer.querySelector('#auth-body');if(login){b.innerHTML='<div class="auth-field"><label>手机号</label><input id="au-phone" inputmode="tel" placeholder="请输入手机号"></div><div class="auth-field"><label>登录密码</label><input id="au-pass" type="password" placeholder="请输入登录密码"></div><button class="auth-main" id="au-login">登录</button>';layer.querySelector('#au-login').onclick=function(){var p=layer.querySelector('#au-phone').value.trim(),pw=layer.querySelector('#au-pass').value;if(!/^1\d{10}$/.test(p)||!pw){bad('请输入正确的手机号和登录密码');return}S.meta.auth={phone:p};save();layer.remove();bootApp()}}else if(step===1){b.innerHTML='<div class="auth-field"><label>手机号</label><input id="au-phone" inputmode="tel" placeholder="请输入手机号"></div><button class="auth-main" id="au-next">获取验证码</button>';layer.querySelector('#au-next').onclick=function(){phone=layer.querySelector('#au-phone').value.trim();if(!/^1\d{10}$/.test(phone)){bad('请输入正确的手机号');return}step=2;render()}}else if(step===2){b.innerHTML='<div class="auth-field"><label>验证码</label><div class="auth-code"><input id="au-code" inputmode="numeric" placeholder="请输入 6 位验证码"><button id="au-resend">重新获取</button></div><div class="auth-hint">验证码已发送，演示验证码：123456</div></div><button class="auth-main" id="au-next">验证并继续</button>';layer.querySelector('#au-next').onclick=function(){if(layer.querySelector('#au-code').value.trim()!=='123456'){bad('验证码不正确，请输入 123456');return}step=3;render()};layer.querySelector('#au-resend').onclick=function(){bad('验证码已重新发送：123456')}}else if(step===3){b.innerHTML='<div class="auth-field"><label>个体工商户名称</label><input id="au-shop" placeholder="如：老陈手拉壶作坊 / 李氏腐乳饼店"></div><button class="auth-main" id="au-next">下一步</button>';layer.querySelector('#au-next').onclick=function(){var n=layer.querySelector('#au-shop').value.trim();if(n.length<2){bad('请填写店铺或作坊名称');return}S.profile.name=n;step=4;render()}}else{b.innerHTML='<div class="auth-field"><label>设置登录密码</label><input id="au-pass" type="password" placeholder="至少 6 位字符"></div><div class="auth-field"><label>确认密码</label><input id="au-pass2" type="password" placeholder="再次输入登录密码"></div><button class="auth-main" id="au-next">完成注册，进入首页</button><div class="auth-hint">仅用于本机演示登录，不会上传密码</div>';layer.querySelector('#au-next').onclick=function(){var p=layer.querySelector('#au-pass').value;if(p.length<6||p!==layer.querySelector('#au-pass2').value){bad('密码至少 6 位且两次输入需一致');return}S.meta.auth={phone:phone};S.meta.disclaimer=true;S.meta.guide=false;S.meta.quiz=null;S.meta.firstEntry=false;save();layer.remove();bootApp()}}layer.querySelector('#auth-switch').onclick=function(){mode=login?'register':'login';step=1;render()}}render()}
+function startFirstGuide(){if(S.meta.guide||!S.meta.auth)return;var d=document.createElement('div');d.className='first-guide';d.innerHTML='<div class="first-guide-card"><div class="first-guide-finger">☝️</div><h3>先点亮麦克风</h3><p>按住这里，说一句话即可记账。食品类和非食品类手艺，都可以用自然语言记录。</p><button class="auth-main" id="fg-go">去记第一笔</button><button class="auth-link" id="fg-skip">稍后再看</button></div>';document.body.appendChild(d);d.querySelector('#fg-go').onclick=function(){d.remove();S.meta.guide=true;save();go('say');toast('按住麦克风，说一句话即可记账')};d.querySelector('#fg-skip').onclick=function(){d.remove();S.meta.guide=true;save()}}
+function showFirstSuccess(){var d=document.createElement('div');d.className='success-bubble';d.innerHTML='<b>太棒了！您的第一笔账已记好</b><span style="font-size:13px;color:#667a73">如果有欠款，系统会自动帮您记入应收台账。</span><button class="auth-main" style="margin-top:12px;padding:10px;font-size:14px" id="success-next">继续设置经营身份</button>';document.body.appendChild(d);d.querySelector('#success-next').onclick=function(){d.remove();showIndustryCard()}}
+function showIndustryCard(){var d=document.createElement('div');d.className='industry-card';d.innerHTML='<div class="industry-inner"><h3>老板，为了让系统更懂您的生意</h3><p>帮您匹配专属的非遗补贴和记账模板，请问您是做什么行业的？</p><button class="industry-option" data-ind="food">① <b>食品类非遗</b><br><small>腐乳饼、牛肉丸、工夫茶等</small></button><button class="industry-option" data-ind="craft">② <b>非食品类非遗</b><br><small>手拉壶、潮绣、木雕等</small></button><button class="industry-option" data-ind="other">③ <b>其他手工作坊</b></button></div>';document.body.appendChild(d);d.querySelectorAll('.industry-option').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-ind');S.meta.quiz=k;S.profile.craft=k==='food'?'食品类非遗':k==='craft'?'非食品类非遗':'其他手工作坊';save();d.remove();renderAll();toast('已匹配相应记账词库和补贴雷达')}})}
+function afterRecordSaved(rec){if(!S.meta.firstEntry){S.meta.firstEntry=true;save();showFirstSuccess();return true}return false}
+function bootApp(){renderAll();renderSay();renderQuiz();renderAgent();renderProofCats();initRec();if(!S.meta.guide)setTimeout(startFirstGuide,450)}
+var _renderHome=renderHome;renderHome=function(){_renderHome();if(!S.records.length){$('#h-count').textContent='0';$('#h-in').textContent='¥0.00';$('#h-out').textContent='¥0.00';$('#h-net').textContent='¥0.00';$('#h-rate').textContent='--';$('#h-top').textContent='—';$('#h-noinv').textContent='¥0.00';$('#h-score').textContent='--';$('#h-ar-list').innerHTML='<div class="empty">暂无往来记录</div>';$('#h-alerts').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#h-subsidy').innerHTML='<div class="empty">完成行业选择后，系统会匹配食品类与非食品类非遗补贴</div>'}};
+var _renderAr=renderAr;renderAr=function(){_renderAr();if(!S.ar.length)$('#a-list').innerHTML='<div class="empty">暂无往来记录</div>'};
+var _renderBoard=renderBoard;renderBoard=function(){_renderBoard();if(!S.records.length){$('#bd-in').textContent='¥0.00';$('#bd-out').textContent='¥0.00';$('#bd-net').textContent='¥0.00';$('#bd-rate').textContent='--';$('#bd-ar-body').innerHTML='<div class="empty">暂无往来记录</div>';$('#bd-chart').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#bd-str').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#bd-cust').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>'}};
+
+/* ========================= 启动 ========================= */
+if(S.meta.auth){bootApp()}else{renderAll();showAuth()}
+</script>
+</body>
+</html>
