@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>穗账达 · 为非遗传承人记好手工账</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#0E7C66">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="穗账达">
+<link rel="apple-touch-icon" href="./icon.svg">
 <style>
 :root{
   --primary:#0E7C66; --primary-2:#14A085; --primary-l:#E6F4F0;
@@ -485,5 +492,6 @@ document.addEventListener('click',function(e){
     if(s)s.scrollIntoView({behavior:'smooth'})}
 });
 </script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(function(){})}</script>
 </body>
 </html>

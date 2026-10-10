@@ -1,0 +1,17 @@
+{
+  "name": "穗账达",
+  "short_name": "穗账达",
+  "description": "为食品类与非食品类非遗手艺人记录每一笔账",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "start_url": "./app.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F4F7F6",
+  "theme_color": "#0E7C66",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "icons": [
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
