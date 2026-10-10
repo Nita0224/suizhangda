@@ -1,4 +1,4 @@
-const CACHE = 'suizhangda-pwa-v1';
+const CACHE = 'suizhangda-pwa-v2';
 const CORE = ['./', './index.html', './app.html', './manifest.webmanifest', './icon.svg'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)));
@@ -16,3 +16,4 @@ self.addEventListener('fetch', event => {
     return response;
   }).catch(() => caches.match('./app.html'))));
 });
+
