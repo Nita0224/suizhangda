@@ -2650,7 +2650,7 @@ var GUIDE=[
   {page:'home',sel:'#h-subsidy',t:'非遗政策自动匹配',
    d:'传承人补助、大师工作室经费、工坊补贴、版权登记补贴，按你的作品存证与经营规模自动测算。'}
 ];
-var gStep=0;
+var gStep=0,guideTimer=null;
 function startGuide(){
   gStep=0;showGuideStep();
 }
@@ -2658,7 +2658,7 @@ function showGuideStep(){
   if(gStep>=GUIDE.length){endGuide();return}
   var s=GUIDE[gStep];
   if(!$('#p-'+s.page).classList.contains('active'))go(s.page);
-  setTimeout(function(){
+  guideTimer=setTimeout(function(){
     var el=document.querySelector(s.sel);
     if(!el){gStep++;showGuideStep();return}
     var r=el.getBoundingClientRect();
@@ -2678,7 +2678,15 @@ function showGuideStep(){
   },260);
 }
 function endGuide(){
-  $('#gmask').classList.remove('on');$('#gtip').classList.remove('on');
+  if(guideTimer){clearTimeout(guideTimer);guideTimer=null}
+  var gm=$('#gmask'),gt=$('#gtip');
+  if(gm){gm.classList.remove('on');gm.style.cssText=''}
+  if(gt){gt.classList.remove('on');gt.style.cssText='';gt.innerHTML=''}
+  var m=$('#mask');if(m)m.classList.remove('on');
+  var c=$('#center');if(c)c.classList.remove('on');
+  var sh=$('#sheet');if(sh)sh.classList.remove('on');
+  document.querySelectorAll('.first-guide').forEach(function(x){x.remove()});
+  document.body.style.overflow='';
   S.meta.guide=true;save();go('home');toast('随时可以在「我的 - 新手引导」重看');
 }
 
