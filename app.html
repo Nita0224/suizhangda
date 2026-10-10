@@ -2009,7 +2009,7 @@ function renderMine(){
   ].map(function(x){return '<div class="row"><div class="row-l"><b>'+x[0]+'</b></div>'+
     '<div class="row-r">'+x[1]+'</div></div>'}).join('')+'<div class="row" data-setup-edit><div class="row-l"><b>开业日期设置</b><span>修改前会提示影响范围</span></div><div class="row-r"><span class="chev">›</span></div></div>';
   var rd=reportData();
-  $('#m-set').innerHTML=[
+  $('#m-set').innerHTML='<div class="row" data-account-setting><div class="row-l"><b>账号与登录</b><span>'+(S.meta.auth?'已登录 · '+maskPhone(S.meta.auth.phone):'未登录')+'</span></div><div class="row-r"><span class="chev">›</span></div></div>'+[
     ['合规体检','财税健康分 '+check().score+' 分'],
     ['经营身份自测',S.meta.quiz?'已测：'+(S.meta.quiz==='food'?'食品类非遗':S.meta.quiz==='craft'?'非食品类非遗':'其他手工作坊'):'首次记账后匹配行业'],
     ['新手引导','重新看一遍'],
@@ -2020,7 +2020,7 @@ function renderMine(){
       ('已记 '+rd.months+' 个月，记满 3 个月解锁')]
   ].map(function(x,i){return '<div class="row" data-set="'+i+'">'+
     '<div class="row-l"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>'+
-    '<div class="row-r"><span class="chev">›</span></div></div>'}).join('')+'<div class="row" data-account-setting><div class="row-l"><b>账号与登录</b><span>'+(S.meta.auth?'已登录 · '+maskPhone(S.meta.auth.phone):'未登录')+'</span></div><div class="row-r"><span class="chev">›</span></div></div>';
+    '<div class="row-r"><span class="chev">›</span></div></div>'}).join('');
 }
 function policyRows(arr){
   return arr.map(function(s){
