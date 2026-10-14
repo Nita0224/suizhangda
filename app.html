@@ -373,6 +373,15 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div class="quick" data-go="proof"><i>📷</i><span>作品存证</span></div>
   </div>
 
+  <div class="card" id="h-policy-card">
+    <div class="card-hd"><h3>潮州非遗政策线索</h3><span class="more" data-go="subsidy">查看 ›</span></div>
+    <div id="h-subsidy"></div>
+  </div>
+  <div class="card" id="h-filing-card">
+    <div class="card-hd"><h3>申报提醒</h3><span class="more" data-go="board">查看 ›</span></div>
+    <div id="h-filing"></div>
+  </div>
+
   <!-- 经营健康与信用报告（资产卡片 · 三态） -->
   <div class="card" id="h-report-card" data-go="report" style="cursor:pointer">
     <div class="card-hd"><h3>经营健康与信用报告</h3>
@@ -414,9 +423,9 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
       <div><span class="lbl">赚了</span><span class="num" id="h-net">¥0</span></div>
     </div>
     <div class="quota">
-      <div class="quota-hd"><span>季度免税额度（增值税）</span><b id="h-qtxt">0 / 30万</b></div>
+      <div class="quota-hd"><span>本季已记录销售发票</span><b id="h-qtxt">¥0</b></div>
       <div class="bar" id="h-barw"><i id="h-bar" style="width:0%"></i></div>
-      <div class="quota-tip" id="h-qtip">额度充足，放心开票</div>
+      <div class="quota-tip" id="h-qtip">申报金额和适用政策请与会计核对</div>
     </div>
   </div>
 
@@ -427,18 +436,13 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
       <div><span class="lbl">毛利率</span><span class="num sm orange" id="h-rate">0%</span></div>
       <div><span class="lbl">最大客户</span><span class="num sm" id="h-top">—</span></div>
       <div><span class="lbl">无票支出</span><span class="num sm red" id="h-noinv">¥0</span></div>
-      <div><span class="lbl">健康分</span><span class="num sm" id="h-score">0</span></div>
+      <div><span class="lbl">资料已备</span><span class="num sm" id="h-score">0/4</span></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-hd"><h3>合规提醒</h3><span class="more" data-go="board">全部 ›</span></div>
+    <div class="card-hd"><h3>经营小提示</h3><span class="more" data-go="board">全部 ›</span></div>
     <div id="h-alerts"></div>
-  </div>
-
-  <div class="card">
-    <div class="card-hd"><h3>非遗政策雷达</h3><span class="more" data-go="subsidy">去看看 ›</span></div>
-    <div id="h-subsidy"></div>
   </div>
 
   <div class="card">
@@ -499,9 +503,9 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div id="b-list" style="margin-top:6px"></div>
   </div>
   <div class="card">
-    <div class="card-hd"><h3>季度开票额度</h3><span class="more" id="i-period">第3季度</span></div>
+    <div class="card-hd"><h3>季度发票记录</h3><span class="more" id="i-period">第3季度</span></div>
     <div class="quota" style="margin-top:0;padding-top:0;border-top:0">
-      <div class="quota-hd"><span>已开销售发票</span><b id="i-qtxt">0 / 30万</b></div>
+      <div class="quota-hd"><span>已录入销售发票</span><b id="i-qtxt">¥0</b></div>
       <div class="bar" id="i-barw"><i id="i-bar" style="width:0%"></i></div>
       <div class="quota-tip" id="i-qtip"></div>
     </div>
@@ -531,7 +535,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div class="field"><label>备注（选填）</label>
       <input class="inp" id="ba-note" placeholder="如：高岭土采购"></div>
     <div class="switch-row">
-      <span id="ba-sw-lb">已取得发票<small>有票支出才能税前扣除</small></span>
+      <span id="ba-sw-lb">已取得发票<small>留存凭证，扣除条件需另行核对</small></span>
       <div class="switch on" id="ba-sw"><i></i></div>
     </div>
     <button class="btn-primary" style="width:100%;margin-top:16px" id="ba-save">保存这一笔</button>
@@ -602,6 +606,14 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
       <div><span class="lbl">毛利率</span><span class="num sm orange" id="bd-rate">0%</span></div>
     </div>
   </div>
+  <div class="card" id="bd-sub">
+    <div class="card-hd"><h3>潮州非遗政策线索</h3><span class="more" data-go="subsidy">查看 ›</span></div>
+    <div id="bd-sub-body"></div>
+  </div>
+  <div class="card" id="bd-filing">
+    <div class="card-hd"><h3>申报提醒</h3></div>
+    <div id="r-cal"></div>
+  </div>
   <div class="card" id="bd-ar">
     <div class="card-hd"><h3>谁欠我钱（应收台账）</h3><span class="more" data-go="ar">全部 ›</span></div>
     <div id="bd-ar-body"></div>
@@ -621,10 +633,10 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div id="bd-cust"></div>
   </div>
   <div class="card">
-    <div class="card-hd"><h3>合规体检</h3><span class="more" id="r-cnt">0 项</span></div>
+    <div class="card-hd"><h3>经营资料小体检</h3><span class="more" id="r-cnt">0 项</span></div>
     <div class="health">
-      <div class="lbl"><b>财税健康分</b><span id="r-level">—</span></div>
-      <div class="ring" id="r-ring"><i><span id="r-score">0</span></i></div>
+      <div class="lbl"><b>已备资料</b><span id="r-level">—</span></div>
+      <div class="ring" id="r-ring"><i><span id="r-score">0/4</span></i></div>
     </div>
     <div class="switch-row" style="margin-top:14px">
       <span>已开立对公账户<small>公私账混用是常见风险点</small></span>
@@ -632,17 +644,9 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     </div>
     <div style="margin-top:14px" id="r-list"></div>
     <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
-      <p class="q">非遗专属 · 传承人补助预估</p>
+      <p class="q">传承人扶持 · 先核对认定条件</p>
       <div class="chips" id="r-heir-lv" style="margin-bottom:10px"></div>
       <div id="r-heir"></div>
-    </div>
-    <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
-      <p class="q">隐私安全盾</p>
-      <div id="r-privacy"></div>
-    </div>
-    <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
-      <p class="q">申报提醒</p>
-      <div id="r-cal"></div>
     </div>
   </div>
   <div class="card">
@@ -654,9 +658,9 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
       <button class="btn-primary" style="width:100%;padding:11px;font-size:15px" data-go="agent">看看会计 ›</button>
     </div>
   </div>
-  <div class="card" id="bd-sub">
-    <div class="card-hd"><h3>🎉 非遗补贴雷达</h3><span class="more" data-go="subsidy">去看看 ›</span></div>
-    <div id="bd-sub-body"></div>
+  <div class="card" id="bd-privacy">
+    <div class="card-hd"><h3>隐私安全盾</h3></div>
+    <div id="r-privacy"></div>
   </div>
   <p class="note">看板数据来自你的账本，越记越准</p>
 </section>
@@ -738,13 +742,14 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
 
 <!-- ==================== 非遗政策雷达 ==================== -->
 <section class="page" id="p-subsidy">
-  <div class="nav-bar"><a data-back>‹</a><h2>非遗政策雷达</h2></div>
+  <div class="nav-bar"><a data-back>‹</a><h2>潮州政策线索</h2></div>
   <div class="card">
-    <div class="card-hd"><h3>测算结果</h3><span class="more" id="s-year"></span></div>
+    <div class="card-hd"><h3>初步匹配</h3><span class="more" id="s-year"></span></div>
     <div class="subsidy-row">
-      <div><b>预计可享金额</b><span id="s-sub">按当前经营规模与作品存证测算</span></div>
-      <div class="amount" id="s-total">¥0</div>
+      <div><b>可进一步了解的政策方向</b><span id="s-sub">仅提供线索，需核对身份、地区和申报条件</span></div>
+      <div class="amount" id="s-total">待核对</div>
     </div>
+    <p style="font-size:12px;line-height:1.7;color:var(--t2);margin:10px 0 0">当前按本机资料提示可能相关的政策方向，尚未接入联网 AI 或实时政策库。将来启用 AI 解读时，也只提供条件解释与待确认事项，不直接判定资格或金额。</p>
   </div>
   <div class="card">
     <div class="card-hd"><h3>非遗专属政策</h3><span class="tag o" id="s-hcnt">—</span></div>
@@ -755,7 +760,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div id="s-list"></div>
   </div>
   <div class="card"><div class="card-hd"><h3>申报进度</h3></div><div id="s-progress"></div></div>
-  <p class="note">各地非遗补贴标准不同，以属地文旅 / 人社部门口径为准</p>
+  <p class="note">仅针对潮州市经营场景作初步提示。政策是否适用、可享金额和办理期限，以潮州市主管部门、广东省税务部门当期公告及会计核实结果为准。</p>
 </section>
 
 <!-- ==================== 我的 ==================== -->
@@ -941,26 +946,26 @@ function nextDeadline(){
   var n=new Date(),y=n.getFullYear(),q=Math.floor(n.getMonth()/3);
   var dl=new Date(y,q*3+3,15);if(dl<n)dl=new Date(y,(q+1)*3+3,15);return dl;
 }
+function filingReminder(){
+  return '<div style="font-size:13px;line-height:1.7;color:var(--t2)">'+
+    '<b style="color:var(--t1)">请核对本期申报安排</b><br>'+ 
+    '申报期限会随节假日和主管部门公告调整。先确认纳税人类型与申报周期，再到广东省电子税务局核对办税日历。'+
+    '</div><a href="https://guangdong.chinatax.gov.cn/" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:8px;font-size:12px;color:var(--primary)">查看广东省税务局 ›</a>';
+}
 function check(){
-  var st=stats(),qs=quarterSales(),pct=qs/300000,issues=[],deduct=0;
-  if(st.ratio>0.4){issues.push({lv:'h',t:'无票支出占比 '+Math.round(st.ratio*100)+'%',d:'本季无票支出 '+money(st.noInv)+'，汇算时可能被调增应纳税所得额，多缴经营所得税约 '+money(st.noInv*0.05)+'。建议向供应商索取发票。'});deduct+=18}
-  else if(st.ratio>0.3){issues.push({lv:'m',t:'无票支出占比 '+Math.round(st.ratio*100)+'%',d:'无票支出 '+money(st.noInv)+'，税前扣除存在被调整风险。优先补齐进货成本、销售费用等大额支出的发票。'});deduct+=12}
-  else if(st.ratio>0.2){issues.push({lv:'l',t:'无票支出占比 '+Math.round(st.ratio*100)+'%',d:'占比尚可，建议 500 元以上的支出坚持要票。'});deduct+=6}
-  if(pct>=1){issues.push({lv:'h',t:'季度免税额度已用尽',d:'本季开票 '+wan(qs)+'，超出 30 万部分需按 1% 缴纳增值税。'});deduct+=15}
-  else if(pct>=0.85){issues.push({lv:'m',t:'季度免税额度剩余 '+Math.round((1-pct)*100)+'%',d:'已开票 '+wan(qs)+'，剩余 '+money(300000-qs)+'，超限部分按 1% 缴税，注意开票节奏。'});deduct+=10}
-  else if(pct>=0.6){issues.push({lv:'l',t:'季度免税额度已用 '+Math.round(pct*100)+'%',d:'已开票 '+wan(qs)+'，剩余 '+money(300000-qs)+'，额度充足。'});deduct+=3}
-  if(!S.profile.corpAccount){issues.push({lv:'m',t:'未使用对公账户收付款',d:'经营收款走个人微信/银行卡，易被认定为账外收入或公私混同。建议开立对公账户并留存合同、出库单佐证。'});deduct+=8}
+  var st=stats(),qs=quarterSales(),issues=[];
+  var steps=[
+    {done:!!S.meta.quiz,t:'完成经营身份自测',d:'填好经营类别，查看更贴近潮州小作坊的政策线索。'},
+    {done:S.records.length>0,t:'记下第一笔经营账',d:'先把收入或支出记下来，慢慢形成自己的账本。'},
+    {done:S.records.some(function(r){return r.type==='in'})&&S.records.some(function(r){return r.type==='out'}),t:'收入和支出都已有记录',d:'两边都记下，经营情况会更清楚。'},
+    {done:S.proofs.length>0||S.invoices.length>0,t:'整理一份经营凭证',d:'作品存证或发票都可以，方便以后核对资料。'}
+  ];
+  var done=steps.filter(function(x){return x.done}).length;
+  steps.forEach(function(x){if(!x.done)issues.push({lv:'l',t:x.t,d:x.d})});
+  if(st.noInv>0)issues.push({lv:'l',t:'有支出尚未标记票据',d:'可以找一找相关发票或其他凭证；能否税前扣除还需会计按实际业务核对。'});
   var la=arStat();
-  if(la.lateN>0){issues.push({lv:'h',t:'有 '+la.lateN+' 笔往来款逾期未处理',d:'逾期金额 '+money(la.late)+'，账龄越长越难收回。建议今天就发催款消息，见「往来台账」。'});deduct+=10}
-  var dl=nextDeadline(),left=Math.ceil((dl-new Date())/86400000);
-  if(left<=7){issues.push({lv:'h',t:'申报期临近：还剩 '+left+' 天',d:'请于 '+ymd(dl)+' 前完成增值税及经营所得个税季度申报。'});deduct+=15}
-  else{issues.push({lv:'ok',t:'下次申报 '+ymd(dl)+'（还有 '+left+' 天）',d:'增值税（小规模·按季）与经营所得个税预缴同期申报。'})}
-  var last=S.records.map(function(r){return r.date}).sort().pop();
-  var gap=last?Math.round((new Date()-new Date(last))/86400000):999;
-  if(gap>7){issues.push({lv:'l',t:'已 '+gap+' 天未记账',d:'记账间隔过长易丢票据、成本失真。建议每天收摊后补录。'});deduct+=5}
-  var rank={h:0,m:1,l:2,ok:3};
-  issues.sort(function(a,b){return rank[a.lv]-rank[b.lv]});
-  return {issues:issues,score:Math.max(0,100-deduct),pct:pct,qs:qs,left:left,deadline:dl};
+  if(la.lateN>0)issues.push({lv:'l',t:'有 '+la.lateN+' 笔往来款待跟进',d:'可以查看约定日期，联系对方确认付款安排。'});
+  return {issues:issues,steps:steps,done:done,score:done*25,pct:0,qs:qs};
 }
 /* ========================= 经营健康与信用报告 ========================= */
 function monthKeys(){
@@ -1032,47 +1037,30 @@ function reportData(){
 }
 /* 通用小微政策 */
 function subsidies(){
-  var annual=Math.max(0,stats().net)*12,taxable=Math.min(annual,2000000);
   return [
-    {n:'小规模纳税人增值税减免',d:'季销 30 万以内免征，超出部分 1%',v:Math.round(quarterSales()*0.01*4),s:'自动享受'},
-    {n:'六税两费减半征收',d:'城建税、印花税等按 50% 征收',v:2400,s:'自动享受'},
-    {n:'经营所得个税减半',d:'年应纳税所得额 '+wan(taxable)+'，按 5% 档估算',v:Math.round(taxable*0.05*0.5),s:'汇算享受'},
-    {n:'一次性创业补贴',d:'注册满 6 个月且正常经营',v:5000,s:'需申请'},
-    {n:'创业担保贷款贴息',d:'最高 300 万额度、财政贴息',v:0,s:'需申请'}
+    {n:'小规模纳税人增值税政策',d:'先确认纳税人类型、销售额口径、开票及当期政策，再判断是否适用。',s:'待核对'},
+    {n:'小微企业“六税两费”政策',d:'先核对经营主体类型、适用期间及具体税费种。',s:'待核对'},
+    {n:'个体工商户经营所得优惠',d:'先确认是否为个体工商户及实际应纳税所得额，不能只按流水推算。',s:'待核对'},
+    {n:'创业扶持信息',d:'申请对象、登记地、经营年限和当期通知均需向潮州市人社部门核实。',s:'关注通知'}
   ];
 }
-/* 非遗专属政策（按作品存证数与经营规模自动匹配） */
+/* 潮州非遗政策线索：本机资料仅用于提示，不判断资格或金额。 */
 function heritageSubsidies(){
-  var pn=S.proofs.length,qs=quarterSales();
   return [
-    {n:'非遗代表性传承人补助',d:'县级以上传承人年度传习补助',v:12000,s:'需申请'},
-    {n:'大师工作室建设经费',d:'设立大师工作室，一次性建设补助',v:50000,s:'需申报'},
-    {n:'非遗工坊专项补贴',d:'非遗工坊 / 传习所运营补贴',v:20000,s:'需申请'},
-    {n:'文创作品版权登记补贴',d:'作品版权登记费补贴（已存证 '+pn+' 件，约 300 元/件）',
-      v:pn*300,s:'需申请'}
+    {n:'非遗代表性传承人扶持',d:'先核对潮州市或所属区县的认定级别、传习记录和当期通知。',s:'待核对'},
+    {n:'非遗工坊与传习场所支持',d:'是否有面向本区县的征集，需看潮州市文旅部门当期公告。',s:'关注通知'},
+    {n:'非遗展示与文旅活动',d:'展销或传习活动可留好合同和票据，项目支持以当期公告为准。',s:'关注通知'}
   ];
 }
 
-/* ============ 传承人补助估算（DOC002 第三条 + DOC004 第三十一条） ============
-   规则：区级传承人每人每年 4000 元；国家级/省级/市级按上级标准，区级财政 1:1 配套。
-   上级标准为公开常见参考值，页面须标注"以属地公布为准"。                      */
+/* 传承人级别仅用于整理待核对条件，不推断补助资格或金额。 */
 var HEIR_LEVELS=[
-  {k:'none',n:'还不是传承人',up:0},
-  {k:'dist',n:'区级传承人',up:0},
-  {k:'city',n:'市级传承人',up:6000},
-  {k:'prov',n:'省级传承人',up:10000},
-  {k:'nat',n:'国家级传承人',up:20000}
+  {k:'none',n:'还不是传承人'},
+  {k:'dist',n:'区级传承人'},
+  {k:'city',n:'市级传承人'},
+  {k:'prov',n:'省级传承人'},
+  {k:'nat',n:'国家级传承人'}
 ];
-function heirSubsidy(){
-  var lv=S.profile.heirLevel||'none',up=0;
-  HEIR_LEVELS.forEach(function(x){if(x.k===lv)up=x.up});
-  if(lv==='dist')return {lv:lv,total:4000,up:0,match:0,
-    line:'区级财政每人每年 4000 元补助，用于带徒授艺、展演展示、资料整理、学术交流'};
-  if(!up)return {lv:lv,total:0,up:0,match:0,
-    line:'先申报认定为非遗代表性传承人，认定后即可按级申领补助'};
-  return {lv:lv,total:up*2,up:up,match:up,
-    line:'上级补助 '+money(up)+' 元 + 区级财政 1:1 配套 '+money(up)+' 元'};
-}
 function heirName(){
   var lv=S.profile.heirLevel||'none',n='—';
   HEIR_LEVELS.forEach(function(x){if(x.k===lv)n=x.n});return n;
@@ -1088,10 +1076,10 @@ var POLICY_RULES=[
       return r.cat==='学徒工资'||/徒弟|学徒|带徒|授徒|传习|教手艺|收徒/.test(t);
     },
     icon:'\uD83D\uDC68\u200D\uD83C\uDF93',
-    title:'您在「师带徒」，有一笔补助可以看看',
-    say:'老板，系统发现您在带徒弟传手艺。潮州正在大力推广「师带徒」传承培养模式，已创建非遗人才示范工作室 12 个、非遗传习所 14 家，带徒授艺、传习活动都有对应的补助和经费扶持。您符合条件吗？',
-    money:'区级传承人 4000 元/年',
-    src:'DOC001 段落4「师带徒」培养模式 · DOC002 第三条',
+    title:'带徒记录可以留作政策材料',
+    say:'这笔带徒支出可以和传习记录一起保存。潮州市是否有适合您当前身份的扶持项目，请查看当期文旅部门公告。',
+    money:'申报条件与金额待核对',
+    src:'潮州市文旅部门当期公告',
     page:'board'
   },
   {
@@ -1102,9 +1090,9 @@ var POLICY_RULES=[
     },
     icon:'\uD83C\uDFD8\uFE0F',
     title:'这笔文旅支出，记得留票据',
-    say:'老板，这笔景区 / 展会的支出，票据请留好。潮州在推「非遗 + 文旅」，依托景区打造了「潮玩古城」「乐享名街」「非遗购物节」等品牌活动，文创产品开发与旅游展销也有专项经费扶持，参展支出是重要佐证。',
-    money:'文创开发经费 · 活动补贴（以奖代补）',
-    src:'DOC001 段落5「非遗+文旅」 · DOC002 第九条、第十条',
+    say:'景区或展会支出记得保留票据、合同和活动记录。是否有可申请的潮州市文旅项目，请看当期公告。',
+    money:'项目与条件待核对',
+    src:'潮州市文旅部门当期公告',
     page:'board'
   },
   {
@@ -1114,9 +1102,9 @@ var POLICY_RULES=[
     },
     icon:'\uD83C\uDFA8',
     title:'请大师出工，可关注工作室经费',
-    say:'老板，请传承人或大师出工的费用记得单独留档。非遗人才示范工作室建设、传习基地运行都有专项经费扶持，这类工时支出正是申报时的重要材料。',
-    money:'大师工作室建设经费 · 以奖代补',
-    src:'DOC001 段落4 · DOC002 第四条',
+    say:'请传承人或工艺师出工的费用可以单独留档。工作室项目是否开放申报，需查看潮州市及所属区县当期通知。',
+    money:'项目与条件待核对',
+    src:'潮州市文旅部门当期公告',
     page:'board'
   },
   {
@@ -1125,10 +1113,10 @@ var POLICY_RULES=[
       return r.cat==='原料采买'&&/泥|陶土|瓷土|高岭土|木|丝线|绣线/.test(t);
     },
     icon:'\uD83E\uDDF1',
-    title:'原料采购可计入项目保护传承经费',
-    say:'老板，特色原料（泥料 / 木材 / 丝线）的采购是项目保护传承的重要支出。县级以上对本级非遗代表性项目有项目保护传承经费，濒危或急需抢救的项目还会重点扶持。',
-    money:'项目保护传承经费',
-    src:'DOC004 第三十一条 · DOC002 第四条',
+    title:'原料采购凭证可以留好',
+    say:'泥料、木材或丝线采购凭证可用于整理经营和传习资料。能否作为项目经费材料，需核对项目要求。',
+    money:'项目与条件待核对',
+    src:'潮州市文旅部门当期公告',
     page:'board'
   }
 ];
@@ -1298,13 +1286,11 @@ function renderHome(){
   $('#h-in').textContent=money(st.in);
   $('#h-out').textContent=money(st.out);
   $('#h-net').textContent=money(st.net);
-  $('#h-qtxt').textContent=wan(c.qs)+' / 30万';
-  $('#h-bar').style.width=Math.min(100,c.pct*100)+'%';
-  $('#h-barw').className='bar'+(c.pct>=1?' full':c.pct>=0.85?' hot':'');
+  $('#h-qtxt').textContent=money(c.qs);
+  $('#h-bar').style.width='0%';
+  $('#h-barw').className='bar';
   var tip=$('#h-qtip');
-  if(c.pct>=1){tip.className='quota-tip danger';tip.textContent='额度已用尽，超出部分按 1% 缴增值税'}
-  else if(c.pct>=0.85){tip.className='quota-tip warn';tip.textContent='剩余 '+money(300000-c.qs)+'，注意开票节奏'}
-  else{tip.className='quota-tip';tip.textContent='剩余 '+money(300000-c.qs)+'，额度充足'}
+  tip.className='quota-tip';tip.textContent='这里只汇总本机发票；申报口径和政策适用请与会计核对。';
 
   // 往来
   $('#h-ar-rec').textContent=money(la.rec);$('#h-ar-recn').textContent=la.recN+' 笔';
@@ -1327,22 +1313,19 @@ function renderHome(){
   var cust=topCustomer();
   $('#h-top').textContent=cust?cust.name:'—';
   $('#h-noinv').textContent=money(st.noInv);
-  $('#h-score').textContent=c.score;
-  $('#h-score').style.color=c.score>=85?'var(--success)':c.score>=70?'var(--warn)':'var(--danger)';
+  $('#h-score').textContent=c.done+'/4';
+  $('#h-score').style.color='var(--success)';
 
   var box=$('#h-alerts');box.innerHTML='';
   c.issues.slice(0,3).forEach(function(x){
-    var cls=x.lv==='h'?'danger':x.lv==='m'?'warn':x.lv==='ok'?'ok':'warn';
-    box.innerHTML+='<div class="alert '+cls+'"><b>'+x.t+'</b><span>'+x.d+'</span></div>';
+    box.innerHTML+='<div class="alert ok"><b>'+x.t+'</b><span>'+x.d+'</span></div>';
   });
-  var sb=subsidies();
-  var sh=heritageSubsidies(),sg=subsidies(),all=sh.concat(sg);
+  var sh=heritageSubsidies();
   $('#h-subsidy').innerHTML=sh.slice(0,2).map(function(s){
     return '<div class="subsidy-row"><div><b>'+s.n+'</b><span>'+s.d+'</span></div>'+
-      '<div class="amount">'+money(s.v)+'</div></div>';
-  }).join('')+'<div style="font-size:12px;color:var(--t3);margin-top:10px">非遗专属 '+sh.length+
-    ' 项 + 通用 '+sg.length+' 项，预计 '+
-    money(all.reduce(function(a,b){return a+b.v},0))+'</div>';
+      '<div class="amount" style="font-size:12px">'+s.s+'</div></div>';
+  }).join('')+'<div style="font-size:12px;color:var(--t3);margin-top:10px">潮州市范围内的初步线索，查看官方公告后再确认。</div>';
+  $('#h-filing').innerHTML=filingReminder();
 
   // 身份自测状态卡片
   var qzCard=$('#h-quiz-card'),qzRes=$('#h-quiz-result');
@@ -1576,11 +1559,11 @@ function renderBook(){
 
   var c=check(),n=new Date(),q=Math.floor(n.getMonth()/3)+1;
   $('#i-period').textContent='第'+q+'季度';
-  $('#i-qtxt').textContent=wan(c.qs)+' / 30万';
-  $('#i-bar').style.width=Math.min(100,c.pct*100)+'%';
-  $('#i-barw').className='bar'+(c.pct>=1?' full':c.pct>=0.85?' hot':'');
-  $('#i-qtip').className='quota-tip'+(c.pct>=1?' danger':c.pct>=0.85?' warn':'');
-  $('#i-qtip').textContent='剩余免税额度 '+money(Math.max(0,300000-c.qs));
+  $('#i-qtxt').textContent=money(c.qs);
+  $('#i-bar').style.width='0%';
+  $('#i-barw').className='bar';
+  $('#i-qtip').className='quota-tip';
+  $('#i-qtip').textContent='本机录入金额不等于税务申报口径，请与会计核对。';
   var inv=S.invoices.slice().sort(function(a,b){return a.date<b.date?1:-1}).slice(0,4);
   $('#i-list').innerHTML=inv.map(function(v){
     return '<div class="flow"><div class="fl-l"><b>'+
@@ -1769,48 +1752,25 @@ function renderBoard(){
       '<span class="v">'+money(x.v)+'</span></div>';
   }).join(''):'<div class="empty">还没有客户数据</div>';
   // 合规
-  var c=check(),col=c.score>=85?'var(--success)':c.score>=70?'var(--warn)':'var(--danger)';
+  var c=check(),col='var(--success)';
   $('#r-ring').style.background='conic-gradient('+col+' '+c.score+'%,#EEF3F1 '+c.score+'%)';
-  $('#r-score').textContent=c.score;$('#r-score').style.color=col;
-  $('#r-level').innerHTML='<b>'+(c.score>=85?'健康':c.score>=70?'亚健康':'需整改')+'</b>共 '+c.issues.length+' 项事项';
+  $('#r-score').textContent=c.done+'/4';$('#r-score').style.color=col;
+  $('#r-level').textContent='已经整理好 '+c.done+' 项，按自己的节奏继续即可';
   $('#r-corp').className='switch'+(S.profile.corpAccount?' on':'');
-  $('#r-cnt').textContent=c.issues.length+' 项';
+  $('#r-cnt').textContent=c.done+'/4 项已备';
   $('#r-list').innerHTML=c.issues.map(function(x){
     return '<div class="issue"><span class="lv '+x.lv+'">'+
-      (x.lv==='h'?'高':x.lv==='m'?'中':x.lv==='ok'?'正常':'低')+'</span>'+
+      '可准备</span>'+ 
       '<div class="bd"><b>'+x.t+'</b><p>'+x.d+'</p></div></div>';
-  }).join('');
-  var y=new Date().getFullYear(),dl=c.deadline;
-  var cal=[
-    {t:'增值税（小规模·按季）',d:ymd(dl),l:c.left},
-    {t:'经营所得个税预缴',d:ymd(dl),l:c.left},
-    {t:'下一季度申报',d:ymd(new Date(y,12,15)),l:Math.max(0,Math.ceil((new Date(y,12,15)-new Date())/86400000))},
-    {t:'经营所得年度汇算',d:(y+1)+'-03-31',l:Math.max(0,Math.ceil((new Date(y+1,2,31)-new Date())/86400000))}
-  ];
-  $('#r-cal').innerHTML=cal.map(function(x){
-    return '<div class="dl"><div><b>'+x.t+'</b><small>截止 '+x.d+'</small></div>'+
-      '<div class="d'+(x.l<=7?' soon':'')+'">'+x.l+' 天</div></div>';
-  }).join('');
+  }).join('') || '<div class="alert ok"><b>经营资料已经整理好</b><span>需要申报时仍请核对当期政策与材料要求。</span></div>';
+  $('#r-cal').innerHTML=filingReminder();
 
   /* 非遗专属 · 传承人补助（法条翻译成大白话） */
-  var hs=heirSubsidy();
   $('#r-heir-lv').innerHTML=HEIR_LEVELS.map(function(x){
     return '<div class="chip'+(x.k===(S.profile.heirLevel||'none')?' on':'')+
       '" data-heir="'+x.k+'">'+x.n+'</div>'}).join('');
-  $('#r-heir').innerHTML=
-    '<div style="background:var(--success-l);border-radius:12px;padding:12px">'+
-    '<div style="display:flex;align-items:baseline;gap:8px">'+
-    '<span style="font-size:13px;color:var(--t2)">'+heirName()+'，预估每年可领</span>'+
-    '<span style="font-size:22px;font-weight:800;color:var(--success);'+
-    'font-variant-numeric:tabular-nums">'+(hs.total?money(hs.total):'—')+'</span></div>'+
-    '<div style="font-size:12.5px;color:var(--t2);margin-top:6px">'+hs.line+'</div></div>'+
-    '<div style="font-size:12px;color:var(--t3);margin-top:10px;line-height:1.6">'+
-    '各级 1:1 配套参考（上级补助 + 区级配套）：国家级 约 '+money(40000)+
-    ' / 省级 约 '+money(20000)+' / 市级 约 '+money(12000)+' / 区级 '+money(4000)+
-    '。上级标准为公开常见参考值，实际以属地文旅部门公布为准。</div>'+
-    '<div class="alert ok" style="margin-top:10px"><b>这笔钱谁也动不了</b>'+
-    '<span>按规定，任何单位和个人不得截留、挪用、挤占项目保护传承经费和传承人补助费；'+
-    '补助由文旅部门按年度实际评选人数申请核拨，直接发放到传承人。</span></div>';
+  $('#r-heir').innerHTML='<div class="alert ok"><b>'+heirName()+' · 可进一步了解</b>'+ 
+    '<span>请带上认定文件和传习记录，向潮州市或所属区县文旅部门核对当前扶持项目、申报条件与金额。选择级别只用于整理问题，不代表已经取得补助资格。</span></div>';
 
   /* 隐私安全盾 */
   $('#r-privacy').innerHTML=
@@ -1822,26 +1782,22 @@ function renderBoard(){
     '不收集与服务无关的个人信息；绝不泄露、篡改、毁损您的经营数据。</div></div></div>'+
     '<button class="btn-ghost" style="width:100%;margin:10px 0 0" id="pv-backup">'+
     '加密本地备份 / 换机迁移 ›</button>';
-  // 非遗补贴雷达（终极杀器）
+  // 潮州非遗政策线索
   (function(){
     var incM=recMonth().filter(function(r){return r.type==='in'&&
       (r.cat==='作品销售'||r.cat==='技艺服务')}).length;
     var hasWage=S.records.some(function(r){return r.cat==='学徒工资'||r.cat==='大师工时费'});
     var sb=$('#bd-sub-body');
-    var sWork=heritageSubsidies().filter(function(s){return /工坊|工作室/.test(s.n)})[0];
-    var est=sWork?sWork.v:20000;
     if(incM>0&&hasWage){
       sb.innerHTML='<div style="background:var(--success-l);border-radius:12px;padding:13px">'+
-        '<b style="font-size:14px;color:var(--success)">系统检测到您本月有稳定出货，且已带徒 / 雇工</b>'+
+        '<b style="font-size:14px;color:var(--success)">记账里有出货与人工支出</b>'+ 
         '<div style="font-size:13px;color:var(--t2);margin-top:6px;line-height:1.65">'+
-        '您完全符合潮州市「非遗人才示范工作室」或「非遗工坊建设经费」的申报条件，预估可领 '+
-        '<b style="color:var(--success)">'+money(est)+'</b>！</div>'+
-        '<button class="btn-primary" style="width:100%;margin-top:12px;padding:11px" id="bd-pack">一键生成申报材料包 ›</button></div>';
+        '这些记录可用于整理潮州市非遗工坊、传习活动相关材料。是否有当期项目、能否申报，仍需向属地文旅部门核对。</div>'+ 
+        '<button class="btn-primary" style="width:100%;margin-top:12px;padding:11px" id="bd-pack">整理已有材料 ›</button></div>';
       var bp=$('#bd-pack');if(bp)bp.onclick=function(){generateSubsidyPack()};
     }else{
       sb.innerHTML='<div style="font-size:13px;color:var(--t2);line-height:1.65">'+
-        '持续记账 + 稳定出货 + 带徒 / 雇工，系统会自动匹配「非遗工坊建设经费」「师带徒传习补贴」等专属政策。'+
-        '本月已记 '+incM+' 笔出货、'+(hasWage?'已记录人工成本':'尚未记录带徒 / 工时费')+'。</div>';
+        '可以关注潮州市文旅部门的非遗工坊、传习活动通知。先保留出货、带徒与作品存证材料；目前记录中有 '+incM+' 笔相关出货。是否适用以当期公告为准。</div>';
     }
   })();
 }
@@ -1936,7 +1892,7 @@ function quizResult(){
   if(pain.indexOf(2)>=0)
     plan.push({t:'大师工时 / 学徒工资',d:'两笔人工分开记，别混成一团',page:'book'});
   if(pain.indexOf(3)>=0)
-    plan.push({t:'合规体检',d:'无票支出、免税额度、申报期提醒',page:'board'});
+    plan.push({t:'经营资料小体检',d:'看看已经备好哪些资料，并核对申报提醒',page:'board'});
   if(pain.indexOf(4)>=0)
     plan.push({t:'作品存证',d:'新花样随手拍，生成带时间戳的在先证据',page:'proof'});
   else plan.push({t:'作品存证',d:'作品拍一张，自动编号、带时间戳',page:'proof'});
@@ -1957,12 +1913,12 @@ function showSafetyCard(){
     '<span style="font-size:17px">🔒</span><b style="font-size:13.5px;color:var(--primary)">① 本机加密存储</b></div>'+
     '<span style="font-size:13px;color:var(--t2);display:block">您每天的流水和往来账，本机加密存储，绝不泄露。</span>'+
     '<div style="display:flex;gap:8px;align-items:center;margin:11px 0 7px">'+
-    '<span style="font-size:17px">🎁</span><b style="font-size:13.5px;color:var(--primary)">② 每笔交易都是补贴凭证</b></div>'+
-    '<span style="font-size:13px;color:var(--t2);display:block">您作为手艺人的每一笔稳定交易，都可以作为申请「非遗工坊建设补贴」或「师带徒传习补贴」的凭证。</span>'+
+    '<span style="font-size:17px">🎁</span><b style="font-size:13.5px;color:var(--primary)">② 经营记录可以帮助整理申报材料</b></div>'+ 
+    '<span style="font-size:13px;color:var(--t2);display:block">这些交易记录可以帮助整理经营材料；具体能否用于申请，请核对潮州市当期项目要求。</span>'+
     '</div></div>'+
     '<div style="display:flex;gap:10px;margin-top:6px">'+
     '<button class="btn-primary" style="flex:1;padding:12px" id="sc-rec">好，马上记一笔</button>'+
-    '<button class="btn-ghost" style="flex:1;padding:12px" id="sc-sub">查查我能领多少非遗补贴</button></div>');
+    '<button class="btn-ghost" style="flex:1;padding:12px" id="sc-sub">看看潮州政策线索</button></div>');
   $('#sc-rec').onclick=function(){closeCenter();go('home');
     if(!S.meta.guide)setTimeout(startGuide,450)};
   $('#sc-sub').onclick=function(){closeCenter();go('subsidy')};
@@ -1973,7 +1929,7 @@ var AGENTS=[
   {n:'陈会计',e:'👩‍💼',tag:'非遗工坊 · 陶瓷木雕',score:'4.9',price:'¥200/月起',
     d:'12 年代账经验，熟悉非遗工坊查账征收与原料进项票补齐'},
   {n:'李税务师',e:'🧑‍💼',tag:'非遗补贴 · 税务筹划',score:'4.8',price:'¥380/月起',
-    d:'熟悉传承人补助、大师工作室经费申报，帮客户年均省税 1.8 万'},
+    d:'可协助核对传承人扶持与经营所得相关政策，具体结果以实际情况为准'},
   {n:'王记账团队',e:'👨‍💻',tag:'手工账 · 快速交付',score:'4.7',price:'¥260/月起',
     d:'3 人小组，月度票据 500 张以内 3 天出报表'}
 ];
@@ -2100,7 +2056,7 @@ function renderMine(){
     '<div class="row-r">'+x[1]+'</div></div>'}).join('')+'<div class="row" data-setup-edit><div class="row-l"><b>开业日期设置</b><span>修改前会提示影响范围</span></div><div class="row-r"><span class="chev">›</span></div></div>';
   var rd=reportData();
   $('#m-set').innerHTML='<div class="row" data-account-setting><div class="row-l"><b>账号与登录</b><span>'+(S.meta.auth?'已登录 · '+maskPhone(S.meta.auth.phone):'未登录')+'</span></div><div class="row-r"><span class="chev">›</span></div></div>'+[
-    ['合规体检','财税健康分 '+check().score+' 分'],
+    ['经营资料小体检','已备 '+check().done+'/4 项'],
     ['经营身份自测',S.meta.quiz?'已测：'+(S.meta.quiz==='food'?'食品类非遗':S.meta.quiz==='craft'?'非食品类非遗':'其他手工作坊'):'首次记账后匹配行业'],
     ['新手引导','重新看一遍'],
     ['免责声明','重要，请阅读'],
@@ -2114,32 +2070,25 @@ function renderMine(){
 }
 function policyRows(arr){
   return arr.map(function(s){
-    var need=s.s.indexOf('需')===0;
     return '<div class="flow"><div class="fl-l"><b>'+s.n+
-      ' <span class="tag'+(need?' o':' b')+'">'+s.s+'</span></b><span>'+s.d+'</span></div>'+
-      '<div class="fl-r"><span class="'+(s.v>0?'in':'out')+'">'+(s.v>0?money(s.v):'额度')+'</span></div></div>';
+      ' <span class="tag b">'+s.s+'</span></b><span>'+s.d+'</span></div></div>';
   }).join('');
 }
 function renderSubsidy(){
   var sg=subsidies(),sh=heritageSubsidies();
-  var total=sg.concat(sh).reduce(function(a,b){return a+b.v},0);
-  $('#s-year').textContent=new Date().getFullYear()+' 年度';
-  $('#s-total').textContent=money(total);
-  $('#s-sub').textContent='按季开票 '+wan(quarterSales())+' · '+S.proofs.length+' 件作品存证测算';
+  $('#s-year').textContent='潮州市 · '+new Date().getFullYear()+' 年';
+  $('#s-total').textContent='逐项核对';
+  $('#s-sub').textContent='本机记录仅用于提示问题，不判断资格、减税额或补贴金额';
   $('#s-heritage').innerHTML=policyRows(sh);
   $('#s-list').innerHTML=policyRows(sg);
   $('#s-hcnt').textContent=sh.length+' 项';
   $('#s-gcnt').textContent=sg.length+' 项';
-  $('#s-progress').innerHTML=[
-    {n:'增值税减免',s:'已享受',d:'按季自动申报，无需单独申请'},
-    {n:'六税两费减半',s:'已享受',d:'申报时自动减半'},
-    {n:'非遗传承人补助',s:'待申请',d:'需传承人认定文件与年度传习记录'},
-    {n:'大师工作室经费',s:'可申报',d:'需向文旅部门提交工作室建设方案'},
-    {n:'版权登记补贴',s:'可申请',d:'凭作品存证与版权登记证书申领'}
-  ].map(function(x){
-    return '<div class="row"><div class="row-l"><b>'+x.n+'</b><span>'+x.d+'</span></div>'+
-      '<div class="row-r"><span class="tag '+(x.s==='待申请'?'o':'b')+'">'+x.s+'</span></div></div>';
-  }).join('');
+  $('#s-progress').innerHTML='<div class="row"><div class="row-l"><b>① 核对经营身份</b><span>营业执照、纳税人类型、传承人或工坊认定文件</span></div></div>'+ 
+    '<div class="row"><div class="row-l"><b>② 核对本期公告</b><span>关注潮州市文旅部门、广东省税务部门的办理条件与期限</span></div></div>'+ 
+    '<div class="row"><div class="row-l"><b>③ 整理材料再申请</b><span>需要时请会计或主管部门确认税收适用和申报结果</span></div></div>'+ 
+    '<div style="font-size:12px;line-height:1.8;margin-top:10px">'+
+    '<a href="https://www.chaozhou.gov.cn/" target="_blank" rel="noopener noreferrer">潮州市人民政府官网 ›</a><br>'+ 
+    '<a href="https://guangdong.chinatax.gov.cn/" target="_blank" rel="noopener noreferrer">广东省税务局官网 ›</a></div>';
 }
 function renderAll(){renderHome();renderBook();renderAr();renderBoard();renderSubsidy();renderMine();renderProof();renderReport()}
 /* 一键生成非遗补贴申报材料包（按本机流水 / 往来 / 存证汇总，供参考申报） */
@@ -2153,9 +2102,6 @@ function generateSubsidyPack(){
   var p=S.profile,qs=quarterSales(),wm=monthsCovered();
   var recUnpaid=S.ar.filter(function(a){return a.kind==='rec'&&!a.paid});
   var recAmt=sum(recUnpaid),recN=recUnpaid.length;
-  var hs=heritageSubsidies();
-  var sWork=hs.filter(function(s){return /工坊|工作室/.test(s.n)})[0];
-  var est=sWork?sWork.v:20000;
   var txt='【非遗工坊建设经费 / 师带徒传习补贴 · 申报材料包（由穗账达生成）】\n'+
     '经营主体：'+p.name+'（'+(p.type||'—')+'）\n'+
     '工艺类别：'+(p.craft||'—')+'\n'+
@@ -2164,7 +2110,7 @@ function generateSubsidyPack(){
     '本季开票：'+wan(qs)+'（'+money(qs)+'）\n'+
     '应收未收：'+money(recAmt)+'（'+recN+' 笔）\n'+
     '作品存证：'+S.proofs.length+' 件\n'+
-    '预估可申报：'+(sWork?sWork.n:'非遗工坊建设经费')+' 约 '+money(est)+'\n\n'+
+    '可关注方向：潮州市非遗工坊与传习活动（需核对当期公告）\n\n'+
     '—— 本材料包依据您在本机记录的流水、往来与存证自动汇总，供您向属地文旅 / 人社部门参考申报。\n'+
     '具体申领标准、额度与结果，以政府主管部门的官方解释为准。';
   openCenter('<h4>📦 申报材料包已生成</h4>'+
@@ -2367,7 +2313,7 @@ function doParse(){
       '<span>另自动记一笔应收尾款 '+money(r.balance)+'（约定 '+md(r.due)+'），到期提醒您催。</span></div>'):'')+
     '<div class="switch-row" style="border-top:0">'+
     '<span>'+(r.type==='in'?'已开具发票':'已取得发票')+
-    '<small>'+(r.type==='in'?'计入季度免税额度':'有票才能在税前扣除')+'</small></span>'+
+    '<small>'+(r.type==='in'?'记录收入凭证':'保存支出凭证便于核对')+'</small></span>'+
     '<div class="switch" id="rs-inv"><i></i></div></div>'+
     '<button class="btn-primary" style="width:100%;margin-top:16px" id="rs-save">确认记这一笔</button></div>';
   $('#say-result').innerHTML=h;
@@ -2445,8 +2391,8 @@ function openAdd(tp){
   var bs=document.querySelectorAll('#ba-seg button');
   for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',bs[i].getAttribute('data-t')===curType);
   $('#ba-title').textContent=curType==='out'?'记一笔支出':'记一笔收入';
-  $('#ba-sw-lb').innerHTML=curType==='out'?'已取得发票<small>有票支出才能税前扣除</small>':
-    '已开具发票<small>开票金额计入季度免税额度</small>';
+  $('#ba-sw-lb').innerHTML=curType==='out'?'已取得发票<small>留存凭证，扣除条件需另行核对</small>':
+    '已开具发票<small>请核对真实开票信息</small>';
   curCat=CATS[curType][0];
   $('#ba-cats').innerHTML=CATS[curType].map(function(x,i){
     return '<div class="chip'+(i===0?' on':'')+'" data-c="'+x+'">'+x+
@@ -2712,14 +2658,14 @@ $('#ag-submit').addEventListener('click',function(){
 /* ========================= 免责声明 ========================= */
 var DISCLAIMER='<b>一、服务性质</b><br>穗账达是一款面向非遗传承人、手工作坊主等小微经营者的记账辅助工具，'+
 '提供流水记录、往来台账、经营测算与政策提示。本工具并非会计师事务所或税务师事务所，不提供审计、鉴证、代理记账或税务代理服务。<br><br>'+
-'<b>二、不构成专业意见</b><br>页面中的税额测算、合规提示、风险评分、补贴与政策信息，均为基于公开政策的通用估算与示例，'+
+'<b>二、不构成专业意见</b><br>页面中的经营资料提示与政策线索仅用于初步匹配和整理待核对条件，'+
 '不构成税务、会计、法律或投资意见，亦不能替代执业财税顾问针对具体情况出具的专业意见。'+
 '你应结合自身实际经营情况，并向主管税务机关或专业人士咨询后作出决策。<br><br>'+
 '<b>三、数据与责任</b><br>你的账目、往来、存证图片仅保存在本机浏览器，本工具不上传、不备份、不共享。'+
 '因设备丢失、浏览器数据清理、误操作等导致的数据丢失，本工具不承担责任，请定期导出 CSV 备份。'+
 '因依赖本工具内容作出决策而产生的任何直接或间接损失，本工具不承担责任。<br><br>'+
-'<b>四、政策时效</b><br>税收优惠政策存在地区差异且会调整，页面展示的额度、税率、补贴标准可能滞后，'+
-'一切以国家税务总局及属地主管部门最新公告为准。<br><br>'+
+'<b>四、政策时效</b><br>本页面面向潮州市经营场景，税收与非遗扶持政策会调整，'+
+'一切以广东省税务部门、潮州市及所属区县主管部门当期公告为准。<br><br>'+ 
 '<b>五、第三方服务</b><br>代账会计、补贴代办等由第三方机构提供，本工具仅作信息展示与对接，'+
 '不对第三方服务质量负责，请自行甄别并签约。<br><br>'+
 '<b>六、服务边界</b><br>本软件仅提供记账辅助与政策信息参考，'+
@@ -2746,8 +2692,8 @@ var GUIDE=[
    d:'应收应付分开记，到期自动标红，还能一键生成催款话术。这是很多记账工具都没做到的刚需。'},
   {page:'home',sel:'#h-proof-card',t:'新花样，先存一份',
    d:'拍下手稿或成品，自动生成带时间戳的作品编号。被抄袭、被抢注时，这就是你的在先证据。'},
-  {page:'home',sel:'#h-subsidy',t:'非遗政策自动匹配',
-   d:'传承人补助、大师工作室经费、工坊补贴、版权登记补贴，按你的作品存证与经营规模自动测算。'}
+  {page:'home',sel:'#h-subsidy',t:'潮州非遗政策线索',
+   d:'查看可能相关的政策方向与待核对条件，最终以潮州市当期公告为准。'}
 ];
 var gStep=0,guideTimer=null;
 function startGuide(){
@@ -2801,7 +2747,7 @@ function showEditSetupDate(){openCenter('<h4>修改开业日期</h4><p>修改开
 function showIndustryCard(){var d=document.createElement('div');d.className='industry-card';d.innerHTML='<div class="industry-inner"><h3>老板，为了让系统更懂您的生意</h3><p>帮您匹配专属的非遗补贴和记账模板，请问您是做什么行业的？</p><button class="industry-option" data-ind="food">① <b>食品类非遗</b><br><small>腐乳饼、牛肉丸、工夫茶等</small></button><button class="industry-option" data-ind="craft">② <b>非食品类非遗</b><br><small>手拉壶、潮绣、木雕等</small></button><button class="industry-option" data-ind="other">③ <b>其他手工作坊</b></button></div>';document.body.appendChild(d);d.querySelectorAll('.industry-option').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-ind');S.meta.quiz=k;S.profile.craft=k==='food'?'食品类非遗':k==='craft'?'非食品类非遗':'其他手工作坊';save();d.remove();renderAll();toast('已匹配相应记账词库和补贴雷达');showSetupDateCard()}})}
 function afterRecordSaved(rec){if(!S.meta.firstEntry){S.meta.firstEntry=true;save();showFirstSuccess();return true}return false}
 function bootApp(){renderAll();renderSay();renderQuiz();renderAgent();renderProofCats();initRec();if(!S.meta.guide)setTimeout(startFirstGuide,450)}
-var _renderHome=renderHome;renderHome=function(){_renderHome();if(!S.records.length){$('#h-count').textContent='0';$('#h-in').textContent='¥0.00';$('#h-out').textContent='¥0.00';$('#h-net').textContent='¥0.00';$('#h-rate').textContent='--';$('#h-top').textContent='—';$('#h-noinv').textContent='¥0.00';$('#h-score').textContent='--';$('#h-ar-list').innerHTML='<div class="empty">暂无往来记录</div>';$('#h-alerts').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#h-subsidy').innerHTML='<div class="empty">完成行业选择后，系统会匹配食品类与非食品类非遗补贴</div>'}};
+var _renderHome=renderHome;renderHome=function(){_renderHome();if(!S.records.length){$('#h-count').textContent='0';$('#h-in').textContent='¥0.00';$('#h-out').textContent='¥0.00';$('#h-net').textContent='¥0.00';$('#h-rate').textContent='--';$('#h-top').textContent='—';$('#h-noinv').textContent='¥0.00';$('#h-ar-list').innerHTML='<div class="empty">暂无往来记录</div>'}};
 var _renderAr=renderAr;renderAr=function(){_renderAr();if(!S.ar.length)$('#a-list').innerHTML='<div class="empty">暂无往来记录</div>'};
 var _renderBoard=renderBoard;renderBoard=function(){_renderBoard();if(!S.records.length){$('#bd-in').textContent='¥0.00';$('#bd-out').textContent='¥0.00';$('#bd-net').textContent='¥0.00';$('#bd-rate').textContent='--';$('#bd-ar-body').innerHTML='<div class="empty">暂无往来记录</div>';$('#bd-chart').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#bd-str').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#bd-cust').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>'}};
 
