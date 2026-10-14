@@ -384,7 +384,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
 
   <!-- 经营健康与信用报告（资产卡片 · 三态） -->
   <div class="card" id="h-report-card" data-go="report" style="cursor:pointer">
-    <div class="card-hd"><h3>经营健康与信用报告</h3>
+    <div class="card-hd"><h3>经营记录报告</h3>
       <span class="more" id="h-rep-tag">未解锁</span></div>
     <div id="h-report-body"></div>
   </div>
@@ -418,9 +418,9 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
   <div class="card">
     <div class="card-hd"><h3>本月手工账</h3><span class="more" data-go="book">查看流水 ›</span></div>
     <div class="stat-row">
-      <div><span class="lbl">收入</span><span class="num green" id="h-in">¥0</span></div>
+      <div><span class="lbl">销售额</span><span class="num green" id="h-in">¥0</span></div>
       <div><span class="lbl">支出</span><span class="num" id="h-out">¥0</span></div>
-      <div><span class="lbl">赚了</span><span class="num" id="h-net">¥0</span></div>
+      <div><span class="lbl">已收款</span><span class="num" id="h-net">¥0</span></div>
     </div>
     <div class="quota">
       <div class="quota-hd"><span>本季已记录销售发票</span><b id="h-qtxt">¥0</b></div>
@@ -433,7 +433,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
   <div class="card">
     <div class="card-hd"><h3>老板看板</h3><span class="more" data-go="board">看详细 ›</span></div>
     <div class="stat4">
-      <div><span class="lbl">毛利率</span><span class="num sm orange" id="h-rate">0%</span></div>
+      <div><span class="lbl">收支差额</span><span class="num sm orange" id="h-rate">¥0</span></div>
       <div><span class="lbl">最大客户</span><span class="num sm" id="h-top">—</span></div>
       <div><span class="lbl">无票支出</span><span class="num sm red" id="h-noinv">¥0</span></div>
       <div><span class="lbl">资料已备</span><span class="num sm" id="h-score">0/4</span></div>
@@ -483,14 +483,18 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
   <div class="card">
     <div class="card-hd"><h3 id="b-title">本月概览</h3><span class="more" id="b-export">导出 CSV</span></div>
     <div class="stat-row">
-      <div><span class="lbl">收入</span><span class="num green" id="b-in">¥0</span></div>
-      <div><span class="lbl">支出</span><span class="num" id="b-out">¥0</span></div>
-      <div><span class="lbl">赚了</span><span class="num" id="b-net">¥0</span></div>
+      <div><span class="lbl">销售额</span><span class="num green" id="b-in">¥0</span></div>
+      <div><span class="lbl">已收款</span><span class="num" id="b-out">¥0</span></div>
+      <div><span class="lbl">待收款</span><span class="num" id="b-net">¥0</span></div>
     </div>
   </div>
   <div class="grid2">
     <div class="big-btn" data-go="say"><i>🎙</i><b>一句话记账</b><span>说人话就能记</span></div>
     <div class="big-btn" data-go="bookadd" data-type="out"><i>✍️</i><b>手动记一笔</b><span>按表单填写</span></div>
+  </div>
+  <div class="card" id="b-orders-card">
+    <div class="card-hd"><h3>定制订单</h3><span class="more" id="order-add">＋ 新建订单</span></div>
+    <div id="b-orders"></div>
   </div>
   <div class="card">
     <p class="q">流水明细</p>
@@ -600,11 +604,12 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
   <div class="card">
     <div class="card-hd"><h3 id="bd-title">本月经营</h3></div>
     <div class="stat4">
-      <div><span class="lbl">收入</span><span class="num sm green" id="bd-in">¥0</span></div>
-      <div><span class="lbl">支出</span><span class="num sm" id="bd-out">¥0</span></div>
-      <div><span class="lbl">毛利</span><span class="num sm" id="bd-net">¥0</span></div>
-      <div><span class="lbl">毛利率</span><span class="num sm orange" id="bd-rate">0%</span></div>
+      <div data-board-filter="sales"><span class="lbl">销售额</span><span class="num sm green" id="bd-in">¥0</span></div>
+      <div data-board-filter="received"><span class="lbl">已收款</span><span class="num sm" id="bd-out">¥0</span></div>
+      <div data-board-filter="pending"><span class="lbl">待收款</span><span class="num sm" id="bd-net">¥0</span></div>
+      <div data-board-filter="overdue"><span class="lbl">已逾期</span><span class="num sm orange" id="bd-rate">¥0</span></div>
     </div>
+    <div id="bd-unsettled" style="font-size:12px;color:var(--t2);margin-top:10px"></div>
   </div>
   <div class="card" id="bd-sub">
     <div class="card-hd"><h3>潮州非遗政策线索</h3><span class="more" data-go="subsidy">查看 ›</span></div>
@@ -654,7 +659,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div style="background:var(--accent-l);border-radius:12px;padding:12px">
       <b style="font-size:14px">找个懂行的会计帮你把账理顺</b>
       <p style="margin:6px 0 10px;font-size:12.5px;color:var(--t2)">
-        免费对接本地代账会计 · 小规模代账低至 ¥200/月</p>
+        如需专业协助，请向本地有资质的会计服务方询价</p>
       <button class="btn-primary" style="width:100%;padding:11px;font-size:15px" data-go="agent">看看会计 ›</button>
     </div>
   </div>
@@ -667,7 +672,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
 
 <!-- ==================== 经营健康与信用报告 ==================== -->
 <section class="page" id="p-report">
-  <div class="nav-bar"><a data-back>‹</a><h2>经营健康与信用报告</h2>
+  <div class="nav-bar"><a data-back>‹</a><h2>经营记录报告</h2>
     <span class="act" id="rp-share">分享</span></div>
   <div id="report-body"></div>
 </section>
@@ -717,7 +722,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div class="card-hd"><h3>新花样，随手存一份</h3><span class="more" id="pf-cnt">0 件</span></div>
     <div class="alert warn" style="margin-bottom:14px">
       <b>存证 ≠ 版权登记</b>
-      <span>这里给作品生成带时间戳的创作凭证，证明「你在什么时候已经做出了这个花样」，日后被抄袭或被抢注时可作为<strong>在先证据</strong>。正式版权登记仍需向版权局申请。</span>
+      <span>这里仅保存作品照片、说明和记录时间，方便整理经营档案；不等于正式版权登记，也不自动证明权属。</span>
     </div>
     <div class="field"><label>作品名称</label>
       <input class="inp" id="pf-name" placeholder="如：牡丹富贵 · 釉下彩赏瓶"></div>
@@ -737,7 +742,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
       <input type="file" accept="image/*" id="pf-file" style="display:none">
     </label>
   </div>
-  <p class="note">作品照片与存证编号仅保存在本机浏览器，不会上传</p>
+  <p class="note">作品照片与编号仅保存在本机浏览器，不会上传；可关联多笔订单。</p>
 </section>
 
 <!-- ==================== 非遗政策雷达 ==================== -->
@@ -802,11 +807,11 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
 <div class="gtip" id="gtip"></div>
 <div class="toast" id="toast"></div>
 
+<script src="./business.js"></script>
 <script>
 /* ========================= 基础工具 ========================= */
 var STORE='szd_v1';
-/* 新用户数据版本：每次重构示例数据（如更换经营人设）都 +1，
-   旧版本缓存在本地的数据会自动重新铺最新 demo，避免「打开还是旧数据」 */
+/* 版本仅标记结构；读取旧版数据时保留原账并补齐新字段。 */
 var DATA_VER=3;
 var $=function(s){return document.querySelector(s)};
 function pad(n){return n<10?'0'+n:''+n}
@@ -814,6 +819,7 @@ function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate
 function md(s){return s?s.slice(5):''}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function money(n){return '¥'+Math.round(n).toLocaleString('zh-CN')}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function wan(n){return (n/10000).toFixed(1)+'万'}
 function today(){return ymd(new Date())}
 function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/86400000)}
@@ -856,7 +862,7 @@ function migrateCats(){
   S.records.forEach(function(r){if(CAT_MIGRATE[r.cat])r.cat=CAT_MIGRATE[r.cat]});
 }
 var S;
-function freshSeed(){return {ver:DATA_VER,profile:{name:'',type:'个体工商户',craft:'',heirLevel:'dist',tax:'',method:'',period:'',corpAccount:false,setup:today()},records:[],invoices:[],ar:[],proofs:[],meta:{guide:false,disclaimer:true,quiz:null,auth:null,firstEntry:false}}}
+function freshSeed(){return {ver:DATA_VER,profile:{name:'',type:'个体工商户',craft:'',heirLevel:'dist',tax:'',method:'',period:'',corpAccount:false,setup:today()},records:[],invoices:[],ar:[],proofs:[],orders:[],meta:{guide:false,disclaimer:true,quiz:null,auth:null,firstEntry:false}}}
 /* 「恢复演示数据」专用；新用户仍使用上面的空账本。 */
 function demoSeed(auth){
   var s=freshSeed(),now=new Date();
@@ -905,12 +911,13 @@ seed=freshSeed;
 try{
   var raw=localStorage.getItem(STORE);
   S=raw?JSON.parse(raw):seed();
-  // 新用户数据版本过低（旧缓存无 ver 或版本不符）→ 铺最新 demo，保证打开即新版人设
-  if(S.ver!==DATA_VER)S=seed();
+  if(!S||typeof S!=='object'||!Array.isArray(S.records))S=seed();
 }catch(e){S=seed()}
 migrateCats();
 if(!S.meta)S.meta={guide:false,disclaimer:false,quiz:null};
 if(!S.ar)S.ar=[];if(!S.proofs)S.proofs=[];
+if(!S.invoices)S.invoices=[];
+Biz.ensure(S);S.ver=DATA_VER;
 function save(){
   try{localStorage.setItem(STORE,JSON.stringify(S))}
   catch(e){toast('本机存储空间不足，建议删掉几张存证图')}
@@ -935,10 +942,12 @@ function stats(){
   return {in:i,out:o,net:i-o,count:rm.length,noInv:noInv,ratio:o?noInv/o:0,
     rate:i?(i-o)/i:0};
 }
+function allAr(){return S.ar.concat(Biz.arEntries(S))}
 function arStat(){
-  var rec=S.ar.filter(function(a){return a.kind==='rec'&&!a.paid});
-  var pay=S.ar.filter(function(a){return a.kind==='pay'&&!a.paid});
-  var late=S.ar.filter(function(a){return !a.paid&&daysBetween(a.due,today())>0});
+  var entries=allAr();
+  var rec=entries.filter(function(a){return a.kind==='rec'&&!a.paid});
+  var pay=entries.filter(function(a){return a.kind==='pay'&&!a.paid});
+  var late=entries.filter(function(a){return !a.paid&&a.due&&daysBetween(a.due,today())>0});
   return {rec:sum(rec),pay:sum(pay),late:sum(late),recN:rec.length,payN:pay.length,lateN:late.length,lateList:late};
 }
 function overdueDays(a){return Math.max(0,daysBetween(a.due,today()))}
@@ -1250,6 +1259,7 @@ function parseSay(txt){
   OUT_STRONG.forEach(function(w){if(t.indexOf(w)>=0)scoreOut+=3});
   IN_WEAK.forEach(function(w){if(t.indexOf(w)>=0)scoreIn+=1});
   OUT_WEAK.forEach(function(w){if(t.indexOf(w)>=0)scoreOut+=1});
+  if(/(?:交付|售出|销售|卖|发货|出货)/.test(t)&&/(?:已收|实收|收款|收到|微信收|现金收)/.test(t))scoreIn+=6;
   if(scoreIn>scoreOut&&scoreIn>0)r.type='in';
   else if(scoreOut>scoreIn&&scoreOut>0)r.type='out';
   else if(r.amt)r.type='out';
@@ -1285,7 +1295,7 @@ function renderHome(){
   $('#h-count').textContent=st.count;
   $('#h-in').textContent=money(st.in);
   $('#h-out').textContent=money(st.out);
-  $('#h-net').textContent=money(st.net);
+  $('#h-net').textContent=money(Biz.metrics(S,thisMonth(),today()).received);
   $('#h-qtxt').textContent=money(c.qs);
   $('#h-bar').style.width='0%';
   $('#h-barw').className='bar';
@@ -1298,7 +1308,7 @@ function renderHome(){
   $('#h-ar-late').textContent=money(la.late);$('#h-ar-laten').textContent=la.lateN+' 笔';
   var late=la.lateList.slice().sort(function(a,b){return overdueDays(b)-overdueDays(a)}).slice(0,2);
   $('#h-ar-list').innerHTML=late.length?late.map(function(a){
-    return '<div class="ar-item late" data-ar="'+a.id+'"><div class="ar-hd">'+
+    return '<div class="ar-item late" '+(a.orderId?'data-order="'+a.orderId+'"':'data-ar="'+a.id+'"')+'><div class="ar-hd">'+
       '<div class="nm">'+(a.kind==='rec'?'应收':'应付')+' · '+a.party+
       '<span class="late-tag">逾期 '+overdueDays(a)+' 天</span></div>'+
       '<div class="am">'+money(a.amt)+'</div></div>'+
@@ -1309,7 +1319,8 @@ function renderHome(){
   else{dot.style.display='none';tdot.style.display='none'}
 
   // 看板摘要
-  $('#h-rate').textContent=Math.round(st.rate*100)+'%';
+  var cashMetric=Biz.metrics(S,thisMonth(),today());
+  $('#h-rate').textContent=money(cashMetric.received-cashMetric.expense);
   var cust=topCustomer();
   $('#h-top').textContent=cust?cust.name:'—';
   $('#h-noinv').textContent=money(st.noInv);
@@ -1351,7 +1362,7 @@ function renderHomeProof(){
       '<span style="font-size:18px">\uD83C\uDFA8</span>'+
       '<b style="font-size:14px">新花样出来了，先存一份</b></div>'+
       '<div style="font-size:12.5px;color:var(--t2);margin-top:6px;line-height:1.5">'+
-      '拍下手稿或成品，自动生成带时间戳的存证编号。万一被抄袭、被抢注，这就是你的在先证据。</div>'+
+      '拍下手稿或成品，保存作品照片和说明，方便以后查找与整理经营资料。</div>'+
       '<button class="btn-primary" style="width:100%;margin-top:12px;padding:10px;font-size:14px" '+
       'data-go="proof">拍作品存证 ›</button></div>';
     return;
@@ -1541,9 +1552,10 @@ function renderSay(){
 var filter='all';
 function renderBook(){
   var st=stats();
-  $('#b-in').textContent=money(st.in);
-  $('#b-out').textContent=money(st.out);
-  $('#b-net').textContent=money(st.net);
+  var bm=Biz.metrics(S,thisMonth(),today());
+  $('#b-in').textContent=money(bm.sales);
+  $('#b-out').textContent=money(bm.received);
+  $('#b-net').textContent=money(bm.pending);
   $('#b-title').textContent=thisMonth().replace('-','年')+'月概览';
   var list=S.records.slice().sort(function(a,b){return a.date<b.date?1:-1});
   if(filter==='in')list=list.filter(function(r){return r.type==='in'});
@@ -1552,9 +1564,10 @@ function renderBook(){
   $('#b-list').innerHTML=list.length?list.map(function(r){
     return '<div class="flow"><div class="fl-l"><b>'+r.cat+
       (r.inv?' <span class="tag b">有票</span>':' <span class="tag r">无票</span>')+
-      '</b><span>'+md(r.date)+(r.party?' · '+r.party:'')+(r.note?' · '+r.note:'')+'</span></div>'+
+      '</b><span>'+md(r.date)+(r.party?' · '+r.party:'')+(r.note?' · '+r.note:'')+'</span></div>'+ 
       '<div class="fl-r"><span class="'+(r.type==='in'?'in':'out')+'">'+
-      (r.type==='in'?'+':'-')+money(r.amt)+'</span><em data-del="'+r.id+'">✕</em></div></div>';
+      (r.type==='in'?'+':'-')+money(r.amt)+'</span>'+
+      (r.orderId?'<em data-order="'+r.orderId+'">详情</em>':'<em data-del="'+r.id+'">✕</em>')+'</div></div>';
   }).join(''):'<div class="empty">还没有记录，说一句话就能记</div>';
 
   var c=check(),n=new Date(),q=Math.floor(n.getMonth()/3)+1;
@@ -1585,7 +1598,7 @@ function renderAr(){
   $('#a-late-zone').innerHTML=late.length?('<div class="card">'+
     '<div class="card-hd"><h3>⏰ 该催了（'+late.length+' 笔 / '+money(la.late)+'）</h3></div>'+
     late.map(function(a){return arCard(a,true)}).join('')+'</div>'):'';
-  var list=S.ar.filter(function(a){
+  var list=allAr().filter(function(a){
     if(arKind==='done')return a.paid;
     return !a.paid&&a.kind===arKind;
   }).sort(function(a,b){return a.due<b.due?-1:1});
@@ -1594,21 +1607,28 @@ function renderAr(){
 }
 function arCard(a,isLate){
   var od=overdueDays(a);
+  if(a.orderId)return '<div class="ar-item'+(od>0&&!a.paid?' late':'')+'" data-order="'+a.orderId+'">'+
+    '<div class="ar-hd"><div class="nm">'+esc(a.party)+'<em class="em-rec">订单待收</em>'+ 
+    (od>0&&!a.paid?'<span class="late-tag">逾期 '+od+' 天</span>':'')+'</div><div class="am">'+money(a.paid?a.amt:a.balance)+'</div></div>'+ 
+    '<div class="ar-meta">'+esc(a.reason)+' · 约定 '+md(a.due)+(a.paid?' · 已结清':'')+'</div>'+ 
+    '<div class="ar-act"><div class="btn-sm ok" data-order="'+a.orderId+'">查看订单 / 记收款</div></div></div>';
   var btn=a.kind==='rec'?
     '<div class="btn-sm dun" data-dun="'+a.id+'">发催款</div>':
     '<div class="btn-sm ok" data-pay="'+a.id+'">安排付款</div>';
-  if(a.paid)btn='<div class="btn-sm gh" data-undone="'+a.id+'">撤销结清</div>';
+  if(a.paid)btn=(a.payments&&a.payments.length)?'':'<div class="btn-sm gh" data-undone="'+a.id+'">撤销结清</div>';
   return '<div class="ar-item'+(od>0&&!a.paid?' late':'')+'">'+
     '<div class="ar-hd"><div class="nm">'+a.party+
       '<em class="'+(a.kind==='rec'?'em-rec':'em-pay')+'">'+(a.kind==='rec'?'别人欠我':'我欠别人')+'</em>'+
       (od>0&&!a.paid?'<span class="late-tag">逾期 '+od+' 天</span>':'')+'</div>'+
-      '<div class="am">'+money(a.amt)+'</div></div>'+
+      '<div class="am">'+money(a.paid&&a.originalAmt!=null?a.originalAmt:a.amt)+'</div></div>'+ 
     '<div class="ar-meta">'+a.reason+' · 发生 '+md(a.date)+' · 约定 '+md(a.due)+
-      (a.paid?' · <span class="tag g">已结清</span>':'')+'</div>'+
+      (a.paid?' · <span class="tag g">已结清</span>':'')+
+      ((a.payments||[]).length?' · 已记 '+a.payments.length+' 次收款':'')+'</div>'+ 
     '<div class="ar-act">'+(isLate?btn:'')+
-      (a.paid?'<div class="btn-sm gh" data-ardel="'+a.id+'">删除</div>':
-        '<div class="btn-sm ok" data-done="'+a.id+'">标记结清</div>'+
-        '<div class="btn-sm gh" data-ardel="'+a.id+'">删除</div>')+'</div></div>';
+      (a.paid?((a.payments||[]).length?'':'<div class="btn-sm gh" data-ardel="'+a.id+'">删除</div>'):
+        (a.kind==='rec'?'<div class="btn-sm ok" data-legacy-receipt="'+a.id+'">记收款</div>':
+        '<div class="btn-sm ok" data-done="'+a.id+'">标记结清</div>')+ 
+        ((a.payments||[]).length?'':'<div class="btn-sm gh" data-ardel="'+a.id+'">删除</div>'))+'</div></div>';
 }
 function openDunning(a){
   $('#center').setAttribute('data-id',a.id||'');
@@ -1679,12 +1699,13 @@ function renderBoard(){
   $('#bd-rate').textContent=Math.round(st.rate*100)+'%';
   // 应收台账置顶（红 + 账龄分桶）
   (function(){
-    var recs=S.ar.filter(function(a){return a.kind==='rec'&&!a.paid})
+    var recs=allAr().filter(function(a){return a.kind==='rec'&&!a.paid})
       .sort(function(a,b){return a.due<b.due?-1:1});
     var ab=$('#bd-ar-body');
     if(!recs.length){ab.innerHTML='<div class="empty">暂时没人欠您钱，钱都收回来了</div>';return}
-    function bk(a){var d=overdueDays(a);return d>60?2:d>30?1:0}
-    var groups=[['30 天内','var(--warn)',0],['30–60 天','#E5762B',1],['60 天以上','var(--danger)',2]];
+    function bk(a){var d=overdueDays(a);return d<=0?-1:d>60?2:d>30?1:0}
+    var groups=[['未到期','var(--primary)',-1],['已逾期 30 天内','var(--warn)',0],
+      ['已逾期 30–60 天','#E5762B',1],['已逾期 60 天以上','var(--danger)',2]];
     var html='';
     groups.forEach(function(g){
       var items=recs.filter(function(a){return bk(a)===g[2]});
@@ -1699,7 +1720,7 @@ function renderBoard(){
             '<span style="font-size:11px;color:var(--t3);margin-left:6px">还有 '+daysBetween(today(),a.due)+' 天</span>')+
           '</div><div class="am">'+money(a.amt)+'</div></div>'+
           '<div class="ar-meta">'+a.reason+' · 约定 '+md(a.due)+'</div>'+
-          '<div class="ar-act"><div class="btn-sm dun" data-dun="'+a.id+'">发催款</div></div></div>';
+          '<div class="ar-act"><div class="btn-sm dun" '+(a.orderId?'data-order-dun="'+a.orderId+'"':'data-dun="'+a.id+'"')+'>发催款</div></div></div>';
       });
     });
     ab.innerHTML=html;
@@ -1894,7 +1915,7 @@ function quizResult(){
   if(pain.indexOf(3)>=0)
     plan.push({t:'经营资料小体检',d:'看看已经备好哪些资料，并核对申报提醒',page:'board'});
   if(pain.indexOf(4)>=0)
-    plan.push({t:'作品存证',d:'新花样随手拍，生成带时间戳的在先证据',page:'proof'});
+    plan.push({t:'作品存证',d:'新花样随手拍，整理作品照片与说明',page:'proof'});
   else plan.push({t:'作品存证',d:'作品拍一张，自动编号、带时间戳',page:'proof'});
   if(!useCorp&&usePersonal)
     plan.push({t:'建议开对公账户',d:'个人码收经营款易被认定账外收入',page:'mine'});
@@ -2014,19 +2035,20 @@ function initRec(){
   btn.addEventListener('touchend',up,{passive:false});
 }
 function proofCertText(p){
-  return '【数字资产存证凭证】\n'+
+  return '【作品资料记录】\n'+
     '作品名称：'+(p.name||'未命名作品')+'\n'+
     '作品编号：'+p.no+'\n'+
     '工艺类别：'+p.cat+'\n'+
     '存证时间：'+p.ts+'\n'+
     '校验码：'+p.hash+'\n'+
     (p.audio?'附语音说明：有（创作者口述工艺与来历）\n':'')+
-    '—— 由穗账达生成，证明持有人于上述时间已完成该作品创作，\n'+
-    '可作为在先证据使用。正式著作权登记请向版权局申请。';
+    '—— 由穗账达在本机保存，仅供整理作品和经营档案。\n'+
+    '这不是正式版权登记，也不自动证明作品权属。';
 }
 function openProofCert(id){
   var p=S.proofs.filter(function(x){return x.id===id})[0];if(!p)return;
-  openCenter('<h4>数字资产存证凭证</h4>'+
+  var linked=S.orders.filter(function(o){return o.proofIds.indexOf(p.id)>=0});
+  openCenter('<h4>作品资料</h4>'+ 
     '<div class="scrollbox"><div style="text-align:center;margin-bottom:12px">'+
     '<img src="'+p.img+'" style="max-width:100%;max-height:200px;border-radius:10px"></div>'+
     [['作品名称',p.name||'未命名作品'],['作品编号',p.no],['工艺类别',p.cat],
@@ -2037,8 +2059,12 @@ function openProofCert(id){
       'color:var(--t2);margin-bottom:6px">创作者语音说明</div>'+
       '<audio controls src="'+p.audio+'" style="width:100%"></audio></div>':'')+
     '<div style="font-size:11.5px;color:var(--t3);margin-top:10px;line-height:1.6">'+
-    '本凭证记录作品的创作时间与内容摘要，可作为在先完成的证据，不等同于著作权登记。</div></div>'+
-    '<button class="btn-primary" style="width:100%;margin-top:12px" id="pf-copycert">复制存证凭证</button>');
+    '本机作品资料不等于正式版权登记，也不自动证明权属。</div>'+ 
+    '<p class="q" style="margin-top:12px">关联订单</p>'+ 
+    (linked.length?linked.map(function(o){return '<div class="row" data-order="'+o.id+'">'+esc(o.no)+' · '+esc(o.item)+' ›</div>'}).join(''):'<div class="empty">暂未关联订单</div>')+
+    '</div><button class="btn-primary" style="width:100%;margin-top:12px" id="pf-link-order">关联订单</button>'+ 
+    '<button class="btn-ghost" style="width:100%" id="pf-copycert">复制作品资料</button>');
+  $('#pf-link-order').onclick=function(){openProofOrders(p)};
   $('#pf-copycert').onclick=function(){copyText(proofCertText(p),'存证凭证已复制')};
 }
 
@@ -2054,16 +2080,13 @@ function renderMine(){
     ['往来挂账',arStat().recN+arStat().payN+' 笔未结']
   ].map(function(x){return '<div class="row"><div class="row-l"><b>'+x[0]+'</b></div>'+
     '<div class="row-r">'+x[1]+'</div></div>'}).join('')+'<div class="row" data-setup-edit><div class="row-l"><b>开业日期设置</b><span>修改前会提示影响范围</span></div><div class="row-r"><span class="chev">›</span></div></div>';
-  var rd=reportData();
   $('#m-set').innerHTML='<div class="row" data-account-setting><div class="row-l"><b>账号与登录</b><span>'+(S.meta.auth?'已登录 · '+maskPhone(S.meta.auth.phone):'未登录')+'</span></div><div class="row-r"><span class="chev">›</span></div></div>'+[
     ['经营资料小体检','已备 '+check().done+'/4 项'],
     ['经营身份自测',S.meta.quiz?'已测：'+(S.meta.quiz==='food'?'食品类非遗':S.meta.quiz==='craft'?'非食品类非遗':'其他手工作坊'):'首次记账后匹配行业'],
     ['新手引导','重新看一遍'],
     ['免责声明','重要，请阅读'],
     ['对公账户',p.corpAccount?'已开立':'未开立'],
-    ['经营信用报告',rd.months>=3?
-      ('信用 '+rd.credit.score+' 分 · 预估额度 '+money(rd.loan)):
-      ('已记 '+rd.months+' 个月，记满 3 个月解锁')]
+    ['经营记录报告','根据本机账本、订单与收款整理']
   ].map(function(x,i){return '<div class="row" data-set="'+i+'">'+
     '<div class="row-l"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>'+
     '<div class="row-r"><span class="chev">›</span></div></div>'}).join('');
@@ -2090,7 +2113,163 @@ function renderSubsidy(){
     '<a href="https://www.chaozhou.gov.cn/" target="_blank" rel="noopener noreferrer">潮州市人民政府官网 ›</a><br>'+ 
     '<a href="https://guangdong.chinatax.gov.cn/" target="_blank" rel="noopener noreferrer">广东省税务局官网 ›</a></div>';
 }
-function renderAll(){renderHome();renderBook();renderAr();renderBoard();renderSubsidy();renderMine();renderProof();renderReport()}
+function orderById(id){return S.orders.filter(function(o){return o.id===id})[0]}
+function renderOrders(){
+  var list=S.orders.slice().sort(function(a,b){return a.date<b.date?1:-1});
+  $('#b-orders').innerHTML=list.length?list.map(function(o){
+    var state=Biz.status(o,today()),received=Biz.sumPayments(o),left=Biz.balance(o);
+    return '<div class="flow" data-order="'+o.id+'" style="cursor:pointer">'+
+      '<div class="fl-l"><b>'+esc(o.item)+' <span class="tag b">'+state+'</span></b>'+ 
+      '<span>'+esc(o.no)+' · '+esc(o.party)+' · '+esc(o.status)+'</span>'+ 
+      '<span>订单 '+money(o.total)+' · 已收 '+money(received)+' · 待收 '+money(o.status==='已取消'?0:left)+'</span></div>'+ 
+      '<div class="fl-r"><span class="in">详情 ›</span></div></div>';
+  }).join(''):'<div class="empty">还没有定制订单。普通现款生意继续用上方记账入口。</div>';
+  var m=Biz.metrics(S,thisMonth(),today());
+  $('#bd-in').textContent=money(m.sales);$('#bd-out').textContent=money(m.received);
+  $('#bd-net').textContent=money(m.pending);$('#bd-rate').textContent=money(m.overdue);
+  $('#bd-unsettled').textContent='未结清订单 '+m.unsettled+' 笔 · 点击上方数字查看对应记录';
+}
+function orderFields(o){
+  o=o||{};var crafts=['潮瓷','手拉壶','潮绣','传统食品','木雕','其他'];
+  var states=['待制作','制作中','待交付','已交付'];
+  return '<div class="scrollbox">'+
+    '<div class="field"><label>订单编号</label><input class="inp" id="od-no" value="'+esc(o.no||('CZ-'+Date.now()))+'"></div>'+ 
+    '<div class="field"><label>客户名称 *</label><input class="inp" id="od-party" value="'+esc(o.party||'')+'" placeholder="如：陶瓷厂"></div>'+ 
+    '<div class="field"><label>联系方式（选填）</label><input class="inp" id="od-phone" value="'+esc(o.phone||'')+'"></div>'+ 
+    '<div class="field"><label>商品或作品 *</label><input class="inp" id="od-item" value="'+esc(o.item||'')+'" placeholder="如：腐乳饼礼盒"></div>'+ 
+    '<div class="field"><label>经营类型</label><select class="inp" id="od-craft">'+crafts.map(function(c){return '<option'+(c===o.craft?' selected':'')+'>'+c+'</option>'}).join('')+'</select></div>'+ 
+    '<div class="field"><label>订单金额 *</label><input class="inp" type="number" min="0.01" step="0.01" id="od-total" value="'+esc(o.total||'')+'"></div>'+ 
+    '<div class="field"><label>下单日期 *</label><input class="inp" type="date" id="od-date" value="'+esc(o.date||today())+'"></div>'+ 
+    '<div class="field"><label>预计交付日期（选填）</label><input class="inp" type="date" id="od-delivery" value="'+esc(o.deliveryDate||'')+'"></div>'+ 
+    '<div class="field"><label>尾款预计收款日</label><input class="inp" type="date" id="od-due" value="'+esc(o.due||ymd(new Date(Date.now()+30*86400000)))+'"></div>'+ 
+    '<div class="field"><label>订单状态（由你手动更新）</label><select class="inp" id="od-status">'+states.map(function(c){return '<option'+(c===o.status?' selected':'')+'>'+c+'</option>'}).join('')+'</select></div>'+ 
+    '<div class="field"><label>备注（选填）</label><input class="inp" id="od-note" value="'+esc(o.note||'')+'"></div></div>';
+}
+function readOrderFields(){return {no:$('#od-no').value.trim(),party:$('#od-party').value.trim(),phone:$('#od-phone').value.trim(),
+  item:$('#od-item').value.trim(),craft:$('#od-craft').value,total:$('#od-total').value,date:$('#od-date').value,
+  deliveryDate:$('#od-delivery').value,due:$('#od-due').value,status:$('#od-status').value,note:$('#od-note').value.trim()}}
+function openOrderForm(o){
+  openCenter('<h4>'+(o?'修改订单':'新建定制订单')+'</h4>'+orderFields(o)+
+    '<button class="btn-primary" style="width:100%;margin-top:12px" id="od-save">保存订单</button>');
+  $('#od-save').onclick=function(){try{
+    var x=readOrderFields(),saved=o?Biz.editOrder(S,o,x):Biz.createOrder(S,x);
+    save();renderAll();openOrderDetails(saved.id);toast('订单已保存');
+  }catch(e){toast(e.message)}};
+}
+function openPaymentForm(o){
+  openCenter('<h4>记一笔收款</h4><p>'+esc(o.party)+' · '+esc(o.item)+'<br>还可收 '+money(Biz.balance(o))+'</p>'+ 
+    '<div class="field"><label>本次实收金额 *</label><input class="inp" id="pay-amount" type="number" min="0.01" step="0.01"></div>'+ 
+    '<div class="field"><label>收款日期 *</label><input class="inp" id="pay-date" type="date" value="'+today()+'"></div>'+ 
+    '<div class="field"><label>收款方式</label><select class="inp" id="pay-method"><option>微信</option><option>支付宝</option><option>现金</option><option>银行转账</option><option>其他</option></select></div>'+ 
+    '<div class="field"><label>备注（选填）</label><input class="inp" id="pay-note" placeholder="如：第二次收款"></div>'+ 
+    '<button class="btn-primary" style="width:100%" id="pay-save">确认收款</button>');
+  $('#pay-save').onclick=function(){try{
+    Biz.addPayment(o,{amount:$('#pay-amount').value,date:$('#pay-date').value,
+      method:$('#pay-method').value,note:$('#pay-note').value});
+    save();renderAll();openOrderDetails(o.id);toast('收款已记录');
+  }catch(e){toast(e.message)}};
+}
+function openLegacyReceipt(a){
+  openCenter('<h4>记录实际收款</h4><p>'+esc(a.party)+' · 当前待收 '+money(a.amt)+'</p>'+ 
+    '<div class="field"><label>本次收款金额</label><input class="inp" id="lr-amt" type="number" min="0.01" step="0.01"></div>'+ 
+    '<div class="field"><label>收款日期</label><input class="inp" id="lr-date" type="date" value="'+today()+'"></div>'+ 
+    '<div class="field"><label>收款方式</label><select class="inp" id="lr-method"><option>微信</option><option>支付宝</option><option>现金</option><option>银行转账</option><option>其他</option></select></div>'+ 
+    '<div class="field"><label>备注</label><input class="inp" id="lr-note"></div>'+ 
+    '<button class="btn-primary" style="width:100%" id="lr-save">确认收款</button>');
+  $('#lr-save').onclick=function(){var v=Biz.amount($('#lr-amt').value);
+    if(!Number.isFinite(v)||v<=0){toast('收款金额必须大于零');return}
+    if(v>a.amt){toast('本次收款不能超过待收款');return}
+    if(!$('#lr-date').value){toast('请选择收款日期');return}
+    if(a.originalAmt==null)a.originalAmt=a.amt;
+    if(!Array.isArray(a.payments))a.payments=[];
+    a.payments.push({id:uid(),amount:v,date:$('#lr-date').value,method:$('#lr-method').value,note:$('#lr-note').value.trim()});
+    a.amt=Biz.amount(a.amt-v);a.paid=a.amt<=0;
+    save();renderAll();closeCenter();toast(a.paid?'已结清':'收款已记录');
+  };
+}
+function openOrderDunning(o){
+  var txt='您好，关于「'+o.item+'」订单（'+o.no+'），订单金额 '+money(o.total)+
+    '，目前已收 '+money(Biz.sumPayments(o))+'，尚有尾款 '+money(Biz.balance(o))+ 
+    '。烦请您方便时确认付款安排，谢谢。';
+  openCenter('<h4>可复制的尾款提醒</h4><div class="scrollbox">'+esc(txt)+'</div>'+ 
+    '<button class="btn-primary" style="width:100%;margin-top:12px" id="od-copy">复制话术</button>');
+  $('#od-copy').onclick=function(){copyText(txt,'话术已复制');closeCenter()};
+}
+function openOrderProofs(o){
+  if(!S.proofs.length){toast('请先到作品存证添加作品');return}
+  openCenter('<h4>关联作品</h4><p>一件作品可以关联多笔订单。</p><div class="scrollbox">'+
+    S.proofs.map(function(p){return '<label class="row"><input type="checkbox" data-link-proof="'+p.id+'"'+
+      (o.proofIds.indexOf(p.id)>=0?' checked':'')+'><span style="margin-left:10px">'+esc(p.name||'未命名作品')+'</span></label>'}).join('')+
+    '</div><button class="btn-primary" style="width:100%;margin-top:12px" id="od-link-save">保存关联</button>');
+  $('#od-link-save').onclick=function(){o.proofIds=[].map.call(document.querySelectorAll('[data-link-proof]:checked'),function(e){return e.getAttribute('data-link-proof')});
+    save();renderAll();openOrderDetails(o.id);toast('已更新作品关联')};
+}
+function openProofOrders(p){
+  if(!S.orders.length){toast('请先在账本里新建订单');return}
+  openCenter('<h4>为作品关联订单</h4><div class="scrollbox">'+S.orders.map(function(o){return '<label class="row">'+
+    '<input type="checkbox" data-link-order="'+o.id+'"'+(o.proofIds.indexOf(p.id)>=0?' checked':'')+'>'+ 
+    '<span style="margin-left:10px">'+esc(o.no)+' · '+esc(o.item)+'</span></label>'}).join('')+'</div>'+ 
+    '<button class="btn-primary" style="width:100%;margin-top:12px" id="pf-link-save">保存关联</button>');
+  $('#pf-link-save').onclick=function(){var selected=[].map.call(document.querySelectorAll('[data-link-order]:checked'),function(e){return e.getAttribute('data-link-order')});
+    S.orders.forEach(function(o){o.proofIds=o.proofIds.filter(function(id){return id!==p.id});if(selected.indexOf(o.id)>=0)o.proofIds.push(p.id)});
+    save();renderAll();openProofCert(p.id);toast('已更新订单关联')};
+}
+function openOrderDetails(id){
+  var o=orderById(id);if(!o)return;
+  var left=Biz.balance(o),state=Biz.status(o,today());
+  var linked=S.proofs.filter(function(p){return o.proofIds.indexOf(p.id)>=0});
+  openCenter('<h4>'+esc(o.item)+' <span class="tag b">'+state+'</span></h4><div class="scrollbox">'+ 
+    [['订单编号',o.no],['客户',o.party+(o.phone?' · '+o.phone:'')],['经营类型',o.craft],
+      ['下单日期',o.date],['预计交付',o.deliveryDate||'未填写'],['当前制作状态',o.status],
+      ['尾款日期',o.due||'未填写'],['备注',o.note||'—']].map(function(x){return '<div class="row"><b>'+x[0]+'</b><span>'+esc(x[1])+'</span></div>'}).join('')+
+    '<div class="stat-row" style="margin:12px 0"><div><span class="lbl">订单金额</span><b>'+money(o.total)+'</b></div>'+ 
+    '<div><span class="lbl">已收款</span><b>'+money(Biz.sumPayments(o))+'</b></div>'+ 
+    '<div><span class="lbl">待收款</span><b>'+money(o.status==='已取消'?0:left)+'</b></div></div>'+ 
+    '<p class="q">收款记录</p>'+(o.payments.length?o.payments.map(function(p){return '<div class="row"><b>'+money(p.amount)+'</b>'+ 
+      '<span>'+esc(p.date)+' · '+esc(p.method)+(p.note?' · '+esc(p.note):'')+'</span></div>'}).join(''):'<div class="empty">尚未收款</div>')+
+    '<p class="q" style="margin-top:12px">关联作品</p>'+(linked.length?linked.map(function(p){return '<div class="row" data-pfview="'+p.id+'">'+esc(p.name)+' ›</div>'}).join(''):'<div class="empty">还没有关联作品</div>')+
+    (o.status==='已取消'&&o.payments.length?'<div class="alert warn"><b>已取消，收款历史仍保留</b><span>请与客户核对退款或后续处理；本工具不会自动冲销真实收款。</span></div>':'')+
+    '</div><div class="order-actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">'+
+    (o.status!=='已取消'&&left>0?'<button class="btn-primary" id="od-pay">记收款</button><button class="btn-ghost" id="od-dun">复制催款话术</button>':'')+
+    (o.status!=='已取消'?'<button class="btn-ghost" id="od-edit">修改订单</button><button class="btn-ghost" id="od-link">关联作品</button><button class="btn-ghost" id="od-cancel">取消订单</button>':'')+
+    (!o.payments.length?'<button class="btn-ghost" id="od-delete">删除订单</button>':'')+'</div>');
+  if($('#od-pay'))$('#od-pay').onclick=function(){openPaymentForm(o)};
+  if($('#od-dun'))$('#od-dun').onclick=function(){openOrderDunning(o)};
+  if($('#od-edit'))$('#od-edit').onclick=function(){openOrderForm(o)};
+  if($('#od-link'))$('#od-link').onclick=function(){openOrderProofs(o)};
+  if($('#od-cancel'))$('#od-cancel').onclick=function(){
+    openCenter('<h4>确认取消订单</h4><p>订单将保留，已有收款历史不会删除。'+
+      (o.payments.length?'请另行与客户核对退款。':'')+'</p>'+ 
+      '<button class="btn-primary" style="width:100%" id="od-cancel-confirm">确认取消</button>'+ 
+      '<button class="btn-ghost" style="width:100%" id="od-back">返回订单</button>');
+    $('#od-cancel-confirm').onclick=function(){Biz.cancelOrder(S,o);save();renderAll();openOrderDetails(o.id)};
+    $('#od-back').onclick=function(){openOrderDetails(o.id)};
+  };
+  if($('#od-delete'))$('#od-delete').onclick=function(){
+    openCenter('<h4>确认删除订单</h4><p>这笔订单尚无收款，删除后无法恢复。</p>'+ 
+      '<button class="btn-primary" style="width:100%" id="od-delete-confirm">确认删除</button>');
+    $('#od-delete-confirm').onclick=function(){try{Biz.deleteOrder(S,o);save();renderAll();closeCenter();toast('订单已删除')}catch(e){toast(e.message)}};
+  };
+}
+function showBoardRecords(kind){
+  var title={sales:'本月销售记录',received:'本月实际收款',pending:'待收款记录',overdue:'已逾期记录'}[kind]||'对应记录';
+  var items=[];
+  if(kind==='sales')S.records.filter(function(r){return r.type==='in'&&monthOf(r.date)===thisMonth()}).forEach(function(r){
+    items.push({t:r.party||r.cat,d:r.date+' · '+(r.note||r.cat),amt:r.amt,orderId:r.orderId})});
+  if(kind==='received'){
+    S.records.filter(function(r){return r.type==='in'&&!r.orderId&&monthOf(r.date)===thisMonth()}).forEach(function(r){
+      var due=S.ar.filter(function(a){return a.sourceId===r.id&&a.kind==='rec'}).reduce(function(n,a){return n+(a.originalAmt!=null?a.originalAmt:a.paid?0:a.amt)},0);
+      if(r.amt>due)items.push({t:r.party||r.cat,d:r.date+' · 原有流水的初始已收部分',amt:r.amt-due})});
+    S.orders.forEach(function(o){o.payments.forEach(function(p){if(monthOf(p.date)===thisMonth())items.push({t:o.party+' · '+o.item,d:p.date+' · '+p.method,amt:p.amount,orderId:o.id})})});
+    S.ar.forEach(function(a){(a.payments||[]).forEach(function(p){if(monthOf(p.date)===thisMonth())items.push({t:a.party,d:p.date+' · '+p.method,amt:p.amount})})});
+  }
+  if(kind==='pending'||kind==='overdue'){
+    allAr().filter(function(a){return a.kind==='rec'&&!a.paid&&
+      (kind==='pending'||(a.due&&a.due<today()))}).forEach(function(a){items.push({t:a.party,d:(a.due||'未设到期日')+' · '+a.reason,amt:a.balance||a.amt,orderId:a.orderId})});
+  }
+  openCenter('<h4>'+title+'</h4><div class="scrollbox">'+(items.length?items.map(function(x){return '<div class="row" '+(x.orderId?'data-order="'+x.orderId+'"':'')+'><div class="row-l"><b>'+esc(x.t)+'</b><span>'+esc(x.d)+'</span></div><div class="row-r">'+money(x.amt)+(x.orderId?' ›':'')+'</div></div>'}).join(''):'<div class="empty">暂无对应记录</div>')+'</div>');
+}
+function renderAll(){renderHome();renderBook();renderAr();renderBoard();renderSubsidy();renderMine();renderProof();renderReport();renderOrders()}
 /* 一键生成非遗补贴申报材料包（按本机流水 / 往来 / 存证汇总，供参考申报） */
 function ensureTaxId(next){
   if(S.profile.tax){next();return}
@@ -2146,9 +2325,10 @@ function openSheet(html){
   $('#sheet').innerHTML=html;$('#sheet').classList.add('on');$('#mask').classList.add('on');
 }
 function closeSheet(){$('#sheet').classList.remove('on');$('#mask').classList.remove('on')}
-function openCenter(html){$('#center').innerHTML=html;$('#center').classList.add('on');$('#mask').classList.add('on')}
+function openCenter(html){$('#center').innerHTML='<button type="button" class="btn-ghost" id="center-close" aria-label="关闭弹窗" style="float:right;padding:4px 9px">×</button>'+html;$('#center').classList.add('on');$('#mask').classList.add('on')}
 function closeCenter(){$('#center').classList.remove('on');$('#mask').classList.remove('on')}
 $('#mask').addEventListener('click',function(){closeSheet();closeCenter()});
+$('#center').addEventListener('click',function(e){if(e.target.closest('#center-close'))closeCenter()});
 
 /* ========================= 交互 ========================= */
 document.addEventListener('click',function(e){
@@ -2164,10 +2344,22 @@ document.addEventListener('click',function(e){
   if(t.closest('[data-back]')){go(lastMain);return}
   var tb=t.closest('[data-tab]');
   if(tb){lastMain=tb.getAttribute('data-tab');go(lastMain);return}
+  if(t.closest('#order-add')){openOrderForm();return}
+  var bf=t.closest('[data-board-filter]');
+  if(bf){showBoardRecords(bf.getAttribute('data-board-filter'));return}
+  var odun=t.closest('[data-order-dun]');
+  if(odun){var doo=orderById(odun.getAttribute('data-order-dun'));if(doo)openOrderDunning(doo);return}
+  var oview=t.closest('[data-order]');
+  if(oview){openOrderDetails(oview.getAttribute('data-order'));return}
   // 流水删除
   var dl=t.closest('[data-del]');
-  if(dl){var rid=dl.getAttribute('data-del');S.records=S.records.filter(function(r){return r.id!==rid});S.ar=S.ar.filter(function(a){return a.sourceId!==rid});
-    save();renderAll();toast('已删除');return}
+  if(dl){var rid=dl.getAttribute('data-del'),record=S.records.filter(function(r){return r.id===rid})[0];
+    if(!record)return;
+    openCenter('<h4>确认删除流水</h4><p>将删除这笔 '+money(record.amt)+' 的记录和直接关联的旧往来、发票。删除后无法恢复。</p>'+ 
+      '<button class="btn-primary" style="width:100%" id="rec-del-confirm">确认删除</button>');
+    $('#rec-del-confirm').onclick=function(){S.records=S.records.filter(function(r){return r.id!==rid});
+      S.ar=S.ar.filter(function(a){return a.sourceId!==rid});S.invoices=S.invoices.filter(function(v){return v.sourceId!==rid});
+      save();renderAll();closeCenter();toast('已删除流水')};return}
   var di=t.closest('[data-idel]');
   if(di){S.invoices=S.invoices.filter(function(r){return r.id!==di.getAttribute('data-idel')});
     save();renderAll();toast('已删除');return}
@@ -2188,6 +2380,8 @@ document.addEventListener('click',function(e){
   if(dn){var a=S.ar.filter(function(x){return x.id===dn.getAttribute('data-dun')})[0];
     if(a)openDunning(a);
     return}
+  var lr=t.closest('[data-legacy-receipt]');
+  if(lr){var legacy=S.ar.filter(function(x){return x.id===lr.getAttribute('data-legacy-receipt')})[0];if(legacy)openLegacyReceipt(legacy);return}
   var py=t.closest('[data-pay]');
   if(py){var b=S.ar.filter(function(x){return x.id===py.getAttribute('data-pay')})[0];
     if(b)openCenter('<h4>安排付款</h4><p>'+b.party+' 的 '+money(b.amt)+
@@ -2207,11 +2401,13 @@ document.addEventListener('click',function(e){
     if(d2){d2.paid=false;save();renderAll();toast('已撤销结清')}return}
   var ad=t.closest('[data-ardel]');
   if(ad){var target=S.ar.filter(function(x){return x.id===ad.getAttribute('data-ardel')})[0];
+    if(!target)return;
+    if(target.sourceId){toast('这笔往来关联经营流水，请到账本处理原记录');return}
     openCenter('<h4>确认删除</h4><p>确定删除「'+target.party+'」的 '+money(target.amt)+' 这条往来记录吗？删除后无法恢复。</p>'+
       '<div style="display:flex;gap:10px;margin-top:16px">'+
       '<button class="btn-sm gh" style="flex:1;padding:12px" id="cnl-del">取消</button>'+
       '<button class="btn-sm dun" style="flex:1;padding:12px" id="ok-del">确认删除</button></div>');
-    $('#ok-del').onclick=function(){var aid=ad.getAttribute('data-ardel'),linked=S.ar.filter(function(x){return x.id===aid})[0];S.ar=S.ar.filter(function(x){return x.id!==aid});if(linked&&linked.sourceId){S.records=S.records.filter(function(r){return r.id!==linked.sourceId})}
+    $('#ok-del').onclick=function(){var aid=ad.getAttribute('data-ardel');S.ar=S.ar.filter(function(x){return x.id!==aid});
       save();renderAll();closeCenter();toast('已删除');};
     $('#cnl-del').onclick=closeCenter;return}
   var ak=t.closest('#a-seg button');
@@ -2223,8 +2419,12 @@ document.addEventListener('click',function(e){
   if(ai){go('ar');return}
   // 存证
   var pd=t.closest('[data-pfdel]');
-  if(pd){S.proofs=S.proofs.filter(function(x){return x.id!==pd.getAttribute('data-pfdel')});
-    save();renderProof();toast('已删除存证');return}
+  if(pd){var proofId=pd.getAttribute('data-pfdel');
+    openCenter('<h4>确认删除作品资料</h4><p>作品照片及订单关联会一并移除，订单和收款记录仍会保留。</p>'+ 
+      '<button class="btn-primary" style="width:100%" id="pf-del-confirm">确认删除</button>');
+    $('#pf-del-confirm').onclick=function(){S.proofs=S.proofs.filter(function(x){return x.id!==proofId});
+      S.orders.forEach(function(o){o.proofIds=o.proofIds.filter(function(id){return id!==proofId})});
+      save();renderAll();closeCenter();toast('已删除作品资料')};return}
   if(t.closest('#pf-add')){$('#pf-file').click();return}
   var pfv=t.closest('[data-pfview]');
   if(pfv){openProofCert(pfv.getAttribute('data-pfview'));return}
@@ -2245,7 +2445,7 @@ document.addEventListener('click',function(e){
   if(t.closest('#qz-back')){if(quizStep>0){quizStep--;renderQuiz()}return}
   // 信用报告
   if(t.closest('#rp-copy')||t.closest('#rp-share')){
-    copyText(reportSummaryText(),'报告摘要已复制，可发给银行或合伙人');return}
+    copyText(reportSummaryText(),'经营记录摘要已复制');return}
   if(t.closest('#qz-share')){copyText('推荐个记账工具「穗账达」——专门给非遗手艺人做的。'+
     '不用懂会计，说一句话就把手工账记清；谁欠你钱、什么时候该催，它替你盯着；'+
     '新花样拍张照就能带时间戳存证，还能匹配传承人补助这些政策。'+
@@ -2292,25 +2492,27 @@ document.addEventListener('click',function(e){
 
 /* ---- 一句话记账解析 ---- */
 function doParse(){
-  var r=parseSay($('#say-txt').value);
+  var spoken=$('#say-txt').value,r=parseSay(spoken);
   if(!r.ok){$('#say-result').innerHTML='<div class="card"><div class="alert warn">'+
     '<b>没听出金额</b><span>试着加上数字，比如「今天卖货收了3800」。也可以直接用下面的手动记账。</span></div></div>';return}
+  var parsed=r.type==='in'?Biz.parseSale(spoken,r,normalizeCnAmounts):null;
   var h='<div class="card"><div class="card-hd"><h3>我听懂了</h3>'+
     '<span class="tag '+(r.type==='in'?'g':'o')+'">'+(r.type==='in'?'收入':'支出')+'</span></div>'+
-    '<div class="amt-box" style="margin-bottom:14px"><s>¥</s>'+
-    '<input id="rs-amt" type="number" value="'+r.amt+'"></div>'+
-    '<div class="field"><label>分类 <span style="font-size:11px;color:var(--t3);font-weight:400">（国家统一一级科目）</span></label><div class="chips" id="rs-cats">'+
+    '<div class="field"><label>'+(r.type==='in'?'交易总金额':'支出金额')+'</label><div class="amt-box"><s>¥</s>'+ 
+    '<input id="rs-amt" type="number" min="0.01" step="0.01" value="'+(parsed?parsed.total:r.amt)+'"></div></div>'+ 
+    (r.type==='in'?'<div class="field"><label>实际已收款</label><input class="inp" id="rs-received" type="number" min="0" step="0.01" value="'+parsed.received+'"></div>'+ 
+    '<div class="field"><label>收款方式</label><select class="inp" id="rs-method">'+['微信','支付宝','现金','银行转账','未填写'].map(function(x){return '<option'+(x===parsed.method?' selected':'')+'>'+x+'</option>'}).join('')+'</select></div>'+ 
+    '<div class="alert ok" id="rs-balance"></div>':'')+
+    '<div class="field"><label>分类</label><div class="chips" id="rs-cats">'+
     CATS[r.type].map(function(c){
       return '<div class="chip'+(c===r.cat?' on':'')+'" data-c="'+c+'">'+c+
         '<span style="font-size:11px;opacity:.65;margin-left:3px">· '+CAT_LABELS[c]+'</span></div>'}).join('')+'</div></div>'+
-    '<div class="field"><label>往来对象</label><input class="inp" id="rs-party" value="'+r.party+'" placeholder="如：古城文创店"></div>'+
+    '<div class="field"><label>'+(r.type==='in'?'客户名称':'往来对象')+'</label><input class="inp" id="rs-party" value="'+esc(r.party)+'" placeholder="如：古城文创店"></div>'+ 
     '<div class="field"><label>日期</label><input class="inp" id="rs-date" type="date" value="'+r.date+'"></div>'+
-    '<div class="switch-row"><span>这笔是赊账<small>打开后自动记进往来台账，到期提醒你催</small></span>'+
-    '<div class="switch'+(r.credit?' on':'')+'" id="rs-sw"><i></i></div></div>'+
-    '<div class="field" id="rs-duef" style="margin-top:14px;display:'+(r.credit?'block':'none')+'">'+
-    '<label>约定收款日</label><input class="inp" id="rs-due" type="date" value="'+(r.due||r.date)+'"></div>'+
-    +(r.balance?('<div class="alert ok" style="margin-top:12px"><b>💰 今日入账 '+money(r.amt)+'（定金）</b>'+
-      '<span>另自动记一笔应收尾款 '+money(r.balance)+'（约定 '+md(r.due)+'），到期提醒您催。</span></div>'):'')+
+    '<div class="field"><label>交易摘要（可修改）</label><input class="inp" id="rs-summary" value="'+esc(r.type==='in'?spoken.split(/[，,。；;]/)[0]:r.note||'')+'"></div>'+ 
+    (r.type==='out'?'<div class="switch-row"><span>这笔是赊账</span><div class="switch'+(r.credit?' on':'')+'" id="rs-sw"><i></i></div></div>':'')+
+    '<div class="field" id="rs-duef" style="margin-top:14px;display:'+(r.type==='in'&&parsed.received<parsed.total||r.type==='out'&&r.credit?'block':'none')+'">'+
+    '<label>预计收款 / 付款日</label><input class="inp" id="rs-due" type="date" value="'+(r.due||ymd(new Date(Date.now()+30*86400000)))+'"></div>'+ 
     '<div class="switch-row" style="border-top:0">'+
     '<span>'+(r.type==='in'?'已开具发票':'已取得发票')+
     '<small>'+(r.type==='in'?'记录收入凭证':'保存支出凭证便于核对')+'</small></span>'+
@@ -2322,38 +2524,48 @@ function doParse(){
     var p=document.querySelectorAll('#rs-cats .chip');
     for(var j=0;j<p.length;j++)p[j].classList.remove('on');
     this.classList.add('on');r.cat=this.getAttribute('data-c')});
-  $('#rs-sw').addEventListener('click',function(){
-    this.classList.toggle('on');
-    $('#rs-duef').style.display=this.classList.contains('on')?'block':'none'});
+  if($('#rs-sw'))$('#rs-sw').addEventListener('click',function(){
+    this.classList.toggle('on');$('#rs-duef').style.display=this.classList.contains('on')?'block':'none'});
+  function refreshBalance(){if(!parsed)return;var total=Number($('#rs-amt').value),paid=Number($('#rs-received').value);
+    $('#rs-balance').textContent='销售金额 '+money(total||0)+' · 已收 '+money(paid||0)+' · 待收 '+money(Math.max(0,total-paid));
+    $('#rs-duef').style.display=paid<total?'block':'none'}
+  if(parsed){$('#rs-amt').addEventListener('input',refreshBalance);$('#rs-received').addEventListener('input',refreshBalance);refreshBalance()}
   $('#rs-inv').addEventListener('click',function(){this.classList.toggle('on')});
   $('#rs-save').addEventListener('click',function(){
-    var amt=parseFloat($('#rs-amt').value)||r.amt;
-    var party=$('#rs-party').value||'';
-    var date=$('#rs-date').value||r.date;
-    var cat=r.cat,hasInv=$('#rs-inv').classList.contains('on');
-    var rec={id:uid(),type:r.type,amt:amt,cat:cat,date:date,
-      note:r.note,inv:hasInv,party:party};
-    S.records.push(rec);
-    if(hasInv){
-      S.invoices.push({id:uid(),dir:r.type==='in'?'out':'in',amt:amt,
-        party:party||(r.type==='in'?'散客':'零星采购'),date:date,cat:'普通发票'});
-    }
-    var credit=$('#rs-sw').classList.contains('on'),arEntry=null;
-    if(credit){
-      if(r.balance){
-        arEntry={id:uid(),sourceId:rec.id,kind:'rec',party:party||'客户',amt:r.balance,
-          reason:'尾款',date:date,due:$('#rs-due').value||date,paid:false};
+    var amt=Number($('#rs-amt').value),party=$('#rs-party').value.trim(),date=$('#rs-date').value;
+    var cat=r.cat,hasInv=$('#rs-inv').classList.contains('on'),summary=$('#rs-summary').value.trim();
+    if(!Number.isFinite(amt)||amt<=0){toast('交易金额必须大于零');return}
+    if(!date){toast('请选择交易日期');return}
+    var rec=null,arEntry=null;
+    if(r.type==='in'){
+      var received=Number($('#rs-received').value);
+      if(!Number.isFinite(received)||received<0||received>amt){toast('已收款须在 0 到订单金额之间');return}
+      if(received<amt){
+        if(!party){toast('有待收款时请填写客户名称');return}
+        try{
+          var itemMatch=normalizeCnAmounts(summary).match(/(?:交付|卖出|卖给|卖了|销售)[^\d]*?\d+(?:\.\d+)?(?:元|块)?(.+)$/);
+          var itemName=itemMatch&&itemMatch[1].trim()||summary||cat;
+          var o=Biz.createOrder(S,{party:party,item:itemName,craft:S.profile.craft||'其他',
+            total:amt,date:date,deliveryDate:date,due:$('#rs-due').value,status:'已交付',note:itemName===summary?'':summary});
+          if(received>0)Biz.addPayment(o,{amount:received,date:date,method:$('#rs-method').value,note:'首次收款'});
+          rec=S.records.filter(function(x){return x.id===o.recordId})[0];rec.cat=cat;rec.inv=hasInv;
+        }catch(e){toast(e.message);return}
       }else{
-        arEntry={id:uid(),sourceId:rec.id,kind:r.type==='in'?'rec':'pay',party:party||(r.type==='in'?'客户':'供应商'),
-          amt:amt,reason:cat,date:date,due:$('#rs-due').value||date,paid:false};
+        rec={id:uid(),type:'in',amt:amt,cat:cat,date:date,note:summary,inv:hasInv,party:party};S.records.push(rec);
       }
-      S.ar.push(arEntry);
+    }else{
+      rec={id:uid(),type:'out',amt:amt,cat:cat,date:date,note:summary,inv:hasInv,party:party};S.records.push(rec);
+      if($('#rs-sw').classList.contains('on')){arEntry={id:uid(),sourceId:rec.id,kind:'pay',party:party||'供应商',amt:amt,
+        reason:cat,date:date,due:$('#rs-due').value||date,paid:false};S.ar.push(arEntry)}
+    }
+    if(hasInv){
+      S.invoices.push({id:uid(),sourceId:rec.id,dir:r.type==='in'?'out':'in',amt:amt,
+        party:party||(r.type==='in'?'散客':'零星采购'),date:date,cat:'普通发票'});
     }
     save();renderAll();
     if(afterRecordSaved(rec))return;
     $('#say-txt').value='';$('#say-result').innerHTML='';
-    if(r.balance&&arEntry){showSaveConfirm(rec,arEntry)}
-    else if(!firePolicyTip(rec)){go('book')}   /* 命中政策线索则先弹提示，否则直接回账本 */
+    if(!firePolicyTip(rec))go('book');
   });
 }
 $('#say-parse').addEventListener('click',doParse);
@@ -2372,11 +2584,11 @@ function showSaveConfirm(rec,ar){
       (ar.party||'客户')+' · 尾款 '+money(ar.amt)+' 元（'+md(ar.due)+'）</b></div>':'')+
     '</div>'+
     '<div class="alert warn" style="margin-top:12px"><b>🏺 守好手艺，也守好成本</b>'+
-    '<span>老板，这把壶的泥料（朱泥）成本有记录吗？手拉壶的纯手工制作工时费，也是您可以抵扣的成本哦。'+
-    '另外，拍了壶的照片可以存证，防止被抄袭！</span></div>'+
+    '<span>老板，这把壶的泥料（朱泥）成本有记录吗？手工制作费用也可以记进经营账。涉税处理请与会计核对。'+
+    '另外，拍下壶的照片可留作作品资料。</span></div>'+ 
     '<div style="margin-top:12px;padding:12px;background:var(--accent-l);border-radius:12px">'+
     '<div style="font-size:13px;color:var(--t2);line-height:1.6">📸 <b style="color:var(--accent)">顺便存个证</b>：'+
-    '拍下这'+cnt+'把壶的照片，生成带时间戳的存证，保护您的原创版权。</div>'+
+    '拍下这'+cnt+'把壶的照片，留存作品资料和创作说明。</div>'+ 
     '<button class="btn-primary" style="width:100%;margin-top:10px;padding:11px" id="sc-proof">一键存证 ›</button>'+
     '</div></div>'+
     '<button class="btn-ghost" style="width:100%" id="sc-done">先到这儿，看账本 ›</button>');
@@ -2421,11 +2633,11 @@ $('#ba-save').addEventListener('click',function(){
     note:$('#ba-note').value,inv:has,party:$('#ba-party').value};
   S.records.push(rec);
   if(has&&curType==='out'){
-    S.invoices.push({id:uid(),dir:'in',amt:amt,party:$('#ba-party').value||'零星采购',
+    S.invoices.push({id:uid(),sourceId:rec.id,dir:'in',amt:amt,party:$('#ba-party').value||'零星采购',
       date:date,cat:'普通发票'});
   }
   if(has&&curType==='in'){
-    S.invoices.push({id:uid(),dir:'out',amt:amt,party:$('#ba-party').value||'散客',
+    S.invoices.push({id:uid(),sourceId:rec.id,dir:'out',amt:amt,party:$('#ba-party').value||'散客',
       date:date,cat:'普通发票'});
   }
   save();renderAll();if(afterRecordSaved(rec))return;toast(curType==='out'?'支出已入账':'收入已入账');
@@ -2519,14 +2731,23 @@ $('#pf-file').addEventListener('change',function(e){
 
 /* ---- 导出 ---- */
 function exportCSV(){
-  var rows=[['日期','类型','分类','金额','有无发票','往来对象','备注']];
+  var rows=[['经营流水'],['流水ID','订单ID','日期','类型','分类','交易金额','有无发票','往来对象','备注']];
   S.records.slice().sort(function(a,b){return a.date<b.date?1:-1}).forEach(function(r){
-    rows.push([r.date,r.type==='in'?'收入':'支出',r.cat,r.amt,r.inv?'有票':'无票',r.party||'',r.note||''])});
+    rows.push([r.id,r.orderId||'',r.date,r.type==='in'?'收入':'支出',r.cat,r.amt,r.inv?'有票':'无票',r.party||'',r.note||''])});
   rows.push([]);rows.push(['往来台账']);
-  rows.push(['类型','对方','金额','事由','发生日','约定日','状态']);
+  rows.push(['往来ID','来源流水ID','类型','对方','待收/待付金额','事由','发生日','约定日','状态']);
   S.ar.forEach(function(a){
-    rows.push([a.kind==='rec'?'别人欠我':'我欠别人',a.party,a.amt,a.reason,a.date,a.due,
+    rows.push([a.id,a.sourceId||'',a.kind==='rec'?'别人欠我':'我欠别人',a.party,a.amt,a.reason,a.date,a.due,
       a.paid?'已结清':(overdueDays(a)>0?'逾期'+overdueDays(a)+'天':'未结')])});
+  rows.push([]);rows.push(['定制订单']);
+  rows.push(['订单ID','订单编号','客户','联系方式','商品作品','经营类型','订单金额','累计已收','剩余应收','下单日期','预计交付','尾款日期','制作状态','收款状态','备注','关联作品ID']);
+  S.orders.forEach(function(o){rows.push([o.id,o.no,o.party,o.phone,o.item,o.craft,o.total,
+    Biz.sumPayments(o),o.status==='已取消'?0:Biz.balance(o),o.date,o.deliveryDate,o.due,o.status,
+    Biz.status(o,today()),o.note,o.proofIds.join('|')])});
+  rows.push([]);rows.push(['实际收款']);
+  rows.push(['收款ID','订单ID或往来ID','收款日期','金额','方式','备注']);
+  S.orders.forEach(function(o){o.payments.forEach(function(p){rows.push([p.id,o.id,p.date,p.amount,p.method,p.note])})});
+  S.ar.forEach(function(a){(a.payments||[]).forEach(function(p){rows.push([p.id,a.id,p.date,p.amount,p.method,p.note])})});
   var csv='\ufeff'+rows.map(function(r){return r.map(function(c){
     return '"'+String(c).replace(/"/g,'""')+'"'}).join(',')}).join('\n');
   var a=document.createElement('a');
@@ -2549,7 +2770,7 @@ function fromB64(s){return decodeURIComponent(escape(atob(s)))}
 function backupPayload(){
   return JSON.stringify({v:1,app:'穗账达',ts:new Date().toISOString(),
     profile:S.profile,records:S.records,invoices:S.invoices,ar:S.ar,
-    proofs:S.proofs,meta:S.meta});
+    proofs:S.proofs,orders:S.orders,meta:S.meta});
 }
 function doBackup(pwd){
   var data=backupPayload();
@@ -2626,7 +2847,7 @@ function applyBackup(o){
   if(!o.records)return;
   S.profile=o.profile||S.profile;
   S.records=o.records;S.invoices=o.invoices||[];S.ar=o.ar||[];
-  S.proofs=o.proofs||[];S.meta=o.meta||S.meta;
+  S.proofs=o.proofs||[];S.orders=o.orders||[];Biz.ensure(S);S.meta=o.meta||S.meta;
   if(!S.meta)S.meta={guide:true,disclaimer:true,quiz:null,tips:{}};
   save();renderAll();renderProofCats();closeCenter();
   toast('已从备份恢复 '+S.records.length+' 笔账');
@@ -2691,7 +2912,7 @@ var GUIDE=[
   {page:'ar',sel:'#p-ar .ar-top',t:'谁欠你钱，一眼看清',
    d:'应收应付分开记，到期自动标红，还能一键生成催款话术。这是很多记账工具都没做到的刚需。'},
   {page:'home',sel:'#h-proof-card',t:'新花样，先存一份',
-   d:'拍下手稿或成品，自动生成带时间戳的作品编号。被抄袭、被抢注时，这就是你的在先证据。'},
+   d:'拍下手稿或成品，保存作品照片与说明，作为经营档案使用。'},
   {page:'home',sel:'#h-subsidy',t:'潮州非遗政策线索',
    d:'查看可能相关的政策方向与待核对条件，最终以潮州市当期公告为准。'}
 ];
@@ -2747,9 +2968,36 @@ function showEditSetupDate(){openCenter('<h4>修改开业日期</h4><p>修改开
 function showIndustryCard(){var d=document.createElement('div');d.className='industry-card';d.innerHTML='<div class="industry-inner"><h3>老板，为了让系统更懂您的生意</h3><p>帮您匹配专属的非遗补贴和记账模板，请问您是做什么行业的？</p><button class="industry-option" data-ind="food">① <b>食品类非遗</b><br><small>腐乳饼、牛肉丸、工夫茶等</small></button><button class="industry-option" data-ind="craft">② <b>非食品类非遗</b><br><small>手拉壶、潮绣、木雕等</small></button><button class="industry-option" data-ind="other">③ <b>其他手工作坊</b></button></div>';document.body.appendChild(d);d.querySelectorAll('.industry-option').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-ind');S.meta.quiz=k;S.profile.craft=k==='food'?'食品类非遗':k==='craft'?'非食品类非遗':'其他手工作坊';save();d.remove();renderAll();toast('已匹配相应记账词库和补贴雷达');showSetupDateCard()}})}
 function afterRecordSaved(rec){if(!S.meta.firstEntry){S.meta.firstEntry=true;save();showFirstSuccess();return true}return false}
 function bootApp(){renderAll();renderSay();renderQuiz();renderAgent();renderProofCats();initRec();if(!S.meta.guide)setTimeout(startFirstGuide,450)}
-var _renderHome=renderHome;renderHome=function(){_renderHome();if(!S.records.length){$('#h-count').textContent='0';$('#h-in').textContent='¥0.00';$('#h-out').textContent='¥0.00';$('#h-net').textContent='¥0.00';$('#h-rate').textContent='--';$('#h-top').textContent='—';$('#h-noinv').textContent='¥0.00';$('#h-ar-list').innerHTML='<div class="empty">暂无往来记录</div>'}};
-var _renderAr=renderAr;renderAr=function(){_renderAr();if(!S.ar.length)$('#a-list').innerHTML='<div class="empty">暂无往来记录</div>'};
-var _renderBoard=renderBoard;renderBoard=function(){_renderBoard();if(!S.records.length){$('#bd-in').textContent='¥0.00';$('#bd-out').textContent='¥0.00';$('#bd-net').textContent='¥0.00';$('#bd-rate').textContent='--';$('#bd-ar-body').innerHTML='<div class="empty">暂无往来记录</div>';$('#bd-chart').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#bd-str').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#bd-cust').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>'}};
+var _renderHome=renderHome;renderHome=function(){_renderHome();if(!S.records.length){$('#h-count').textContent='0';$('#h-in').textContent='¥0.00';$('#h-out').textContent='¥0.00';$('#h-net').textContent=money(Biz.metrics(S,thisMonth(),today()).received);$('#h-rate').textContent='¥0';$('#h-top').textContent='—';$('#h-noinv').textContent='¥0.00';if(!allAr().length)$('#h-ar-list').innerHTML='<div class="empty">暂无往来记录</div>'}};
+var _renderAr=renderAr;renderAr=function(){_renderAr();if(!allAr().length)$('#a-list').innerHTML='<div class="empty">暂无往来记录</div>'};
+var _renderBoard=renderBoard;renderBoard=function(){_renderBoard();if(!S.records.length){$('#bd-chart').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#bd-str').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>';$('#bd-cust').innerHTML='<div class="empty">暂无数据，去记一笔解锁经营分析</div>'}if(!allAr().length)$('#bd-ar-body').innerHTML='<div class="empty">暂无往来记录</div>'};
+renderReportCard=function(){
+  var m=Biz.metrics(S,thisMonth(),today());
+  $('#h-rep-tag').textContent='查看 ›';
+  $('#h-report-body').innerHTML='<div style="font-size:13px;line-height:1.7;color:var(--t2)">'+
+    '本月销售 '+money(m.sales)+' · 实际收款 '+money(m.received)+'<br>'+ 
+    '待收 '+money(m.pending)+' · 逾期 '+money(m.overdue)+
+    '<div style="font-size:12px;color:var(--t3)">依据本机记录整理，方便自己核对生意。</div></div>';
+};
+renderReport=function(){
+  var m=Biz.metrics(S,thisMonth(),today());
+  var missing=S.records.filter(function(r){return !r.date||!r.cat||!Number(r.amt)}).length;
+  var noDue=S.orders.filter(function(o){return o.status!=='已取消'&&Biz.balance(o)>0&&!o.due}).length;
+  var canceled=S.orders.filter(function(o){return o.status==='已取消'&&Biz.sumPayments(o)>0}).length;
+  $('#report-body').innerHTML='<div class="card"><div class="card-hd"><h3>本月生意概况</h3></div>'+ 
+    [['已记录销售额',money(m.sales)],['实际收款',money(m.received)],['待收款',money(m.pending)],
+      ['其中已逾期',money(m.overdue)],['未结清订单',m.unsettled+' 笔']].map(function(x){return '<div class="row"><div class="row-l"><b>'+x[0]+'</b></div><div class="row-r">'+x[1]+'</div></div>'}).join('')+'</div>'+ 
+    '<div class="card"><div class="card-hd"><h3>可以核对的资料</h3></div>'+ 
+    '<div class="alert ok"><b>账目字段</b><span>'+(missing?'有 '+missing+' 笔记录缺少日期、分类或金额。':'现有流水的日期、分类和金额均已填写。')+'</span></div>'+ 
+    '<div class="alert ok"><b>订单收款</b><span>'+m.unsettled+' 笔订单尚未结清，'+noDue+' 笔未填写预计收款日。</span></div>'+ 
+    (canceled?'<div class="alert warn"><b>取消订单待处理</b><span>'+canceled+' 笔取消订单有收款历史，请核对退款安排。</span></div>':'')+
+    '</div><div class="card"><p style="font-size:12.5px;line-height:1.7;color:var(--t2);margin:0">本报告只整理你在这台设备上的经营记录，不是信用评级、审计报告、税务申报材料或贷款额度评估。浏览器数据清理后可能丢失，请定期导出备份。</p></div>'+ 
+    '<button class="btn-primary full" id="rp-copy">复制经营摘要</button>';
+};
+reportSummaryText=function(){var m=Biz.metrics(S,thisMonth(),today());return '【穗账达经营记录摘要】\n'+
+  '月份：'+thisMonth()+'\n销售额：'+money(m.sales)+'\n实际收款：'+money(m.received)+
+  '\n待收款：'+money(m.pending)+'\n已逾期：'+money(m.overdue)+
+  '\n未结清订单：'+m.unsettled+' 笔\n仅供本机经营记录核对。'};
 
 /* ========================= 启动 ========================= */
 if(S.meta.auth){bootApp()}else{renderAll();showAuth()}
