@@ -1349,7 +1349,8 @@ function renderHome(){
   if(S.meta.quiz){
     qzCard.style.display='';
     qzRes.innerHTML='<div style="display:flex;align-items:center;gap:10px">'+
-      '<span class="tag b" style="font-size:13px;padding:6px 12px">'+S.meta.quiz+'</span>'+
+      '<span class="tag b" style="font-size:13px;padding:6px 12px">'+
+      ({food:'食品类非遗',craft:'非食品类非遗',other:'其他手工作坊'}[S.meta.quiz]||S.meta.quiz)+'</span>'+
       '<span style="font-size:13px;color:var(--t2)">已测 · 去「我的」可重新自测</span></div>';
   }else{
     qzCard.style.display='none';
