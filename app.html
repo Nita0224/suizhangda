@@ -852,6 +852,50 @@ function migrateCats(){
 }
 var S;
 function freshSeed(){return {ver:DATA_VER,profile:{name:'',type:'个体工商户',craft:'',heirLevel:'dist',tax:'',method:'',period:'',corpAccount:false,setup:today()},records:[],invoices:[],ar:[],proofs:[],meta:{guide:false,disclaimer:true,quiz:null,auth:null,firstEntry:false}}}
+/* 「恢复演示数据」专用；新用户仍使用上面的空账本。 */
+function demoSeed(auth){
+  var s=freshSeed(),now=new Date();
+  function sampleDate(monthsAgo,day){
+    var first=new Date(now.getFullYear(),now.getMonth()-monthsAgo,1);
+    var last=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();
+    return ymd(new Date(first.getFullYear(),first.getMonth(),Math.min(day,last,monthsAgo===0?now.getDate():last)));
+  }
+  function add(type,amt,cat,date,note,inv,party){
+    var r={id:uid(),type:type,amt:amt,cat:cat,date:date,note:note,inv:inv,party:party};
+    s.records.push(r);return r;
+  }
+  s.profile={name:'陈记手拉壶作坊',type:'个体工商户 · 非遗工坊',
+    craft:'潮州陶瓷 · 手拉壶',heirLevel:'dist',tax:'',method:'查账征收 · 小规模纳税人',
+    period:'按季申报',corpAccount:false,setup:'2019-04-12'};
+  s.meta={guide:true,disclaimer:true,quiz:'craft',auth:auth||null,firstEntry:true};
+  var sale=add('in',46800,'作品销售',sampleDate(0,5),'手拉壶 12 把',true,'古城文创店');
+  add('in',8650,'作品销售',sampleDate(0,8),'作坊散客现金',false,'散客');
+  var custom=add('in',23400,'技艺服务',sampleDate(0,12),'手拉壶定制 6 把',true,'牌坊街文创店');
+  add('in',39200,'作品销售',sampleDate(0,13),'非遗文创平台结算',true,'非遗文创平台');
+  var clay=add('out',18600,'原料采买',sampleDate(0,2),'朱泥 3 吨',true,'枫溪陶土行');
+  add('out',12000,'学徒工资',sampleDate(0,7),'2 名学徒工钱',false,'学徒');
+  add('out',5400,'展会差旅',sampleDate(0,9),'文博会摊位费',true,'文博会组委会');
+  add('out',15000,'大师工时费',sampleDate(0,11),'手拉壶绘制工时',false,'陈师傅');
+  add('out',3800,'作坊开支',sampleDate(0,1),'作坊租金',true,'房东');
+  var history=[[132000,88000],[148000,96500],[121000,79000],[166000,112000],[158000,101000]];
+  for(var i=5;i>=1;i--){
+    var pair=history[5-i];
+    add('in',pair[0],'作品销售',sampleDate(i,8),'月度作品销售',true,'古城文创店');
+    add('out',Math.round(pair[1]*0.7),'原料采买',sampleDate(i,6),'陶土采购',true,'枫溪陶土行');
+    add('out',Math.round(pair[1]*0.3),'学徒工资',sampleDate(i,10),'学徒工钱',false,'学徒');
+  }
+  s.invoices=[
+    {id:uid(),dir:'out',amt:46800,party:'古城文创店',date:sale.date,cat:'普通发票'},
+    {id:uid(),dir:'out',amt:23400,party:'牌坊街文创店',date:custom.date,cat:'电子发票'},
+    {id:uid(),dir:'in',amt:18600,party:'枫溪陶土行',date:clay.date,cat:'普通发票'}
+  ];
+  s.ar=[
+    {id:uid(),sourceId:custom.id,kind:'rec',party:'牌坊街文创店',amt:12000,reason:'手拉壶定制尾款',date:custom.date,due:ymd(new Date(Date.now()+15*86400000)),paid:false},
+    {id:uid(),sourceId:clay.id,kind:'pay',party:'枫溪陶土行',amt:6000,reason:'朱泥采购尾款',date:clay.date,due:ymd(new Date(Date.now()+10*86400000)),paid:false},
+    {id:uid(),kind:'rec',party:'古城文创店',amt:8000,reason:'上月补货尾款',date:sampleDate(1,20),due:sampleDate(0,5),paid:false}
+  ];
+  return s;
+}
 seed=freshSeed;
 try{
   var raw=localStorage.getItem(STORE);
@@ -2642,8 +2686,17 @@ function applyBackup(o){
 }
 $('#r-refresh').addEventListener('click',function(){renderAll();toast('已刷新')});
 $('#m-reset').addEventListener('click',function(){
-  if(!confirm('将用最新示例账套（陈记手拉壶作坊）覆盖当前数据，确定？'))return;
-  S=seed();save();renderAll();toast('已恢复为「陈记手拉壶作坊」示例账套');
+  openCenter('<h4>恢复演示数据</h4><p>将用「陈记手拉壶作坊」的示例流水、发票和往来记录替换当前账本。当前数据不会自动保留，建议先导出备份。</p>'+
+    '<button class="btn-primary" style="width:100%" id="demo-confirm">确认恢复演示数据</button>'+
+    '<button class="btn-ghost" style="width:100%;margin:8px 0 0" id="demo-backup">先备份当前账本</button>'+
+    '<button class="btn-ghost" style="width:100%;margin:8px 0 0" id="demo-cancel">取消</button>');
+  $('#demo-cancel').onclick=closeCenter;
+  $('#demo-backup').onclick=openBackup;
+  $('#demo-confirm').onclick=function(){
+    var auth=S.meta&&S.meta.auth;
+    S=demoSeed(auth);save();closeCenter();renderAll();go('home');
+    toast('已恢复「陈记手拉壶作坊」演示账套');
+  };
 });
 $('#ag-submit').addEventListener('click',function(){
   var city=$('#ag-city').value.trim();
