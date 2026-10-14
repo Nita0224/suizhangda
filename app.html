@@ -1120,6 +1120,46 @@ function showPolicyTip(p){
 
 /* ========================= 自然语言记账（核心） ========================= */
 var NUM=/(\d+(?:\.\d+)?)\s*(万元|万|千元|千|元|块|块钱|毛)?/;
+/* 把口语和财务大写金额转为数字，语音识别与手动输入共用。 */
+function cnAmount(s){
+  var map={'零':0,'〇':0,'○':0,'一':1,'壹':1,'二':2,'两':2,'贰':2,'三':3,'叁':3,'四':4,'肆':4,'五':5,'伍':5,'六':6,'陆':6,'七':7,'柒':7,'八':8,'捌':8,'九':9,'玖':9};
+  s=(s||'').replace(/萬/g,'万').replace(/億/g,'亿').replace(/拾/g,'十').replace(/佰/g,'百').replace(/仟/g,'千');
+  if(s.indexOf('点')>=0){
+    var ps=s.split('点'), left=cnAmount(ps[0]), right='', suffix=(ps[1]||'').match(/[十百千万亿]$/);
+    var fraction=suffix?ps[1].slice(0,-1):ps[1];
+    for(var j=0;j<(fraction||'').length;j++) right+=(map[fraction[j]]===undefined?'':map[fraction[j]]);
+    return (left+Number('0.'+(right||'0')))*(suffix?{十:10,百:100,千:1000,万:10000,亿:100000000}[suffix[0]]:1);
+  }
+  var total=0, section=0, digit=null, lastUnit=0, explicitZero=false;
+  var units={十:10,百:100,千:1000,万:10000,亿:100000000};
+  for(var i=0;i<s.length;i++){
+    var ch=s[i];
+    if(map[ch]!==undefined){digit=map[ch];if(digit===0)explicitZero=true;continue}
+    if(units[ch]){
+      var u=units[ch];
+      if(u<10000){section+=(digit===null?1:digit)*u}
+      else {section+=(digit===null?0:digit); total+=section*u; section=0}
+      digit=null;lastUnit=u;explicitZero=false;
+    }
+  }
+  if(digit!==null){
+    /* 「一万五」「一千二」是 15000、1200；「一万零五」是 10005。 */
+    section+=lastUnit>=100&&!explicitZero?digit*lastUnit/10:digit;
+  }
+  return total+section;
+}
+function normalizeCnAmounts(text){
+  var chars='零〇○一二两三四五六七八九十百千万亿壹贰叁肆伍陆柒捌玖拾佰仟萬億点';
+  var re=new RegExp('['+chars+']+','g');
+  return (text||'').replace(re,function(m,off,whole){
+    var hasUnit=/[十百千万亿拾佰仟萬億]/.test(m), next=whole.slice(off+m.length);
+    var before=whole.slice(0,off), moneyWord=/(?:收了?|收到|收入|卖了?|赚了?|进账|回款|到账|付了?|付给|买了?|花了?|采购|工资|房租|定金|订金|尾款|余款|欠款|货款|工钱|工时费|成本|金额)\s*$/;
+    if(!/^[个件笔天月日号年只把]/.test(next)&&(hasUnit||/^[元块毛]/.test(next)||moneyWord.test(before))){
+      var n=cnAmount(m);if(isFinite(n)&&n>0)return String(n);
+    }
+    return m;
+  });
+}
 var IN_STRONG=['收了','收到','卖了','进账','回款','到账','发了','发货','出货','营业额','定金','订金','结算','打入','作品','定制','授课','体验课','景区','代销','批发给'];
 var OUT_STRONG=['付了','付给','买了','花了','采购','工资','房租','水电','运费','请客','批发','进货','租金','交了','参展','展会','工时','学徒','大师','窑','维修','摊位'];
 var IN_WEAK=['收','卖','赚','货款','营收','作品','课程'];
@@ -1139,15 +1179,20 @@ var CAT_MAP_IN=[
 ];
 var PARTY_SUF=/([\u4e00-\u9fa5A-Za-z0-9]{1,8}(?:超市|便利|连锁|干货|粮油|市场|平台|公司|工厂|厂|店|商行|老板|师傅|客户|文创店|文创|景区|陶土|釉料|发行|工坊|博物馆|文旅|协会))/;
 function parseSay(txt){
-  var t=(txt||'').trim(),r={ok:false,type:null,amt:null,cat:null,party:'',date:today(),
-    credit:false,due:null,note:t,reason:''};
+  var original=(txt||'').trim(),t=normalizeCnAmounts(original),r={ok:false,type:null,amt:null,cat:null,party:'',date:today(),
+    credit:false,due:null,note:original,reason:''};
   // —— 定金 + 尾款 拆解（如：收了2000定金，尾款3000下个月结）——
   // 兼顾「2000定金 / 定金2000」「3000尾款 / 尾款3000」两种语序
   var depM=t.match(/(\d+(?:\.\d+)?)\s*(?:万|千|元|块|块钱)?\s*(?:定金|订金|首付|预付款|预收款|先付)|(?:定金|订金|首付|预付款|预收款|先付)\s*(?:约|了)?\s*(\d+(?:\.\d+)?)\s*(?:万|千|元|块|块钱)?/);
   var balM=t.match(/(\d+(?:\.\d+)?)\s*(?:万|千|元|块|块钱)?\s*(?:尾款|余款|剩余|欠款)|(?:尾款|余款|剩余|欠款)\s*(?:约|了)?\s*(\d+(?:\.\d+)?)\s*(?:万|千|元|块|块钱)?/);
-  var dep=depM?parseFloat(depM[1]||depM[2]):0,bal=balM?parseFloat(balM[1]||balM[2]):0;
+  function matchedMoney(m){
+    if(!m)return 0;
+    var value=m[0].match(NUM);if(!value)return 0;
+    return parseFloat(value[1])*(value[2]&&value[2].indexOf('万')===0?10000:value[2]&&value[2].indexOf('千')===0?1000:1);
+  }
+  var dep=matchedMoney(depM),bal=matchedMoney(balM);
   if(dep>0&&bal>0){
-    r.type='in';r.cat='作品销售';r.amt=dep;r.deposit=dep;r.balance=bal;r.credit=true;r.note=t;
+    r.type='in';r.cat='作品销售';r.amt=dep;r.deposit=dep;r.balance=bal;r.credit=true;
     var n2=new Date();
     if(/月底|月末/.test(t))r.due=ymd(new Date(n2.getFullYear(),n2.getMonth()+1,0));
     else if(/下月|下个月/.test(t))r.due=ymd(new Date(n2.getFullYear(),n2.getMonth()+1,15));
