@@ -41,7 +41,7 @@
     var selected=String(p.policyCraft||'unknown');
     var heritage=selected==='food'||selected==='craft'||(selected==='unknown'&&
       (meta.quiz==='food'||meta.quiz==='craft'||/非遗|潮绣|手拉壶|木雕|潮瓷|陶瓷|传统食品/.test(craft)));
-    var tax=String(p.policyTaxStatus||'unknown');
+    var tax=String(p.policyTaxStatus||(/小规模纳税人/.test(p.method||'')?'small':/一般纳税人/.test(p.method||'')?'general':'unknown'));
     var n=(state.orders||[]).length,r=(state.records||[]).length,proof=(state.proofs||[]).length;
     var date=at||new Date().toISOString().slice(0,10);
     return ITEMS.map(function(item){

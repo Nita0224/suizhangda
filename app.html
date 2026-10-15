@@ -2109,8 +2109,8 @@ function renderSubsidy(){
   $('#s-hcnt').textContent=sh.length+' 项';
   $('#s-gcnt').textContent=sg.length+' 项';
   $('#s-verified').textContent=SuizhangPolicy.verifiedAt;
-  $('#s-craft').value=S.profile.policyCraft||'unknown';
-  $('#s-tax').value=S.profile.policyTaxStatus||'unknown';
+  $('#s-craft').value=S.profile.policyCraft||((S.meta.quiz==='food'||S.meta.quiz==='craft')?S.meta.quiz:S.meta.quiz==='other'?'other':'unknown');
+  $('#s-tax').value=S.profile.policyTaxStatus||(/小规模纳税人/.test(S.profile.method||'')?'small':/一般纳税人/.test(S.profile.method||'')?'general':'unknown');
   $('#s-craft').onchange=function(){S.profile.policyCraft=this.value;save();renderSubsidy();renderHome()};
   $('#s-tax').onchange=function(){S.profile.policyTaxStatus=this.value;save();renderSubsidy();renderHome()};
   $('#s-progress').innerHTML='<div class="row"><div class="row-l"><b>① 补充身份</b><span>上方选择实际经营方向和税务登记身份</span></div></div>'+ 
