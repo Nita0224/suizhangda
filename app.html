@@ -813,7 +813,8 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div class="alert ok"><b>账本只在你这台机器上</b>
       <span>全部数据保存在本机浏览器，不上传服务器。清理浏览器数据会一并清除，建议定期导出 CSV 备份。</span></div>
   </div>
-  <button class="btn-ghost" id="m-reset">恢复示例账套（陈记手拉壶作坊）</button>
+  <button class="btn-ghost" id="m-reset">载入示例账套（陈记手拉壶作坊）</button>
+  <button class="btn-ghost" id="m-clear-demo" style="display:none;margin-top:8px">清空示例账套，开始记自己的账</button>
   <p class="note">穗账达 v0.4 · 非遗传承人手工账管家 · 演示原型</p>
 </section>
 
@@ -905,7 +906,7 @@ function demoSeed(auth){
   s.profile={name:'陈记手拉壶作坊',type:'个体工商户 · 非遗工坊',
     craft:'潮州陶瓷 · 手拉壶',heirLevel:'dist',tax:'',method:'查账征收 · 小规模纳税人',
     period:'按季申报',corpAccount:false,setup:'2019-04-12'};
-  s.meta={guide:true,disclaimer:true,quiz:'craft',auth:auth||null,firstEntry:true};
+  s.meta={guide:true,disclaimer:true,quiz:'craft',auth:auth||null,firstEntry:true,demo:true};
   var sale=add('in',46800,'作品销售',sampleDate(0,5),'手拉壶 12 把',true,'古城文创店');
   add('in',8650,'作品销售',sampleDate(0,8),'作坊散客现金',false,'散客');
   var custom=add('in',23400,'技艺服务',sampleDate(0,12),'手拉壶定制 6 把',true,'牌坊街文创店');
@@ -2110,6 +2111,7 @@ function openProofCert(id){
 /* ---- 我的 ---- */
 function renderMine(){
   var p=S.profile;
+  $('#m-clear-demo').style.display=isDemoBook()?'block':'none';
   $('#m-name').textContent=p.name;$('#m-type').textContent=p.type;
   $('#m-info').innerHTML=[
     ['工艺类别',p.craft||'—'],
@@ -2909,9 +2911,13 @@ function applyBackup(o){
   toast('已从备份恢复 '+S.records.length+' 笔账');
 }
 $('#r-refresh').addEventListener('click',function(){renderAll();toast('已刷新')});
+function isDemoBook(){
+  return !!(S.meta&&S.meta.demo)||!!(S.profile&&S.profile.name==='陈记手拉壶作坊'&&
+    S.profile.setup==='2019-04-12'&&S.profile.craft==='潮州陶瓷 · 手拉壶');
+}
 $('#m-reset').addEventListener('click',function(){
-  openCenter('<h4>恢复演示数据</h4><p>将用「陈记手拉壶作坊」的示例流水、发票和往来记录替换当前账本。当前数据不会自动保留，建议先导出备份。</p>'+
-    '<button class="btn-primary" style="width:100%" id="demo-confirm">确认恢复演示数据</button>'+
+  openCenter('<h4>载入示例账套</h4><p>将用「陈记手拉壶作坊」的示例流水、发票和往来记录替换当前账本。当前数据不会自动保留，建议先导出备份。</p>'+ 
+    '<button class="btn-primary" style="width:100%" id="demo-confirm">确认载入示例账套</button>'+ 
     '<button class="btn-ghost" style="width:100%;margin:8px 0 0" id="demo-backup">先备份当前账本</button>'+
     '<button class="btn-ghost" style="width:100%;margin:8px 0 0" id="demo-cancel">取消</button>');
   $('#demo-cancel').onclick=closeCenter;
@@ -2919,7 +2925,25 @@ $('#m-reset').addEventListener('click',function(){
   $('#demo-confirm').onclick=function(){
     var auth=S.meta&&S.meta.auth;
     S=demoSeed(auth);save();closeCenter();renderAll();go('home');
-    toast('已恢复「陈记手拉壶作坊」演示账套');
+    toast('已载入「陈记手拉壶作坊」示例账套');
+  };
+});
+$('#m-clear-demo').addEventListener('click',function(){
+  if(!isDemoBook())return;
+  var n=S.records.length,orders=S.orders.length,proofs=S.proofs.length;
+  openCenter('<h4>清空示例账套</h4><p>这会删除当前账本中的 '+n+' 笔流水、'+orders+' 笔订单、'+proofs+' 份作品，以及关联的收款、往来和发票。若你已在示例账套中记入自己的生意，也会一起删除。请先备份要保留的资料。</p>'+ 
+    '<div class="field"><label>输入“清空”以确认</label><input class="inp" id="demo-clear-word" placeholder="清空"></div>'+ 
+    '<button class="btn-primary" style="width:100%" id="demo-clear-confirm">清空并开始空账本</button>'+ 
+    '<button class="btn-ghost" style="width:100%;margin:8px 0 0" id="demo-clear-backup">先备份当前账本</button>'+ 
+    '<button class="btn-ghost" style="width:100%;margin:8px 0 0" id="demo-clear-cancel">取消</button>');
+  $('#demo-clear-cancel').onclick=closeCenter;
+  $('#demo-clear-backup').onclick=openBackup;
+  $('#demo-clear-confirm').onclick=function(){
+    if($('#demo-clear-word').value.trim()!=='清空'){toast('请先输入“清空”');return}
+    var old=S,auth=S.meta&&S.meta.auth;
+    S=freshSeed();S.meta.auth=auth||null;S.meta.guide=true;S.meta.firstEntry=true;
+    if(!save()){S=old;return}
+    closeCenter();renderAll();go('home');toast('示例数据已清空，可以开始记自己的账');
   };
 });
 $('#ag-submit').addEventListener('click',function(){
