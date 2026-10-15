@@ -476,10 +476,12 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
 <section class="page" id="p-say">
   <div class="nav-bar"><a data-back>‹</a><h2>一句话记账</h2><span class="act" id="say-clear">清空</span></div>
   <div class="card">
-    <p class="q">用你平时说话的方式写，剩下的交给穗账达</p>
-    <textarea class="inp" id="say-txt" placeholder="试试用语音记录你的每一笔账"></textarea>
-    <div class="chips" style="margin-top:10px" id="say-ex"></div>
+    <p class="q">说出来或直接打字，识别后再核对</p>
+    <textarea class="inp" id="say-txt" placeholder="写下这笔生意，金额和收款情况可以用自己的话描述"></textarea>
+    <button class="btn-ghost" style="width:100%;margin-top:10px" id="say-dictate" type="button">🎙 语音转文字</button>
+    <p class="note" id="say-dictate-state">方言识别不准时，可以修改上面的文字，或直接手动记账。浏览器语音识别可能在线处理声音。</p>
     <button class="btn-primary" style="width:100%;margin-top:16px" id="say-parse">识别这句话</button>
+    <button class="btn-ghost" style="width:100%;margin-top:10px" data-go="bookadd" data-type="in" type="button">改用手动记账</button>
   </div>
   <div id="say-result"></div>
   <div class="card">
@@ -1547,20 +1549,15 @@ function topCustomer(){
 }
 
 /* ---- 一句话记账页 ---- */
-var EXAMPLES=['给古城文创店发了5把朱泥壶，收了2000定金，尾款3000下个月结',
-  '今天卖手拉壶收了3800现金','买朱泥花了8600','付了9月作坊租金3800',
-  '发学徒工资1万5','牌坊街3万货款还没给','请陈师傅画壶，工时费2万'];
 var TIPS=[
   ['💰','金额：2万 / 8600 / 3.5万，都能认'],
   ['🔁','收支：卖、收、回款 → 收入；买、付、花了 → 支出'],
   ['🧾','赊账：提到「欠/赊/月底付/尾款」，自动记进往来台账'],
-  ['🏺','非遗科目：泥料·木材·丝线 → 原料采买；大师 → 工时费'],
-  ['👤','对象：带文创店、景区、陶土行这类词，自动填往来对象'],
+  ['📦','分类：原料、租金、工资等支出会尝试归类，保存前可改'],
+  ['👤','对象：提到客户或供货方时会尝试填写，保存前可改'],
   ['📅','时间：今天、昨天、9月5日，都能认']
 ];
 function renderSay(){
-  $('#say-ex').innerHTML=EXAMPLES.map(function(e){
-    return '<div class="chip" data-ex="'+e+'">'+e+'</div>'}).join('');
   $('#say-tips').innerHTML=TIPS.map(function(t){
     return '<div class="dl"><div><b>'+t[0]+' '+t[1].split('：')[0]+'</b>'+
       '<small>'+t[1].split('：')[1]+'</small></div></div>'}).join('');
@@ -2416,8 +2413,6 @@ document.addEventListener('click',function(e){
     var cs=document.querySelectorAll('#b-chips .chip');
     for(var i=0;i<cs.length;i++)cs[i].classList.remove('on');
     fc.classList.add('on');renderBook();return}
-  var ex=t.closest('[data-ex]');
-  if(ex){$('#say-txt').value=ex.getAttribute('data-ex');doParse();return}
   // 往来
   var ds=t.closest('[data-dstyle]');
   if(ds){dunStyle=ds.getAttribute('data-dstyle');
@@ -2541,9 +2536,9 @@ document.addEventListener('click',function(e){
 function doParse(){
   var spoken=$('#say-txt').value,r=parseSay(spoken);
   if(!r.ok){$('#say-result').innerHTML='<div class="card"><div class="alert warn">'+
-    '<b>没听出金额</b><span>试着加上数字，比如「今天卖货收了3800」。也可以直接用下面的手动记账。</span></div></div>';return}
+    '<b>没找到金额</b><span>请在上方补充金额，或点“改用手动记账”逐项填写。</span></div></div>';return}
   var parsed=r.type==='in'?Biz.parseSale(spoken,r,normalizeCnAmounts):null;
-  var h='<div class="card"><div class="card-hd"><h3>我听懂了</h3>'+
+  var h='<div class="card"><div class="card-hd"><h3>请核对这笔账</h3>'+
     '<span class="tag '+(r.type==='in'?'g':'o')+'">'+(r.type==='in'?'收入':'支出')+'</span></div>'+
     '<div class="field"><label>'+(r.type==='in'?'交易总金额':'支出金额')+'</label><div class="amt-box"><s>¥</s>'+ 
     '<input id="rs-amt" type="number" min="0.01" step="0.01" value="'+(parsed?parsed.total:r.amt)+'"></div></div>'+ 
@@ -2616,7 +2611,35 @@ function doParse(){
   });
 }
 $('#say-parse').addEventListener('click',doParse);
-$('#say-clear').addEventListener('click',function(){$('#say-txt').value='';$('#say-result').innerHTML=''});
+var saySpeech=null;
+$('#say-dictate').addEventListener('click',function(){
+  if(saySpeech){saySpeech.stop();return}
+  var Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
+  var state=$('#say-dictate-state');
+  if(!Speech){state.textContent='这个浏览器不支持语音转文字。可以直接打字，或点“改用手动记账”。';return}
+  var rec=new Speech(),heard=false;
+  rec.lang='zh-CN';rec.continuous=false;rec.interimResults=false;saySpeech=rec;
+  rec.onresult=function(e){
+    var words=Array.from(e.results).map(function(result){return result[0].transcript}).join('').trim();
+    if(!words)return;
+    heard=true;
+    var box=$('#say-txt');box.value+=(box.value.trim()?' ':'')+words;
+    state.textContent='已转成文字。请核对并修改，确认金额、收款和客户后再保存。';
+  };
+  rec.onerror=function(e){state.textContent=e.error==='not-allowed'?
+    '没有麦克风权限。可以直接打字，或改用手动记账。':
+    '语音没有识别成功。方言较重时可直接打字，或改用手动记账。';};
+  rec.onend=function(){saySpeech=null;$('#say-dictate').textContent='🎙 语音转文字';
+    if(!heard&&state.textContent==='正在听，请说出这笔生意…')
+      state.textContent='没有识别到文字。可以重试、直接打字，或改用手动记账。';};
+  try{rec.start();$('#say-dictate').textContent='结束语音输入';state.textContent='正在听，请说出这笔生意…'}
+  catch(e){saySpeech=null;state.textContent='无法启动语音识别。可以直接打字，或改用手动记账。'}
+});
+$('#say-clear').addEventListener('click',function(){
+  if(saySpeech)saySpeech.stop();
+  $('#say-txt').value='';$('#say-result').innerHTML='';
+  $('#say-dictate-state').textContent='方言识别不准时，可以修改上面的文字，或直接手动记账。浏览器语音识别可能在线处理声音。';
+});
 
 /* 记一笔后的「已记账」反馈：定金入账 + 应收尾款 + 顺手存证（带文化温度的提示） */
 function showSaveConfirm(rec,ar){
