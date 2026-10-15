@@ -1076,7 +1076,7 @@ function reportData(){
 function subsidies(){return SuizhangPolicy.evaluate(S,today()).filter(function(x){return x.group==='tax'})}
 function heritageSubsidies(){return SuizhangPolicy.evaluate(S,today()).filter(function(x){return x.group==='heritage'})}
 
-/* 传承人级别仅用于整理待核对条件，不推断补助资格或金额。 */
+/* 传承人级别用于展示不同的扶持方向；金额和资格不得从自填级别推定。 */
 var HEIR_LEVELS=[
   {k:'none',n:'还不是传承人'},
   {k:'dist',n:'区级传承人'},
@@ -1084,6 +1084,13 @@ var HEIR_LEVELS=[
   {k:'prov',n:'省级传承人'},
   {k:'nat',n:'国家级传承人'}
 ];
+var HEIR_GUIDE={
+  none:{title:'先看工坊和项目支持',support:'尚未取得代表性传承人认定，不能按传承人身份申领传习补助。经营非遗产品的工坊可留意非遗工坊建设、展示和培训项目。',next:'准备作品照片、经营资料和传习记录，关注潮州市或所在区县的当期征集通知。',url:'https://www.chaozhou.gov.cn/czwgltj/gkmlpt/content/3/3949/post_3949124.html',source:'潮州市文旅部门工作要点'},
+  dist:{title:'关注所在区县的传习支持',support:'区级认定可作为查询区县传习活动扶持的身份资料；是否设补助、金额和申报办法由所在区县当期文件决定。',next:'带区级认定文件、授徒和活动记录，向所在区县文旅部门核对。',url:'https://www.chaozhou.gov.cn/czwgltj/',source:'潮州市文旅部门公告入口'},
+  city:{title:'关注潮州市级传习支持',support:'市级代表性传承人可关注市级传习活动、培训和展示项目；目前未核实到可直接套用的潮州市统一补助金额。',next:'带市级认定文件和传习记录，查看潮州市文旅部门当期资金或项目通知。',url:'https://www.chaozhou.gov.cn/czwgltj/',source:'潮州市文旅部门公告入口'},
+  prov:{title:'关注广东省级传习补助',support:'广东省对省级代表性传承人开展传习活动设有支持方向；是否发放、具体金额和履责要求应以当年省级安排为准。',next:'核对省级认定文件、传习计划和年度评估要求，并向属地文旅部门询问办理路径。',url:'https://whly.gd.gov.cn/',source:'广东省文化和旅游厅公告入口'},
+  nat:{title:'关注国家级传习补助',support:'中央非遗保护资金包含支持国家级代表性传承人开展传习活动的方向；自填级别不等于自动获得资金。',next:'核对国家级认定文件、传习履责记录和当年资金安排，向属地文旅部门询问发放流程。',url:'https://zwgk.mct.gov.cn/',source:'文化和旅游部政务公开入口'}
+};
 function heirName(){
   var lv=S.profile.heirLevel||'none',n='—';
   HEIR_LEVELS.forEach(function(x){if(x.k===lv)n=x.n});return n;
@@ -1800,12 +1807,16 @@ function renderBoard(){
   }).join('') || '<div class="alert ok"><b>经营资料已经整理好</b><span>需要申报时仍请核对当期政策与材料要求。</span></div>';
   $('#r-cal').innerHTML=filingReminder();
 
-  /* 传承人资料：认定级别由用户自填，不推定补助。 */
+  /* 按正式认定级别展示扶持方向，保留各级差异而不推定金额。 */
   $('#r-heir-lv').innerHTML=HEIR_LEVELS.map(function(x){
     return '<div class="chip'+(x.k===(S.profile.heirLevel||'none')?' on':'')+
       '" data-heir="'+x.k+'">'+x.n+'</div>'}).join('');
-  $('#r-heir').innerHTML='<div class="alert ok"><b>'+heirName()+' · 资料线索</b>'+ 
-    '<span>如有正式认定文件，可连同传习记录保存。是否存在当期项目，请查看潮州文旅部门公告；所选级别不代表已经取得补助资格。</span></div>';
+  var heirGuide=HEIR_GUIDE[S.profile.heirLevel]||HEIR_GUIDE.none;
+  $('#r-heir').innerHTML='<div class="alert ok"><b>'+heirName()+' · '+heirGuide.title+'</b>'+ 
+    '<span><strong>可能涉及：</strong>'+heirGuide.support+'</span>'+ 
+    '<span><strong>怎么核对：</strong>'+heirGuide.next+'</span>'+ 
+    '<a href="'+heirGuide.url+'" target="_blank" rel="noopener noreferrer" style="font-size:12px;margin-top:5px">查看'+heirGuide.source+' ›</a></div>'+ 
+    '<div style="font-size:11.5px;color:var(--t3);line-height:1.55;margin-top:7px">旧版按级别显示的金额未核实为潮州现行标准，这里不将其当作可领金额。当期金额仍需按官方文件核实。</div>';
 
   /* 隐私安全盾 */
   $('#r-privacy').innerHTML=
