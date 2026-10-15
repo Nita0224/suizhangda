@@ -88,6 +88,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .card-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .card-hd h3{margin:0;font-size:16px;font-weight:700}
 .card-hd h3 small{font-size:11px;color:var(--t3);font-weight:400;margin-left:6px}
+.policy-item{padding:13px 0;border-bottom:1px solid var(--line)}
+.policy-item:last-child{border-bottom:0;padding-bottom:0}
+.policy-head{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;font-size:14px}
+.policy-head b{flex:1;line-height:1.45}
+.policy-head .tag{white-space:nowrap}
+.policy-text{font-size:12px;line-height:1.7;color:var(--t2);margin:7px 0 0}
+.policy-text b{color:var(--t1)}
+.policy-detail{font-size:12px;line-height:1.7;color:var(--t2);margin-top:9px}
+.policy-detail summary{color:var(--primary);cursor:pointer;font-weight:600}
+.policy-detail p{margin:6px 0}
 .more{font-size:13px;color:var(--t3);cursor:pointer}
 
 /* ============ 统计 ============ */
@@ -374,7 +384,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
   </div>
 
   <div class="card" id="h-policy-card">
-    <div class="card-hd"><h3>潮州非遗政策线索</h3><span class="more" data-go="subsidy">查看 ›</span></div>
+    <div class="card-hd"><h3>潮州经营机会</h3><span class="more" data-go="subsidy">查看 ›</span></div>
     <div id="h-subsidy"></div>
   </div>
   <div class="card" id="h-filing-card">
@@ -612,7 +622,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div id="bd-unsettled" style="font-size:12px;color:var(--t2);margin-top:10px"></div>
   </div>
   <div class="card" id="bd-sub">
-    <div class="card-hd"><h3>潮州非遗政策线索</h3><span class="more" data-go="subsidy">查看 ›</span></div>
+    <div class="card-hd"><h3>潮州经营机会</h3><span class="more" data-go="subsidy">查看 ›</span></div>
     <div id="bd-sub-body"></div>
   </div>
   <div class="card" id="bd-filing">
@@ -649,7 +659,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     </div>
     <div style="margin-top:14px" id="r-list"></div>
     <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
-      <p class="q">传承人扶持 · 先核对认定条件</p>
+      <p class="q">传承人资料 · 按正式认定填写</p>
       <div class="chips" id="r-heir-lv" style="margin-bottom:10px"></div>
       <div id="r-heir"></div>
     </div>
@@ -747,25 +757,27 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
 
 <!-- ==================== 非遗政策雷达 ==================== -->
 <section class="page" id="p-subsidy">
-  <div class="nav-bar"><a data-back>‹</a><h2>潮州政策线索</h2></div>
+  <div class="nav-bar"><a data-back>‹</a><h2>潮州经营机会</h2></div>
   <div class="card">
-    <div class="card-hd"><h3>初步匹配</h3><span class="more" id="s-year"></span></div>
+    <div class="card-hd"><h3>先看与你有关的</h3><span class="more" id="s-year"></span></div>
     <div class="subsidy-row">
-      <div><b>可进一步了解的政策方向</b><span id="s-sub">仅提供线索，需核对身份、地区和申报条件</span></div>
+      <div><b>按工坊资料整理</b><span id="s-sub">补充两项资料即可筛选</span></div>
       <div class="amount" id="s-total">待核对</div>
     </div>
-    <p style="font-size:12px;line-height:1.7;color:var(--t2);margin:10px 0 0">当前按本机资料提示可能相关的政策方向，尚未接入联网 AI 或实时政策库。将来启用 AI 解读时，也只提供条件解释与待确认事项，不直接判定资格或金额。</p>
+    <div class="field" style="margin-top:12px"><label for="s-craft">经营方向</label><select class="inp" id="s-craft"><option value="unknown">尚未确认</option><option value="food">传统食品或食品类非遗</option><option value="craft">潮瓷、手拉壶、潮绣等工艺</option><option value="other">其他经营</option></select></div>
+    <div class="field"><label for="s-tax">税务身份（按税务登记选择）</label><select class="inp" id="s-tax"><option value="unknown">不清楚</option><option value="small">小规模纳税人</option><option value="general">一般纳税人</option></select></div>
+    <p style="font-size:12px;line-height:1.7;color:var(--t2);margin:10px 0 0">本机按所填资料做规则初筛，不上传账本。下方是已核对来源的政策说明，并非自动判定资格或实时申报窗口。</p>
   </div>
   <div class="card">
-    <div class="card-hd"><h3>非遗专属政策</h3><span class="tag o" id="s-hcnt">—</span></div>
+    <div class="card-hd"><h3>非遗经营方向</h3><span class="tag o" id="s-hcnt">—</span></div>
     <div id="s-heritage"></div>
   </div>
   <div class="card">
-    <div class="card-hd"><h3>通用小微政策</h3><span class="tag b" id="s-gcnt">—</span></div>
+    <div class="card-hd"><h3>经营税费提醒</h3><span class="tag b" id="s-gcnt">—</span></div>
     <div id="s-list"></div>
   </div>
-  <div class="card"><div class="card-hd"><h3>申报进度</h3></div><div id="s-progress"></div></div>
-  <p class="note">仅针对潮州市经营场景作初步提示。政策是否适用、可享金额和办理期限，以潮州市主管部门、广东省税务部门当期公告及会计核实结果为准。</p>
+  <div class="card"><div class="card-hd"><h3>接下来做什么</h3></div><div id="s-progress"></div></div>
+  <p class="note">官方来源资料整理于 <span id="s-verified"></span>。静态网页无法自动保证公告实时更新；办理前请打开原文确认期限和条件。无官方开放通知时，不显示“可申请补贴”。</p>
 </section>
 
 <!-- ==================== 我的 ==================== -->
@@ -808,6 +820,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
 <div class="toast" id="toast"></div>
 
 <script src="./business.js"></script>
+<script src="./policy.js"></script>
 <script>
 /* ========================= 基础工具 ========================= */
 var STORE='szd_v1';
@@ -862,7 +875,7 @@ function migrateCats(){
   S.records.forEach(function(r){if(CAT_MIGRATE[r.cat])r.cat=CAT_MIGRATE[r.cat]});
 }
 var S;
-function freshSeed(){return {ver:DATA_VER,profile:{name:'',type:'个体工商户',craft:'',heirLevel:'dist',tax:'',method:'',period:'',corpAccount:false,setup:today()},records:[],invoices:[],ar:[],proofs:[],orders:[],meta:{guide:false,disclaimer:true,quiz:null,auth:null,firstEntry:false}}}
+function freshSeed(){return {ver:DATA_VER,profile:{name:'',type:'个体工商户',craft:'',heirLevel:'none',tax:'',method:'',period:'',corpAccount:false,setup:today()},records:[],invoices:[],ar:[],proofs:[],orders:[],meta:{guide:false,disclaimer:true,quiz:null,auth:null,firstEntry:false}}}
 /* 「恢复演示数据」专用；新用户仍使用上面的空账本。 */
 function demoSeed(auth){
   var s=freshSeed(),now=new Date();
@@ -1044,23 +1057,9 @@ function reportData(){
     la:arStat(),st:stats(),avgIn:avgMonthlyIn(),avgNet:avgMonthlyNet(),
     level:creditLevel(cr.score)};
 }
-/* 通用小微政策 */
-function subsidies(){
-  return [
-    {n:'小规模纳税人增值税政策',d:'先确认纳税人类型、销售额口径、开票及当期政策，再判断是否适用。',s:'待核对'},
-    {n:'小微企业“六税两费”政策',d:'先核对经营主体类型、适用期间及具体税费种。',s:'待核对'},
-    {n:'个体工商户经营所得优惠',d:'先确认是否为个体工商户及实际应纳税所得额，不能只按流水推算。',s:'待核对'},
-    {n:'创业扶持信息',d:'申请对象、登记地、经营年限和当期通知均需向潮州市人社部门核实。',s:'关注通知'}
-  ];
-}
-/* 潮州非遗政策线索：本机资料仅用于提示，不判断资格或金额。 */
-function heritageSubsidies(){
-  return [
-    {n:'非遗代表性传承人扶持',d:'先核对潮州市或所属区县的认定级别、传习记录和当期通知。',s:'待核对'},
-    {n:'非遗工坊与传习场所支持',d:'是否有面向本区县的征集，需看潮州市文旅部门当期公告。',s:'关注通知'},
-    {n:'非遗展示与文旅活动',d:'展销或传习活动可留好合同和票据，项目支持以当期公告为准。',s:'关注通知'}
-  ];
-}
+/* 首页只显示一条政策线索，完整信息与官方链接放在政策页。 */
+function subsidies(){return SuizhangPolicy.evaluate(S,today()).filter(function(x){return x.group==='tax'})}
+function heritageSubsidies(){return SuizhangPolicy.evaluate(S,today()).filter(function(x){return x.group==='heritage'})}
 
 /* 传承人级别仅用于整理待核对条件，不推断补助资格或金额。 */
 var HEIR_LEVELS=[
@@ -1333,9 +1332,9 @@ function renderHome(){
   });
   var sh=heritageSubsidies();
   $('#h-subsidy').innerHTML=sh.slice(0,2).map(function(s){
-    return '<div class="subsidy-row"><div><b>'+s.n+'</b><span>'+s.d+'</span></div>'+
-      '<div class="amount" style="font-size:12px">'+s.s+'</div></div>';
-  }).join('')+'<div style="font-size:12px;color:var(--t3);margin-top:10px">潮州市范围内的初步线索，查看官方公告后再确认。</div>';
+    return '<div class="subsidy-row"><div><b>'+esc(s.title)+'</b><span>'+esc(s.relevance)+'</span></div>'+
+      '<div class="amount" style="font-size:12px">'+esc(s.matchLabel)+'</div></div>';
+  }).join('')+'<div style="font-size:12px;color:var(--t3);margin-top:10px">有官方出处的经营线索；是否可申报请看当期通知。</div>';
   $('#h-filing').innerHTML=filingReminder();
 
   // 身份自测状态卡片
@@ -1786,12 +1785,12 @@ function renderBoard(){
   }).join('') || '<div class="alert ok"><b>经营资料已经整理好</b><span>需要申报时仍请核对当期政策与材料要求。</span></div>';
   $('#r-cal').innerHTML=filingReminder();
 
-  /* 非遗专属 · 传承人补助（法条翻译成大白话） */
+  /* 传承人资料：认定级别由用户自填，不推定补助。 */
   $('#r-heir-lv').innerHTML=HEIR_LEVELS.map(function(x){
     return '<div class="chip'+(x.k===(S.profile.heirLevel||'none')?' on':'')+
       '" data-heir="'+x.k+'">'+x.n+'</div>'}).join('');
-  $('#r-heir').innerHTML='<div class="alert ok"><b>'+heirName()+' · 可进一步了解</b>'+ 
-    '<span>请带上认定文件和传习记录，向潮州市或所属区县文旅部门核对当前扶持项目、申报条件与金额。选择级别只用于整理问题，不代表已经取得补助资格。</span></div>';
+  $('#r-heir').innerHTML='<div class="alert ok"><b>'+heirName()+' · 资料线索</b>'+ 
+    '<span>如有正式认定文件，可连同传习记录保存。是否存在当期项目，请查看潮州文旅部门公告；所选级别不代表已经取得补助资格。</span></div>';
 
   /* 隐私安全盾 */
   $('#r-privacy').innerHTML=
@@ -2092,23 +2091,31 @@ function renderMine(){
     '<div class="row-r"><span class="chev">›</span></div></div>'}).join('');
 }
 function policyRows(arr){
+  if(!arr.length)return '<div class="empty">暂无线索。补充上方资料，或到官方公告查看当期安排。</div>';
   return arr.map(function(s){
-    return '<div class="flow"><div class="fl-l"><b>'+s.n+
-      ' <span class="tag b">'+s.s+'</span></b><span>'+s.d+'</span></div></div>';
+    return '<div class="policy-item"><div class="policy-head"><b>'+esc(s.title)+'</b><span class="tag '+(s.related?'b':'o')+'">'+esc(s.matchLabel)+'</span></div>'+
+      '<p class="policy-text">'+esc(s.relevance)+'。'+esc(s.summary)+'</p>'+
+      '<p class="policy-text"><b>你可以做：</b>'+esc(s.action)+'</p>'+
+      '<details class="policy-detail"><summary>查看资料与官方依据</summary><p>'+esc(s.prepare)+'</p><p>'+esc(s.evidence)+'</p><p>状态：'+esc(s.status)+'</p><p>发布：'+esc(s.published)+' · 资料整理：'+esc(SuizhangPolicy.verifiedAt)+'</p><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">打开官方原文 ›</a></details></div>';
   }).join('');
 }
 function renderSubsidy(){
-  var sg=subsidies(),sh=heritageSubsidies();
-  $('#s-year').textContent='潮州市 · '+new Date().getFullYear()+' 年';
-  $('#s-total').textContent='逐项核对';
-  $('#s-sub').textContent='本机记录仅用于提示问题，不判断资格、减税额或补贴金额';
+  var sg=subsidies().filter(function(x){return x.related}),sh=heritageSubsidies().filter(function(x){return x.related});
+  $('#s-year').textContent='潮州市 · 官方来源';
+  $('#s-total').textContent='线索 '+(sg.length+sh.length)+' 项';
+  $('#s-sub').textContent='结合你的工艺和税务身份，先看相关政策说明';
   $('#s-heritage').innerHTML=policyRows(sh);
   $('#s-list').innerHTML=policyRows(sg);
   $('#s-hcnt').textContent=sh.length+' 项';
   $('#s-gcnt').textContent=sg.length+' 项';
-  $('#s-progress').innerHTML='<div class="row"><div class="row-l"><b>① 核对经营身份</b><span>营业执照、纳税人类型、传承人或工坊认定文件</span></div></div>'+ 
-    '<div class="row"><div class="row-l"><b>② 核对本期公告</b><span>关注潮州市文旅部门、广东省税务部门的办理条件与期限</span></div></div>'+ 
-    '<div class="row"><div class="row-l"><b>③ 整理材料再申请</b><span>需要时请会计或主管部门确认税收适用和申报结果</span></div></div>'+ 
+  $('#s-verified').textContent=SuizhangPolicy.verifiedAt;
+  $('#s-craft').value=S.profile.policyCraft||'unknown';
+  $('#s-tax').value=S.profile.policyTaxStatus||'unknown';
+  $('#s-craft').onchange=function(){S.profile.policyCraft=this.value;save();renderSubsidy();renderHome()};
+  $('#s-tax').onchange=function(){S.profile.policyTaxStatus=this.value;save();renderSubsidy();renderHome()};
+  $('#s-progress').innerHTML='<div class="row"><div class="row-l"><b>① 补充身份</b><span>上方选择实际经营方向和税务登记身份</span></div></div>'+ 
+    '<div class="row"><div class="row-l"><b>② 看官方原文</b><span>确认所在地、当期申报窗口、对象与材料</span></div></div>'+ 
+    '<div class="row"><div class="row-l"><b>③ 保存经营资料</b><span>订单和作品资料可用于整理线索，正式申报材料以通知为准</span></div></div>'+ 
     '<div style="font-size:12px;line-height:1.8;margin-top:10px">'+
     '<a href="https://www.chaozhou.gov.cn/" target="_blank" rel="noopener noreferrer">潮州市人民政府官网 ›</a><br>'+ 
     '<a href="https://guangdong.chinatax.gov.cn/" target="_blank" rel="noopener noreferrer">广东省税务局官网 ›</a></div>';
@@ -2270,40 +2277,34 @@ function showBoardRecords(kind){
   openCenter('<h4>'+title+'</h4><div class="scrollbox">'+(items.length?items.map(function(x){return '<div class="row" '+(x.orderId?'data-order="'+x.orderId+'"':'')+'><div class="row-l"><b>'+esc(x.t)+'</b><span>'+esc(x.d)+'</span></div><div class="row-r">'+money(x.amt)+(x.orderId?' ›':'')+'</div></div>'}).join(''):'<div class="empty">暂无对应记录</div>')+'</div>');
 }
 function renderAll(){renderHome();renderBook();renderAr();renderBoard();renderSubsidy();renderMine();renderProof();renderReport();renderOrders()}
-/* 一键生成非遗补贴申报材料包（按本机流水 / 往来 / 存证汇总，供参考申报） */
+/* 一键整理本机经营资料摘要；不生成或暗示正式申报材料。 */
 function ensureTaxId(next){
   if(S.profile.tax){next();return}
   openCenter('<h4>补充一个信息</h4><p>为了让代账会计帮您准确处理税务，需要补充一个信息。</p><div class="field"><label>纳税人识别号</label><input class="inp" id="tax-id" placeholder="填写营业执照上的纳税人识别号"></div><p style="font-size:12px;color:var(--t3);line-height:1.6">这个号就在您的营业执照上，填一次就行，以后自动带出。</p><button class="btn-primary" style="width:100%" id="tax-save">保存并继续</button>');
   $('#tax-save').onclick=function(){var v=$('#tax-id').value.trim();if(!v){toast('请填写纳税人识别号');return}S.profile.tax=v;save();closeCenter();next()};
 }
 function generateSubsidyPack(){
-  if(!S.profile.tax){ensureTaxId(generateSubsidyPack);return}
-  var p=S.profile,qs=quarterSales(),wm=monthsCovered();
-  var recUnpaid=S.ar.filter(function(a){return a.kind==='rec'&&!a.paid});
-  var recAmt=sum(recUnpaid),recN=recUnpaid.length;
-  var txt='【非遗工坊建设经费 / 师带徒传习补贴 · 申报材料包（由穗账达生成）】\n'+
-    '经营主体：'+p.name+'（'+(p.type||'—')+'）\n'+
+  var p=S.profile,wm=monthsCovered();
+  var txt='【穗账达 · 本机经营资料摘要】\n'+
+    '经营主体：'+(p.name||'—')+'（'+(p.type||'—')+'）\n'+
     '工艺类别：'+(p.craft||'—')+'\n'+
-    '纳税人识别号：'+(p.tax||'—')+'\n'+
     '经营时长：已记账 '+wm+' 个月\n'+
-    '本季开票：'+wan(qs)+'（'+money(qs)+'）\n'+
-    '应收未收：'+money(recAmt)+'（'+recN+' 笔）\n'+
-    '作品存证：'+S.proofs.length+' 件\n'+
-    '可关注方向：潮州市非遗工坊与传习活动（需核对当期公告）\n\n'+
-    '—— 本材料包依据您在本机记录的流水、往来与存证自动汇总，供您向属地文旅 / 人社部门参考申报。\n'+
-    '具体申领标准、额度与结果，以政府主管部门的官方解释为准。';
-  openCenter('<h4>📦 申报材料包已生成</h4>'+
+    '本机经营流水：'+S.records.length+' 笔\n'+
+    '本机订单：'+S.orders.length+' 笔\n'+
+    '作品资料：'+S.proofs.length+' 份\n\n'+
+    '以上仅帮助查找现有记录，不是政府申报表或资格证明。具体项目、材料和期限以主管部门当期正式通知为准。';
+  openCenter('<h4>本机经营资料摘要</h4>'+
     '<div class="scrollbox"><pre style="white-space:pre-wrap;font-size:12.5px;line-height:1.7;'+
-    'color:var(--t2);margin:0">'+txt+'</pre>'+
+    'color:var(--t2);margin:0">'+esc(txt)+'</pre>'+
     '<div style="font-size:11.5px;color:var(--t3);margin-top:10px">'+
-    '材料包为辅助整理用途，不构成申报承诺；正式申报请按主管部门要求提交。</div></div>'+
-    '<button class="btn-primary" style="width:100%;margin-top:12px" id="pk-copy">复制材料包</button>'+
+    '这份摘要只在本机生成。正式申报请按主管部门要求准备材料。</div></div>'+
+    '<button class="btn-primary" style="width:100%;margin-top:12px" id="pk-copy">复制摘要</button>'+
     '<button class="btn-ghost" style="width:100%" id="pk-dl">下载为 .txt</button>');
-  $('#pk-copy').onclick=function(){copyText(txt,'申报材料包已复制')};
+  $('#pk-copy').onclick=function(){copyText(txt,'摘要已复制')};
   $('#pk-dl').onclick=function(){
     var a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));
-    a.download='穗账达_非遗补贴申报材料包_'+today()+'.txt';a.click();toast('已下载材料包');
+    a.download='穗账达_经营资料摘要_'+today()+'.txt';a.click();toast('已下载摘要');
   };
 }
 
@@ -2448,7 +2449,7 @@ document.addEventListener('click',function(e){
     copyText(reportSummaryText(),'经营记录摘要已复制');return}
   if(t.closest('#qz-share')){copyText('推荐个记账工具「穗账达」——专门给非遗手艺人做的。'+
     '不用懂会计，说一句话就把手工账记清；谁欠你钱、什么时候该催，它替你盯着；'+
-    '新花样拍张照就能带时间戳存证，还能匹配传承人补助这些政策。'+
+    '新花样拍张照就能带时间戳存证，还能整理潮州相关政策线索。'+
     '潮州陶瓷、木雕、潮绣的师傅都在用。');return}
   // 会计
   var ag=t.closest('[data-ag]');
@@ -2964,8 +2965,8 @@ function showAuth(){var layer=document.createElement('div');layer.className='aut
 function startFirstGuide(){if(S.meta.guide||!S.meta.auth)return;var d=document.createElement('div');d.className='first-guide';d.innerHTML='<div class="first-guide-card"><div class="first-guide-finger">☝️</div><h3>先点亮麦克风</h3><p>按住这里，说一句话即可记账。食品类和非食品类手艺，都可以用自然语言记录。</p><button class="auth-main" id="fg-go">去记第一笔</button><button class="auth-link" id="fg-skip">稍后再看</button></div>';document.body.appendChild(d);d.querySelector('#fg-go').onclick=function(){d.remove();S.meta.guide=true;save();go('say');toast('按住麦克风，说一句话即可记账')};d.querySelector('#fg-skip').onclick=function(){d.remove();S.meta.guide=true;save()}}
 function showFirstSuccess(){var d=document.createElement('div');d.className='success-bubble';d.innerHTML='<b>太棒了！您的第一笔账已记好</b><span style="font-size:13px;color:#667a73">如果有欠款，系统会自动帮您记入应收台账。</span><button class="auth-main" style="margin-top:12px;padding:10px;font-size:14px" id="success-next">继续设置经营身份</button>';document.body.appendChild(d);d.querySelector('#success-next').onclick=function(){d.remove();showIndustryCard()}}
 function showSetupDateCard(){openCenter('<h4>补充开业日期</h4><p>请选择营业执照上的开业日期，后续可在“我的”中修改。</p><div class="field"><label>开业日期</label><input class="inp" id="setup-date" type="date" value="'+(S.profile.setup||today())+'"></div><button class="btn-primary" style="width:100%" id="setup-save">保存开业日期</button>');$('#setup-save').onclick=function(){var v=$('#setup-date').value;if(!v){toast('请选择开业日期');return}S.profile.setup=v;save();closeCenter();renderAll();toast('开业日期已保存')}}
-function showEditSetupDate(){openCenter('<h4>修改开业日期</h4><p>修改开业日期会影响经营时长和部分补贴测算，请确认营业执照信息准确。</p><div class="field"><label>开业日期</label><input class="inp" id="setup-date" type="date" value="'+(S.profile.setup||today())+'"></div><div style="display:flex;gap:10px"><button class="btn-ghost" style="flex:1" id="setup-cancel">取消</button><button class="btn-primary" style="flex:1" id="setup-edit-save">确认修改</button></div>');$('#setup-cancel').onclick=closeCenter;$('#setup-edit-save').onclick=function(){var v=$('#setup-date').value;if(!v){toast('请选择开业日期');return}S.profile.setup=v;save();closeCenter();renderAll();toast('开业日期已更新')}}
-function showIndustryCard(){var d=document.createElement('div');d.className='industry-card';d.innerHTML='<div class="industry-inner"><h3>老板，为了让系统更懂您的生意</h3><p>帮您匹配专属的非遗补贴和记账模板，请问您是做什么行业的？</p><button class="industry-option" data-ind="food">① <b>食品类非遗</b><br><small>腐乳饼、牛肉丸、工夫茶等</small></button><button class="industry-option" data-ind="craft">② <b>非食品类非遗</b><br><small>手拉壶、潮绣、木雕等</small></button><button class="industry-option" data-ind="other">③ <b>其他手工作坊</b></button></div>';document.body.appendChild(d);d.querySelectorAll('.industry-option').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-ind');S.meta.quiz=k;S.profile.craft=k==='food'?'食品类非遗':k==='craft'?'非食品类非遗':'其他手工作坊';save();d.remove();renderAll();toast('已匹配相应记账词库和补贴雷达');showSetupDateCard()}})}
+function showEditSetupDate(){openCenter('<h4>修改开业日期</h4><p>修改开业日期会影响经营时长显示，请按营业执照信息填写。</p><div class="field"><label>开业日期</label><input class="inp" id="setup-date" type="date" value="'+(S.profile.setup||today())+'"></div><div style="display:flex;gap:10px"><button class="btn-ghost" style="flex:1" id="setup-cancel">取消</button><button class="btn-primary" style="flex:1" id="setup-edit-save">确认修改</button></div>');$('#setup-cancel').onclick=closeCenter;$('#setup-edit-save').onclick=function(){var v=$('#setup-date').value;if(!v){toast('请选择开业日期');return}S.profile.setup=v;save();closeCenter();renderAll();toast('开业日期已更新')}}
+function showIndustryCard(){var d=document.createElement('div');d.className='industry-card';d.innerHTML='<div class="industry-inner"><h3>老板，为了让系统更懂您的生意</h3><p>帮您整理合适的记账词汇和潮州经营政策线索，请问您是做什么行业的？</p><button class="industry-option" data-ind="food">① <b>食品类非遗</b><br><small>腐乳饼、牛肉丸、工夫茶等</small></button><button class="industry-option" data-ind="craft">② <b>非食品类非遗</b><br><small>手拉壶、潮绣、木雕等</small></button><button class="industry-option" data-ind="other">③ <b>其他手工作坊</b></button></div>';document.body.appendChild(d);d.querySelectorAll('.industry-option').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-ind');S.meta.quiz=k;S.profile.craft=k==='food'?'食品类非遗':k==='craft'?'非食品类非遗':'其他手工作坊';save();d.remove();renderAll();toast('已更新记账词汇与政策线索');showSetupDateCard()}})}
 function afterRecordSaved(rec){if(!S.meta.firstEntry){S.meta.firstEntry=true;save();showFirstSuccess();return true}return false}
 function bootApp(){renderAll();renderSay();renderQuiz();renderAgent();renderProofCats();initRec();if(!S.meta.guide)setTimeout(startFirstGuide,450)}
 var _renderHome=renderHome;renderHome=function(){_renderHome();if(!S.records.length){$('#h-count').textContent='0';$('#h-in').textContent='¥0.00';$('#h-out').textContent='¥0.00';$('#h-net').textContent=money(Biz.metrics(S,thisMonth(),today()).received);$('#h-rate').textContent='¥0';$('#h-top').textContent='—';$('#h-noinv').textContent='¥0.00';if(!allAr().length)$('#h-ar-list').innerHTML='<div class="empty">暂无往来记录</div>'}};
