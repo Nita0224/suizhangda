@@ -42,6 +42,7 @@ jobs:
         working-directory: desktop
         run: |
           node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));p.version='1.1.'+process.env.GITHUB_RUN_NUMBER;fs.writeFileSync('package.json',JSON.stringify(p,null,2))"
+          npm pkg delete build.electronDist
       - name: Build installer and update manifest
         shell: pwsh
         working-directory: desktop
