@@ -388,7 +388,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
   </div>
 
   <div class="card" id="h-policy-card">
-    <div class="card-hd"><h3>潮州经营机会</h3><span class="more" data-go="subsidy">查看 ›</span></div>
+    <div class="card-hd"><h3>与你有关的政策提醒</h3><span class="more" data-go="subsidy">查看 ›</span></div>
     <div id="h-subsidy"></div>
   </div>
   <div class="card" id="h-filing-card">
@@ -626,7 +626,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div id="bd-unsettled" style="font-size:12px;color:var(--t2);margin-top:10px"></div>
   </div>
   <div class="card" id="bd-sub">
-    <div class="card-hd"><h3>潮州经营机会</h3><span class="more" data-go="subsidy">查看 ›</span></div>
+    <div class="card-hd"><h3>与你有关的政策提醒</h3><span class="more" data-go="subsidy">查看 ›</span></div>
     <div id="bd-sub-body"></div>
   </div>
   <div class="card" id="bd-filing">
@@ -772,23 +772,23 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
 
 <!-- ==================== 非遗政策雷达 ==================== -->
 <section class="page" id="p-subsidy">
-  <div class="nav-bar"><a data-back>‹</a><h2>潮州经营机会</h2></div>
+  <div class="nav-bar"><a data-back>‹</a><h2>与你有关的政策提醒</h2></div>
   <div class="card">
-    <div class="card-hd"><h3>先看与你有关的</h3><span class="more" id="s-year"></span></div>
+    <div class="card-hd"><h3>看看哪些政策与你的生意有关</h3><span class="more" id="s-year"></span></div>
     <div class="subsidy-row">
-      <div><b>按工坊资料整理</b><span id="s-sub">补充两项资料即可筛选</span></div>
+      <div><b>先按你做的生意筛一筛</b><span id="s-sub">选好经营方向和税务身份</span></div>
       <div class="amount" id="s-total">待核对</div>
     </div>
     <div class="field" style="margin-top:12px"><label for="s-craft">经营方向</label><select class="inp" id="s-craft"><option value="unknown">尚未确认</option><option value="food">传统食品或食品类非遗</option><option value="craft">潮瓷、手拉壶、潮绣等工艺</option><option value="other">其他经营</option></select></div>
     <div class="field"><label for="s-tax">税务身份（按税务登记选择）</label><select class="inp" id="s-tax"><option value="unknown">不清楚</option><option value="small">小规模纳税人</option><option value="general">一般纳税人</option></select></div>
-    <p style="font-size:12px;line-height:1.7;color:var(--t2);margin:10px 0 0">本机按所填资料做规则初筛，不上传账本。下方是已核对来源的政策说明，并非自动判定资格或实时申报窗口。</p>
+    <p style="font-size:12px;line-height:1.7;color:var(--t2);margin:10px 0 0">这里告诉你可能用得上的政策、现在能做什么、该向谁核对。显示的条数不是可领补贴数；目前没有核实到开放中的补贴申请入口。</p>
   </div>
   <div class="card">
-    <div class="card-hd"><h3>非遗经营方向</h3><span class="tag o" id="s-hcnt">—</span></div>
+    <div class="card-hd"><h3>非遗发展方向 · 暂无申报入口</h3><span class="tag o" id="s-hcnt">—</span></div>
     <div id="s-heritage"></div>
   </div>
   <div class="card">
-    <div class="card-hd"><h3>经营税费提醒</h3><span class="tag b" id="s-gcnt">—</span></div>
+    <div class="card-hd"><h3>税费规则 · 需核对条件</h3><span class="tag b" id="s-gcnt">—</span></div>
     <div id="s-list"></div>
   </div>
   <div class="card"><div class="card-hd"><h3>接下来做什么</h3></div><div id="s-progress"></div></div>
@@ -805,7 +805,7 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
   <div class="grid4">
     <div class="quick" data-go="proof"><i>📷</i><span>作品存证</span></div>
     <div class="quick" id="m-export"><i>📤</i><span>导出账套</span></div>
-    <div class="quick" data-go="subsidy"><i>🎁</i><span>政策雷达</span></div>
+    <div class="quick" data-go="subsidy"><i>📋</i><span>政策提醒</span></div>
     <div class="quick" data-go="agent"><i>🧑‍💼</i><span>代账会计</span></div>
   </div>
   <div class="card"><p class="q">常用</p><div id="m-set"></div></div>
@@ -1355,8 +1355,8 @@ function renderHome(){
   var sh=heritageSubsidies();
   $('#h-subsidy').innerHTML=sh.slice(0,2).map(function(s){
     return '<div class="subsidy-row"><div><b>'+esc(s.title)+'</b><span>'+esc(s.relevance)+'</span></div>'+
-      '<div class="amount" style="font-size:12px">'+esc(s.matchLabel)+'</div></div>';
-  }).join('')+'<div style="font-size:12px;color:var(--t3);margin-top:10px">有官方出处的经营线索；是否可申报请看当期通知。</div>';
+      '<div class="amount" style="font-size:12px">发展方向</div></div>';
+  }).join('')+'<div style="font-size:12px;color:var(--t3);margin-top:10px">看看与你做的生意有关的政策，以及下一步该问谁；这不是可领补贴清单。</div>';
   $('#h-filing').innerHTML=filingReminder();
 
   // 身份自测状态卡片
@@ -2139,19 +2139,20 @@ function renderMine(){
     '<div class="row-r"><span class="chev">›</span></div></div>'}).join('');
 }
 function policyRows(arr){
-  if(!arr.length)return '<div class="empty">暂无线索。补充上方资料，或到官方公告查看当期安排。</div>';
+  if(!arr.length)return '<div class="empty">暂时没有匹配的资料。可调整上方选项，或查看官方当期公告。</div>';
   return arr.map(function(s){
-    return '<div class="policy-item"><div class="policy-head"><b>'+esc(s.title)+'</b><span class="tag '+(s.related?'b':'o')+'">'+esc(s.matchLabel)+'</span></div>'+
+    var label=s.group==='heritage'?'发展方向':'税费规则';
+    return '<div class="policy-item"><div class="policy-head"><b>'+esc(s.title)+'</b><span class="tag '+(s.group==='heritage'?'o':'b')+'">'+label+'</span></div>'+ 
       '<p class="policy-text">'+esc(s.relevance)+'。'+esc(s.summary)+'</p>'+
-      '<p class="policy-text"><b>你可以做：</b>'+esc(s.action)+'</p>'+
+      '<p class="policy-text"><b>下一步：</b>'+esc(s.action)+'</p>'+ 
       '<details class="policy-detail"><summary>查看资料与官方依据</summary><p>'+esc(s.prepare)+'</p><p>'+esc(s.evidence)+'</p><p>状态：'+esc(s.status)+'</p><p>发布：'+esc(s.published)+' · 资料整理：'+esc(SuizhangPolicy.verifiedAt)+'</p><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">打开官方原文 ›</a></details></div>';
   }).join('');
 }
 function renderSubsidy(){
   var sg=subsidies().filter(function(x){return x.related}),sh=heritageSubsidies().filter(function(x){return x.related});
   $('#s-year').textContent='潮州市 · 官方来源';
-  $('#s-total').textContent='线索 '+(sg.length+sh.length)+' 项';
-  $('#s-sub').textContent='结合你的工艺和税务身份，先看相关政策说明';
+  $('#s-total').textContent='相关资料 '+(sg.length+sh.length)+' 条';
+  $('#s-sub').textContent='按你的经营方向和税务身份整理；不是可领补贴数';
   $('#s-heritage').innerHTML=policyRows(sh);
   $('#s-list').innerHTML=policyRows(sg);
   $('#s-hcnt').textContent=sh.length+' 项';
@@ -2161,9 +2162,9 @@ function renderSubsidy(){
   $('#s-tax').value=S.profile.policyTaxStatus||(/小规模纳税人/.test(S.profile.method||'')?'small':/一般纳税人/.test(S.profile.method||'')?'general':'unknown');
   $('#s-craft').onchange=function(){S.profile.policyCraft=this.value;save();renderSubsidy();renderHome()};
   $('#s-tax').onchange=function(){S.profile.policyTaxStatus=this.value;save();renderSubsidy();renderHome()};
-  $('#s-progress').innerHTML='<div class="row"><div class="row-l"><b>① 补充身份</b><span>上方选择实际经营方向和税务登记身份</span></div></div>'+ 
-    '<div class="row"><div class="row-l"><b>② 看官方原文</b><span>确认所在地、当期申报窗口、对象与材料</span></div></div>'+ 
-    '<div class="row"><div class="row-l"><b>③ 保存经营资料</b><span>订单和作品资料可用于整理线索，正式申报材料以通知为准</span></div></div>'+ 
+  $('#s-progress').innerHTML='<div class="row"><div class="row-l"><b>① 选你做什么生意</b><span>上方选择经营方向和税务登记身份</span></div></div>'+ 
+    '<div class="row"><div class="row-l"><b>② 看这条信息现在是什么状态</b><span>发展方向还不能直接申报；税费规则要核对适用条件</span></div></div>'+ 
+    '<div class="row"><div class="row-l"><b>③ 按“下一步”去核对</b><span>打开原文，确认主管部门、当期通知与所需资料</span></div></div>'+ 
     '<div style="font-size:12px;line-height:1.8;margin-top:10px">'+
     '<a href="https://www.chaozhou.gov.cn/" target="_blank" rel="noopener noreferrer">潮州市人民政府官网 ›</a><br>'+ 
     '<a href="https://guangdong.chinatax.gov.cn/" target="_blank" rel="noopener noreferrer">广东省税务局官网 ›</a></div>';
