@@ -285,6 +285,10 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
   background:rgba(0,0,0,.5);color:#fff;font-size:12px;display:grid;place-items:center}
 .proof.add{display:grid;place-items:center;font-size:26px;color:var(--t3);
   border:1px dashed #CBD8D4;background:#fff}
+.proof-preview{display:none;margin-top:14px;padding:12px;border:1px solid #DCE9E5;border-radius:14px;background:#F7FAF9}
+.proof-preview img{display:block;width:100%;max-height:260px;object-fit:contain;border-radius:9px;background:#EDF2F0}
+.proof-preview .actions{display:flex;gap:8px;margin-top:12px}
+.proof-preview .actions button{flex:1;margin:0}
 
 /* ============ 弹层 ============ */
 .mask{position:fixed;inset:0;background:rgba(10,25,22,.5);z-index:100;display:none}
@@ -740,17 +744,28 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
       <div class="chips" id="pf-cats"></div></div>
     <div class="field"><label>作品编号（自动生成，全库唯一）</label>
       <input class="inp" id="pf-no" readonly style="background:#F2F6F5;color:var(--t2)"></div>
-    <div class="field"><label>语音说明（选填 · 按住录音）</label>
+    <div class="field"><label>作品说明（选填）</label>
+      <textarea class="inp" id="pf-description" rows="3" placeholder="说说作品的泥料、工艺、来历，也可以手动输入"></textarea>
+      <button class="btn-ghost" style="width:100%;margin:8px 0 0" id="pf-dictate" type="button">🎙 语音转文字</button>
+      <div id="pf-dictate-state" style="font-size:12px;color:var(--t3);margin-top:6px">请说普通话并核对结果。识别可能由浏览器在线处理语音；也可直接手动输入。</div>
+    </div>
+    <div class="field"><label>保留原声（选填 · 按住录音）</label>
       <button class="btn-ghost" style="width:100%;margin:0" id="pf-rec">
         按住说：这件作品的泥料 / 工艺 / 来历…</button>
       <div id="pf-rec-state" style="font-size:12px;color:var(--t3);margin-top:6px">
-        可用潮州话或普通话讲一段，会随作品一起打上时间戳</div>
+        录音会与文字说明一起保存在本机；录音文件不会自动转写</div>
     </div>
     <div class="proof-g" id="pf-grid"></div>
     <label class="btn-primary" style="display:block;width:100%;text-align:center;cursor:pointer;margin-top:14px">
       拍摄作品 / 手稿
       <input type="file" accept="image/*" id="pf-file" style="display:none">
     </label>
+    <div class="proof-preview" id="pf-pending">
+      <b>确认这张作品照片</b>
+      <img id="pf-preview" alt="待保存的作品照片" style="margin-top:10px">
+      <div id="pf-pending-meta" style="font-size:12px;color:var(--t2);margin-top:8px">照片尚未保存，请检查名称和说明</div>
+      <div class="actions"><button class="btn-ghost" id="pf-cancel" type="button">取消</button><button class="btn-primary" id="pf-save" type="button">确认保存作品</button></div>
+    </div>
   </div>
   <p class="note">作品照片与编号仅保存在本机浏览器，不会上传；可关联多笔订单。</p>
 </section>
@@ -932,8 +947,8 @@ if(!S.ar)S.ar=[];if(!S.proofs)S.proofs=[];
 if(!S.invoices)S.invoices=[];
 Biz.ensure(S);S.ver=DATA_VER;
 function save(){
-  try{localStorage.setItem(STORE,JSON.stringify(S))}
-  catch(e){toast('本机存储空间不足，建议删掉几张存证图')}
+  try{localStorage.setItem(STORE,JSON.stringify(S));return true}
+  catch(e){toast('本机存储空间不足，请先导出备份或清理旧照片');return false}
 }
 
 /* ========================= 计算 ========================= */
@@ -1989,7 +2004,7 @@ function renderProof(){
   var g=$('#pf-grid'),h='<div class="proof add" id="pf-add">＋</div>';
   S.proofs.slice().reverse().forEach(function(p){
     h+='<div class="proof" data-pfview="'+p.id+'"><img src="'+p.img+'" alt="作品">'+
-      '<div class="cap">'+(p.name||'未命名作品')+'</div>'+
+      '<div class="cap">'+esc(p.name||'未命名作品')+'</div>'+
       '<div class="x" data-pfdel="'+p.id+'">✕</div></div>';
   });
   g.innerHTML=h;
@@ -1997,6 +2012,25 @@ function renderProof(){
 }
 /* 声音存证：按住录音，随作品一起打时间戳（可作对接潮州非遗数智平台的素材） */
 var pfAudio='',pfRec=null,pfStream=null,pfChunks=[];
+var pfPending='',pfSpeech=null;
+function startProofDictation(){
+  if(pfSpeech){pfSpeech.stop();return}
+  var Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!Speech){$('#pf-dictate-state').textContent='当前浏览器不支持语音转文字，请在上方手动输入说明';return}
+  var rec=new Speech(),base=$('#pf-description').value.trim(),parts={};
+  rec.lang='zh-CN';rec.continuous=false;rec.interimResults=true;pfSpeech=rec;
+  rec.onresult=function(e){
+    for(var i=e.resultIndex;i<e.results.length;i++)parts[i]=e.results[i][0].transcript;
+    var spoken=Object.keys(parts).sort(function(a,b){return +a-+b}).map(function(k){return parts[k]}).join('');
+    $('#pf-description').value=(base?base+'\n':'')+spoken;
+    $('#pf-dictate-state').textContent='正在识别，识别后请核对并修改文字';
+  };
+  rec.onerror=function(e){$('#pf-dictate-state').textContent=e.error==='not-allowed'?'未取得麦克风权限，请允许后重试':'识别未完成，请重试或手动输入';};
+  rec.onend=function(){pfSpeech=null;$('#pf-dictate').textContent='🎙 语音转文字';
+    if($('#pf-dictate-state').textContent.indexOf('正在识别')===0)$('#pf-dictate-state').textContent='识别已结束，请核对上方文字';};
+  try{rec.start();$('#pf-dictate').textContent='结束语音转文字';$('#pf-dictate-state').textContent='正在听，请说普通话…'}
+  catch(e){pfSpeech=null;$('#pf-dictate-state').textContent='无法启动识别，请重试或手动输入'}
+}
 function startRec(){
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||typeof MediaRecorder==='undefined'){
     toast('这个浏览器不支持录音，可跳过');return}
@@ -2026,6 +2060,7 @@ function startRec(){
 function stopRec(){if(pfRec&&pfRec.state!=='inactive')pfRec.stop()}
 function initRec(){
   var btn=$('#pf-rec');if(!btn)return;
+  $('#pf-dictate').addEventListener('click',startProofDictation);
   var down=function(e){e.preventDefault();startRec()};
   var up=function(e){e.preventDefault();stopRec()};
   btn.addEventListener('mousedown',down);btn.addEventListener('mouseup',up);
@@ -2040,6 +2075,7 @@ function proofCertText(p){
     '工艺类别：'+p.cat+'\n'+
     '存证时间：'+p.ts+'\n'+
     '校验码：'+p.hash+'\n'+
+    (p.description?'作品说明：'+p.description+'\n':'')+
     (p.audio?'附语音说明：有（创作者口述工艺与来历）\n':'')+
     '—— 由穗账达在本机保存，仅供整理作品和经营档案。\n'+
     '这不是正式版权登记，也不自动证明作品权属。';
@@ -2053,7 +2089,8 @@ function openProofCert(id){
     [['作品名称',p.name||'未命名作品'],['作品编号',p.no],['工艺类别',p.cat],
      ['存证时间',p.ts],['校验码',p.hash]].map(function(x){
       return '<div class="row"><div class="row-l"><b>'+x[0]+'</b></div>'+
-        '<div class="row-r">'+x[1]+'</div></div>'}).join('')+
+         '<div class="row-r">'+esc(x[1])+'</div></div>'}).join('')+
+     (p.description?'<div style="margin-top:10px"><b>作品说明</b><div style="white-space:pre-wrap;line-height:1.6;margin-top:5px">'+esc(p.description)+'</div></div>':'')+
     (p.audio?'<div style="margin-top:10px"><div style="font-size:12px;'+
       'color:var(--t2);margin-bottom:6px">创作者语音说明</div>'+
       '<audio controls src="'+p.audio+'" style="width:100%"></audio></div>':'')+
@@ -2705,6 +2742,7 @@ $('#ar-add').addEventListener('click',function(){
 /* ---- 存证上传 ---- */
 $('#pf-file').addEventListener('change',function(e){
   var f=e.target.files&&e.target.files[0];if(!f)return;
+  if(!f.type||f.type.indexOf('image/')!==0){toast('请选择照片文件');e.target.value='';return}
   var fr=new FileReader();
   fr.onload=function(ev){
     var img=new Image();
@@ -2713,21 +2751,34 @@ $('#pf-file').addEventListener('change',function(e){
       var c=document.createElement('canvas');
       c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);
       c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      var data=c.toDataURL('image/jpeg',0.72);
-      var nm=($('#pf-name').value||'').trim()||'未命名作品';
-      var no=makeWorkNo(pfCat);
-      var ts=new Date().toLocaleString('zh-CN',{hour12:false});
-      S.proofs.push({id:uid(),img:data,name:nm,cat:pfCat,no:no,date:today(),
-        ts:ts,hash:makeHash(nm+pfCat+no+ts),audio:pfAudio||''});
-      $('#pf-name').value='';pfAudio='';
-      $('#pf-rec-state').textContent='可用潮州话或普通话讲一段，会随作品一起打上时间戳';
-      save();renderProof();renderProofCats();
-      toast('已存证 · 编号 '+no);
+      pfPending=c.toDataURL('image/jpeg',0.72);
+      $('#pf-preview').src=pfPending;
+      $('#pf-pending').style.display='block';
+      $('#pf-pending-meta').textContent='照片尚未保存，请检查作品名称、工艺类别和说明后确认';
+      $('#pf-pending').scrollIntoView({block:'nearest',behavior:'smooth'});
     };
+    img.onerror=function(){toast('照片读取失败，请重新选择')};
     img.src=ev.target.result;
   };
+  fr.onerror=function(){toast('照片读取失败，请重新选择')};
   fr.readAsDataURL(f);
   e.target.value='';
+});
+$('#pf-cancel').addEventListener('click',function(){pfPending='';$('#pf-preview').removeAttribute('src');$('#pf-pending').style.display='none';toast('已取消这张照片')});
+$('#pf-save').addEventListener('click',function(){
+  if(!pfPending){toast('请先拍摄或选择作品照片');return}
+  var nm=$('#pf-name').value.trim();
+  if(!nm){toast('请填写作品名称，再确认保存');$('#pf-name').focus();return}
+  var no=makeWorkNo(pfCat),ts=new Date().toLocaleString('zh-CN',{hour12:false});
+  var proof={id:uid(),img:pfPending,name:nm,cat:pfCat,no:no,date:today(),ts:ts,
+    hash:makeHash(nm+pfCat+no+ts),audio:pfAudio||'',description:$('#pf-description').value.trim()};
+  S.proofs.push(proof);
+  if(!save()){S.proofs.pop();return}
+  pfPending='';pfAudio='';$('#pf-name').value='';$('#pf-description').value='';
+  $('#pf-preview').removeAttribute('src');$('#pf-pending').style.display='none';
+  $('#pf-rec-state').textContent='录音会与文字说明一起保存在本机；录音文件不会自动转写';
+  $('#pf-dictate-state').textContent='请说普通话并核对结果。识别可能由浏览器在线处理语音；也可直接手动输入。';
+  renderAll();renderProofCats();toast('作品已保存 · 编号 '+no);
 });
 
 /* ---- 导出 ---- */
