@@ -1,0 +1,56 @@
+name: Build Windows desktop update
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - app.html
+      - business.js
+      - policy.js
+      - manifest.webmanifest
+      - icon.svg
+      - icon-192.png
+      - icon-512.png
+      - desktop-source.zip
+      - .github/workflows/desktop-update.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: desktop-release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Unpack desktop source
+        shell: pwsh
+        run: Expand-Archive -LiteralPath desktop-source.zip -DestinationPath desktop -Force
+      - name: Install dependencies
+        shell: pwsh
+        working-directory: desktop
+        run: npm ci
+      - name: Set release version
+        shell: pwsh
+        working-directory: desktop
+        run: |
+          node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json'));p.version='1.1.'+process.env.GITHUB_RUN_NUMBER;fs.writeFileSync('package.json',JSON.stringify(p,null,2))"
+      - name: Build installer and update manifest
+        shell: pwsh
+        working-directory: desktop
+        run: npm run dist -- --publish never
+      - name: Publish desktop update
+        shell: pwsh
+        working-directory: desktop
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = node -p "require('./package.json').version"
+          gh release create "v$version" "dist/SuiZhangDa-Setup-$version-x64.exe" "dist/latest.yml" --title "穗账达 Windows 桌面版 $version" --notes "包含 main 分支截至本次构建的穗账达网页内容。已安装 1.1.0 及以上版本会在联网时检查并下载更新；本机账本保留。" --latest
