@@ -1832,9 +1832,7 @@ function renderBoard(){
       sb.innerHTML='<div style="background:var(--success-l);border-radius:12px;padding:13px">'+
         '<b style="font-size:14px;color:var(--success)">记账里有出货与人工支出</b>'+ 
         '<div style="font-size:13px;color:var(--t2);margin-top:6px;line-height:1.65">'+
-        '这些记录可用于整理潮州市非遗工坊、传习活动相关材料。是否有当期项目、能否申报，仍需向属地文旅部门核对。</div>'+ 
-        '<button class="btn-primary" style="width:100%;margin-top:12px;padding:11px" id="bd-pack">整理已有材料 ›</button></div>';
-      var bp=$('#bd-pack');if(bp)bp.onclick=function(){generateSubsidyPack()};
+        '这些记录可用于整理潮州市非遗工坊、传习活动相关材料。是否有当期项目、能否申报，仍需向属地文旅部门核对。</div></div>';
     }else{
       sb.innerHTML='<div style="font-size:13px;color:var(--t2);line-height:1.65">'+
         '可以关注潮州市文旅部门的非遗工坊、传习活动通知。先保留出货、带徒与作品存证材料；目前记录中有 '+incM+' 笔相关出货。是否适用以当期公告为准。</div>';
@@ -2320,37 +2318,11 @@ function showBoardRecords(kind){
   openCenter('<h4>'+title+'</h4><div class="scrollbox">'+(items.length?items.map(function(x){return '<div class="row" '+(x.orderId?'data-order="'+x.orderId+'"':'')+'><div class="row-l"><b>'+esc(x.t)+'</b><span>'+esc(x.d)+'</span></div><div class="row-r">'+money(x.amt)+(x.orderId?' ›':'')+'</div></div>'}).join(''):'<div class="empty">暂无对应记录</div>')+'</div>');
 }
 function renderAll(){renderHome();renderBook();renderAr();renderBoard();renderSubsidy();renderMine();renderProof();renderReport();renderOrders()}
-/* 一键整理本机经营资料摘要；不生成或暗示正式申报材料。 */
 function ensureTaxId(next){
   if(S.profile.tax){next();return}
   openCenter('<h4>补充一个信息</h4><p>为了让代账会计帮您准确处理税务，需要补充一个信息。</p><div class="field"><label>纳税人识别号</label><input class="inp" id="tax-id" placeholder="填写营业执照上的纳税人识别号"></div><p style="font-size:12px;color:var(--t3);line-height:1.6">这个号就在您的营业执照上，填一次就行，以后自动带出。</p><button class="btn-primary" style="width:100%" id="tax-save">保存并继续</button>');
   $('#tax-save').onclick=function(){var v=$('#tax-id').value.trim();if(!v){toast('请填写纳税人识别号');return}S.profile.tax=v;save();closeCenter();next()};
 }
-function generateSubsidyPack(){
-  var p=S.profile,wm=monthsCovered();
-  var txt='【穗账达 · 本机经营资料摘要】\n'+
-    '经营主体：'+(p.name||'—')+'（'+(p.type||'—')+'）\n'+
-    '工艺类别：'+(p.craft||'—')+'\n'+
-    '经营时长：已记账 '+wm+' 个月\n'+
-    '本机经营流水：'+S.records.length+' 笔\n'+
-    '本机订单：'+S.orders.length+' 笔\n'+
-    '作品资料：'+S.proofs.length+' 份\n\n'+
-    '以上仅帮助查找现有记录，不是政府申报表或资格证明。具体项目、材料和期限以主管部门当期正式通知为准。';
-  openCenter('<h4>本机经营资料摘要</h4>'+
-    '<div class="scrollbox"><pre style="white-space:pre-wrap;font-size:12.5px;line-height:1.7;'+
-    'color:var(--t2);margin:0">'+esc(txt)+'</pre>'+
-    '<div style="font-size:11.5px;color:var(--t3);margin-top:10px">'+
-    '这份摘要只在本机生成。正式申报请按主管部门要求准备材料。</div></div>'+
-    '<button class="btn-primary" style="width:100%;margin-top:12px" id="pk-copy">复制摘要</button>'+
-    '<button class="btn-ghost" style="width:100%" id="pk-dl">下载为 .txt</button>');
-  $('#pk-copy').onclick=function(){copyText(txt,'摘要已复制')};
-  $('#pk-dl').onclick=function(){
-    var a=document.createElement('a');
-    a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));
-    a.download='穗账达_经营资料摘要_'+today()+'.txt';a.click();toast('已下载摘要');
-  };
-}
-
 /* ========================= 页面切换 ========================= */
 var MAIN={home:1,book:1,ar:1,board:1,mine:1};
 var lastMain='home';
