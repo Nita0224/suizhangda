@@ -632,6 +632,23 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
     <div class="card-hd"><h3>申报提醒</h3></div>
     <div id="r-cal"></div>
   </div>
+  <div class="card" id="bd-health">
+    <div class="card-hd"><h3>经营资料小体检</h3><span class="more" id="r-cnt">0 项</span></div>
+    <div class="health">
+      <div class="lbl"><b>已备资料</b><span id="r-level">—</span></div>
+      <div class="ring" id="r-ring"><i><span id="r-score">0/4</span></i></div>
+    </div>
+    <div class="switch-row" style="margin-top:14px">
+      <span>已开立对公账户<small>公私账混用是常见风险点</small></span>
+      <div class="switch" id="r-corp"><i></i></div>
+    </div>
+    <div style="margin-top:14px" id="r-list"></div>
+    <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
+      <p class="q">传承人资料 · 按正式认定填写</p>
+      <div class="chips" id="r-heir-lv" style="margin-bottom:10px"></div>
+      <div id="r-heir"></div>
+    </div>
+  </div>
   <div class="card" id="bd-ar">
     <div class="card-hd"><h3>谁欠我钱（应收台账）</h3><span class="more" data-go="ar">全部 ›</span></div>
     <div id="bd-ar-body"></div>
@@ -649,23 +666,6 @@ textarea.inp{min-height:88px;resize:none;line-height:1.55}
   <div class="card">
     <div class="card-hd"><h3>主要客户</h3></div>
     <div id="bd-cust"></div>
-  </div>
-  <div class="card">
-    <div class="card-hd"><h3>经营资料小体检</h3><span class="more" id="r-cnt">0 项</span></div>
-    <div class="health">
-      <div class="lbl"><b>已备资料</b><span id="r-level">—</span></div>
-      <div class="ring" id="r-ring"><i><span id="r-score">0/4</span></i></div>
-    </div>
-    <div class="switch-row" style="margin-top:14px">
-      <span>已开立对公账户<small>公私账混用是常见风险点</small></span>
-      <div class="switch" id="r-corp"><i></i></div>
-    </div>
-    <div style="margin-top:14px" id="r-list"></div>
-    <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:12px">
-      <p class="q">传承人资料 · 按正式认定填写</p>
-      <div class="chips" id="r-heir-lv" style="margin-bottom:10px"></div>
-      <div id="r-heir"></div>
-    </div>
   </div>
   <div class="card">
     <div class="card-hd"><h3>账记不过来？</h3></div>
